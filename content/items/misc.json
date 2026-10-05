@@ -1,0 +1,50 @@
+{
+  "items": {
+    "healing_draught": {
+      "name": "Healing Draught", "names": ["draught", "potion", "healing potion"], "type": "consumable",
+      "rarity": "common", "value": 10,
+      "description": "A stoppered vial of red cordial that tastes of iron and honey. It closes wounds, mostly.",
+      "use_text": "You pull the cork with your teeth and drink. Warmth spreads through your chest.",
+      "effects": [{"heal": 20}]
+    },
+    "focus_tincture": {
+      "name": "Focus Tincture", "names": ["tincture"], "type": "consumable",
+      "rarity": "common", "value": 12,
+      "description": "Bitter blue drops that sharpen the mind and numb the tongue.",
+      "use_text": "Three drops under the tongue. The world comes into sharp, unpleasant focus.",
+      "effects": [{"restore_focus": 12}]
+    },
+    "stale_bread": {
+      "name": "Stale Bread", "names": ["bread", "loaf", "heel"], "type": "consumable",
+      "rarity": "common", "value": 1,
+      "description": "The heel of yesterday's loaf, hard enough to drive nails. Still, it's food.",
+      "use_text": "You gnaw at the bread until it gives up.",
+      "effects": [{"heal": 6}]
+    },
+    "funeral_coins": {
+      "name": "Funeral Coins", "names": ["coins", "coppers", "copper coins"], "type": "junk",
+      "rarity": "common", "value": 2,
+      "description": "Two copper pennies, still warm. Someone laid them on your eyes to pay your way into the light. You seem to have been refunded."
+    },
+    "sextons_key": {
+      "name": "Sexton's Key", "names": ["key", "iron key", "ring of keys", "keys"], "type": "key",
+      "rarity": "common",
+      "description": "A ring of old keys on a loop of twine. The largest is iron, heavy as a promise, and stamped with a sunburst.",
+      "use_fail": "None of the locks here fit it.",
+      "uses": [
+        {
+          "location": "chapel_steps",
+          "conditions": {"not_flag": "chapel_unlocked"},
+          "text": "The iron key grinds in the padlock, catches, and turns. The chain slithers down the doors and pools on the steps like something shed. Cold air breathes out of the chapel, smelling of standing water.",
+          "effects": [{"set_flag": "chapel_unlocked"}]
+        }
+      ]
+    },
+    "abels_tally": {
+      "name": "Abel's Tally", "names": ["tally", "ledger", "notebook", "book"], "type": "lore",
+      "rarity": "uncommon",
+      "description": "A sexton's pocket-book, the pages soft as cloth from handling.",
+      "text": "Week of the Grey Moon. Four put down. Two came back up. Put them back.\nWeek of the Red Rain. Nine put down. Six came back up. Put them back.\nWeek of the Long Bell. Eleven put down. Eleven came back up. Put them back. Put them back. Put them back.\n\nTired now. Key's on the shelf for whoever comes after. Don't open the chapel. The drowned in there are praying, and I think the god is listening, and I don't think that's a good thing anymore.\n\nA.M."
+    }
+  }
+}

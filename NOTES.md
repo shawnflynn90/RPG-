@@ -1,8 +1,28 @@
 # NOTES: Emberfall development log
 
 ## Current status
-- **Phase:** Planning. PLAN.md is written and **waiting for user approval** before any code.
-- **Next step:** after approval, start M1 (engine core: loop, parser, locations, inventory, save/load, small test area).
+- **Phase:** M1 complete (engine core + Greyhallow test area). PLAN.md approved.
+- **Next step:** M2: combat, progression (XP/levels/derived stats), equipment (equip/unequip), loot tiers, shops.
+
+## How to run / check
+- Play: `python main.py` (`--plain`, `--seed N`, `--script FILE`, `--save-dir DIR`)
+- Tests: `python -m unittest discover -s tests -t .`
+- Validator: `python tools/validate_content.py` (`--strict` makes warnings fatal)
+- Demo script: `python main.py --script tests/playthroughs/m1_test_area.txt --seed 1`
+
+## Engine map (where things live)
+- `engine/game.py`: Game object, menus, main loop, enter_location, shrines, save/load glue, talk (greeting-only until M3)
+- `engine/commands.py`: `@command` registry. Handlers, `resolve()` noun lookup, `run_event_list()` for one-shot content events
+- `engine/world.py`: exits (hidden/conditional/null "scenery wall" exits), variants, features, room items, ASCII map
+- `engine/conditions.py` / `engine/effects.py`: content mini-languages. New systems register more leaves/handlers with `@leaf` / `@effect`
+- `engine/content.py`: loads every JSON under /content; sections declared in SECTIONS
+- `tools/validate_content.py`: generic walk over every `conditions`/`effects` key in all content
+
+## Content conventions
+- Event lists (`search`, `on_enter`, feature `use`, item `on_take`/`on_read`, npc `on_talk`) are lists of `{conditions, text, effects, once}`. `once` defaults to true and is tracked by a flag `<loc>.<kind>.<i>`.
+- An exit is a string, `null`, or `{to, conditions, blocked_text, hidden, label, look, text, effects}`. `to: null` makes a scenery wall (the Pall).
+- Location variants: `{conditions, description}` replaces the text; `{conditions, append}` adds to it.
+- Item types: weapon, armor, trinket, consumable, key, lore, junk, tool, material. Key and lore items can't be dropped.
 
 ## Design decisions
 - Content is JSON under `/content`, because the game uses the stdlib only (no PyYAML).
@@ -17,7 +37,7 @@
 - Tests use stdlib `unittest` and also run under pytest.
 
 ## Milestone progress
-- [ ] M1 Engine core
+- [x] M1 Engine core (53 tests passing, validator clean)
 - [ ] M2 Combat, progression, items, shops
 - [ ] M3 Dialogue, flags, factions, journal
 - [ ] M4 Act 1 + bosses
