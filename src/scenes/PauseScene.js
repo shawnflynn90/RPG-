@@ -6,6 +6,7 @@ import { Audio } from '../systems/Audio.js';
 import { pixelText, wrapText, measureText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 import { formatTime } from './TitleScene.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 const TABS = ['Items', 'Weapons', 'Spells', 'Armor', 'Quests', 'System'];
 
@@ -22,7 +23,8 @@ export class PauseScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0);
+    backdrop(this);
+    anchorUI(this, 'center');
     drawPanel(this, 2, 2, 236, 18);
     let tx = 8;
     this.tabTexts = TABS.map((t) => {

@@ -6,6 +6,7 @@ import { Audio } from '../systems/Audio.js';
 import { pixelText } from '../ui/font.js';
 import { drawPanel, COLORS } from '../ui/widgets.js';
 import { propsOf } from './WorldScene.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 const CELL_W = 26;
 const CELL_H = 18;
@@ -48,7 +49,8 @@ export class MapScene extends Phaser.Scene {
 
   draw() {
     this.clear();
-    this.put(this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0));
+    this.put(backdrop(this));
+    anchorUI(this, 'center');
     this.put(drawPanel(this, 2, 2, 236, 18));
     ['Area', 'World'].forEach((t, i) => this.put(pixelText(this, 12 + i * 50, 7, t, i === this.tab ? COLORS.highlight : COLORS.dim)));
     this.put(pixelText(this, 232, 7, 'L/R: tab  B: close', COLORS.dim).setOrigin(1, 0));

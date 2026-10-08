@@ -5,6 +5,7 @@ import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 import { UI } from '../config/game.config.js';
 import { Audio } from '../systems/Audio.js';
 import { Game } from '../systems/GameState.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 const TEXT_SPEEDS = [0.5, 1, 2.2];
 
@@ -24,6 +25,9 @@ export class UIScene extends Phaser.Scene {
   create() {
     this.active = null; // current box state
     this.toasts = [];
+    this.extra = 0;
+    // dialogue sits at the bottom of tall screens
+    anchorUI(this, 'bottom', (extra) => (this.extra = extra));
   }
 
   /** Show pages of text in a GBA-style box. Long pages are split automatically. */
@@ -80,13 +84,13 @@ export class UIScene extends Phaser.Scene {
   /** Cinematic boss title card with letterbox bars. */
   bossIntro(name, title) {
     return new Promise((resolve) => {
-      const top = this.add.rectangle(0, -20, 240, 20, 0x000000).setOrigin(0);
+      const top = this.add.rectangle(0, -this.extra - 20, 240, 20, 0x000000).setOrigin(0);
       const bot = this.add.rectangle(0, 160, 240, 20, 0x000000).setOrigin(0);
       const band = this.add.rectangle(-240, 64, 240, 30, 0x000000, 0.75).setOrigin(0);
       const t1 = pixelText(this, 120, 69, name.toUpperCase(), 0xf86048).setOrigin(0.5, 0).setScale(2).setAlpha(0);
       const t2 = pixelText(this, 120, 86, title, COLORS.highlight).setOrigin(0.5, 0).setAlpha(0);
       const objs = [top, bot, band, t1, t2];
-      this.tweens.add({ targets: top, y: 0, duration: 250 });
+      this.tweens.add({ targets: top, y: -this.extra, duration: 250 });
       this.tweens.add({ targets: bot, y: 140, duration: 250 });
       this.tweens.add({ targets: band, x: 0, duration: 300, delay: 200, ease: 'Quad.easeOut' });
       this.tweens.add({ targets: [t1, t2], alpha: 1, duration: 250, delay: 450 });
@@ -117,7 +121,7 @@ export class UIScene extends Phaser.Scene {
       Audio.sfx('levelUp');
       this.cameras.main.flash(250, 255, 255, 220);
       const objs = [];
-      const glow = this.add.rectangle(0, 0, 240, 160, 0xf8e060, 0.15).setOrigin(0);
+      const glow = backdrop(this, 0xf8e060, 0.15);
       objs.push(glow);
       const big = pixelText(this, 120, 48, 'LEVEL UP!', COLORS.highlight).setOrigin(0.5).setScale(3);
       objs.push(big);

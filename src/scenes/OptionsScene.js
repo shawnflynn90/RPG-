@@ -6,6 +6,7 @@ import { Audio } from '../systems/Audio.js';
 import { BUTTONS, KEYBOARD, GAMEPAD } from '../config/input.config.js';
 import { pixelText, wrapText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 const TEXT_SPEED_NAMES = ['Slow', 'Normal', 'Fast'];
 const BUTTON_NAMES = { up: 'Up', down: 'Down', left: 'Left', right: 'Right', A: 'A', B: 'B', LB: 'L', RB: 'R', select: 'Select', start: 'Start' };
@@ -45,7 +46,8 @@ export class OptionsScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0);
+    backdrop(this);
+    anchorUI(this, 'center');
     drawPanel(this, 2, 2, 236, 18);
     this.title = pixelText(this, 8, 7, 'Options', COLORS.highlight);
     drawPanel(this, 2, 22, 236, 104);

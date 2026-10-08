@@ -1,10 +1,12 @@
 import { GAME } from './config/game.config.js';
 
 /**
- * Sizes the 240x160 canvas to fit the #screen area.
- * The canvas keeps its native resolution; CSS scales it with `image-rendering: pixelated`.
- * With integer scaling we pick a whole multiple of the *device* pixel grid, so every game pixel
- * is exactly N x N physical pixels: perfectly crisp, even on 3x phone screens.
+ * Sizes the canvas to fill the #screen area.
+ * The game is always GAME.width (240) pixels wide; its height grows with tall screens
+ * (e.g. portrait phones) from GAME.height (160) up to GAME.maxHeight, so the screen can take
+ * about half the phone. Scenes anchor their UI to the real height (see ui/layout.js).
+ * CSS scales the canvas with `image-rendering: pixelated`. With integerScaling we snap to a
+ * whole multiple of the *device* pixel grid when that wastes little space.
  */
 export function installScaler(game) {
   const screen = document.getElementById('screen');
@@ -14,14 +16,17 @@ export function installScaler(game) {
     const availW = screen.clientWidth;
     const availH = screen.clientHeight;
     if (!availW || !availH) return;
-    let cssScale;
+    const W = GAME.width;
+    const clampH = (h) => Math.max(GAME.height, Math.min(GAME.maxHeight, Math.floor(h)));
+    let zoom = availW / W;
+    if (availH / zoom < GAME.height) zoom = availH / GAME.height;
     if (GAME.integerScaling) {
-      const devScale = Math.max(1, Math.floor(Math.min((availW * dpr) / GAME.width, (availH * dpr) / GAME.height)));
-      cssScale = devScale / dpr;
-    } else {
-      cssScale = Math.min(availW / GAME.width, availH / GAME.height);
+      const dev = Math.floor(zoom * dpr);
+      if (dev >= 1 && dev / (zoom * dpr) >= 0.88) zoom = dev / dpr;
     }
-    game.scale.setZoom(cssScale);
+    const H = clampH(availH / zoom);
+    if (H !== game.scale.height) game.scale.resize(W, H);
+    game.scale.setZoom(zoom);
   };
 
   window.addEventListener('resize', fit);

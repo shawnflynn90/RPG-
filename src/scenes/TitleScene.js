@@ -5,6 +5,7 @@ import { input } from '../input/InputManager.js';
 import { pixelText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 import { Audio } from '../systems/Audio.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 export function formatTime(ms) {
   const m = Math.floor(ms / 60000);
@@ -29,7 +30,7 @@ export class TitleScene extends Phaser.Scene {
     // simple animated backdrop
     this.stars = [];
     for (let i = 0; i < 40; i++) {
-      this.stars.push(this.add.rectangle(Math.random() * 240, Math.random() * 160, 1, 1, 0xffffff, Math.random() * 0.8 + 0.2));
+      this.stars.push(this.add.rectangle(Math.random() * 240, Math.random() * 256 - 48, 1, 1, 0xffffff, Math.random() * 0.8 + 0.2));
     }
     const title = (DB.world.title || 'Pocket Quest').toUpperCase();
     pixelText(this, width / 2 + 1, 25, title, 0x402060).setOrigin(0.5).setScale(2);
@@ -38,6 +39,7 @@ export class TitleScene extends Phaser.Scene {
     this.prompt = pixelText(this, width / 2, 82, 'Press START or A', 0xffffff).setOrigin(0.5);
     pixelText(this, width / 2, 150, 'v0.3 - milestone 3', COLORS.dim).setOrigin(0.5);
 
+    anchorUI(this, 'center');
     this.mode = 'press';
     this.menu = null;
     this.panel = null;
@@ -83,7 +85,7 @@ export class TitleScene extends Phaser.Scene {
   update(time) {
     for (const s of this.stars) {
       s.y += 0.05;
-      if (s.y > 160) s.y = 0;
+      if (s.y > 208) s.y = -48;
     }
     if (this.mode === 'press') {
       this.prompt.setVisible(Math.floor(time / 500) % 2 === 0);

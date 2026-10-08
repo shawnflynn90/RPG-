@@ -141,9 +141,19 @@ export class WorldScene extends Phaser.Scene {
 
     // ---- camera -----------------------------------------------------------------------
     const cam = this.cameras.main;
-    const bx = W < GAME.width ? -(GAME.width - W) / 2 : 0;
-    const by = H < GAME.height ? -(GAME.height - H) / 2 : 0;
-    cam.setBounds(bx, by, Math.max(W, GAME.width), Math.max(H, GAME.height));
+    // Small maps are centred; the screen height changes with the phone (see scale.js).
+    const fitCamera = () => {
+      const SW = this.scale.width;
+      const SH = this.scale.height;
+      cam.setSize(SW, SH);
+      const bx = W < SW ? -Math.floor((SW - W) / 2) : 0;
+      const by = H < SH ? -Math.floor((SH - H) / 2) : 0;
+      cam.setBounds(bx, by, Math.max(W, SW), Math.max(H, SH));
+      if (this.lighting) this.lighting.resize(SW, SH);
+    };
+    fitCamera();
+    this.scale.on('resize', fitCamera);
+    this.events.once('shutdown', () => this.scale.off('resize', fitCamera));
     cam.startFollow(this.player, true);
     cam.setRoundPixels(true);
     cam.fadeIn(180, 0, 0, 0);

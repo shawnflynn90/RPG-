@@ -2,11 +2,12 @@
 
 export const GAME = {
   width: 240, // GBA native resolution
-  height: 160,
+  height: 160, // minimum height; tall screens (portrait phones) get up to maxHeight
+  maxHeight: 256,
   tileSize: 16,
   /**
-   * true  = scale by whole multiples of the *device* pixel grid: perfectly crisp pixels,
-   *         may leave a border.
+   * true  = prefer whole multiples of the *device* pixel grid (perfectly crisp pixels) when
+   *         that costs little screen space; otherwise fill.
    * false = fill the available space (pixels may be slightly uneven).
    */
   integerScaling: true,

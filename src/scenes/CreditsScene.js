@@ -4,6 +4,7 @@ import { input } from '../input/InputManager.js';
 import { Audio } from '../systems/Audio.js';
 import { pixelText, LINE_HEIGHT } from '../ui/font.js';
 import { COLORS } from '../ui/widgets.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 /** Scrolling credits (public/data/credits.json). Hold A to speed up; A at the end closes. */
 export class CreditsScene extends Phaser.Scene {
@@ -17,10 +18,12 @@ export class CreditsScene extends Phaser.Scene {
 
   create() {
     const c = DB.credits || {};
-    this.add.rectangle(0, 0, 240, 160, 0x000000).setOrigin(0);
+    backdrop(this, 0x000000);
     this.stars = [];
-    for (let i = 0; i < 50; i++) this.stars.push(this.add.rectangle(Math.random() * 240, Math.random() * 160, 1, 1, 0xffffff, Math.random() * 0.7 + 0.2));
-    this.content = this.add.container(0, 170);
+    for (let i = 0; i < 50; i++) this.stars.push(this.add.rectangle(Math.random() * 240, Math.random() * 256 - 48, 1, 1, 0xffffff, Math.random() * 0.7 + 0.2));
+    let extra = 0;
+    anchorUI(this, 'center', (e) => (extra = e));
+    this.content = this.add.container(0, 170 + Math.ceil(extra / 2));
     let y = 0;
     const add = (txt, color, scale = 1) => {
       this.content.add(pixelText(this, 120, y, txt, color).setOrigin(0.5, 0).setScale(scale));
@@ -44,7 +47,7 @@ export class CreditsScene extends Phaser.Scene {
   update(time, dt) {
     for (const s of this.stars) {
       s.y += 0.04 * dt * 0.06;
-      if (s.y > 160) s.y = 0;
+      if (s.y > 208) s.y = -48;
     }
     const target = 70 - this.endY;
     if (this.content.y > target) {

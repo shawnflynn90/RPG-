@@ -6,6 +6,7 @@ import { pixelText, wrapText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 
 import { Audio } from '../systems/Audio.js';
+import { anchorUI, backdrop } from '../ui/layout.js';
 
 /**
  * Buying screen for shops (data/shops.json), spell teachers (data/teachers.json) and
@@ -25,7 +26,8 @@ export class ShopScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0);
+    backdrop(this);
+    anchorUI(this, 'center');
     drawPanel(this, 2, 2, 236, 18);
     pixelText(this, 8, 7, this.def.name || 'Shop', COLORS.highlight);
     this.goldText = pixelText(this, 232, 7, '', COLORS.highlight).setOrigin(1, 0);

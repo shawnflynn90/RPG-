@@ -3,6 +3,7 @@ import { DB } from '../systems/db.js';
 import { Game } from '../systems/GameState.js';
 import { pixelText } from '../ui/font.js';
 import { drawPanel } from '../ui/widgets.js';
+import { anchorUI } from '../ui/layout.js';
 
 /** HP / MP bars, gold, equipped weapon + spell, boss health bar, area names. */
 export class HUDScene extends Phaser.Scene {
@@ -55,6 +56,7 @@ export class HUDScene extends Phaser.Scene {
     this.bossUI.add([bb, this.bossName, bossBg, this.bossFill]);
 
     this.areaBanner = this.add.container(120, 46).setAlpha(0);
+    anchorUI(this, 'top', (extra) => this.bossUI.setY(extra));
   }
 
   makeBar(x, y, w, color) {

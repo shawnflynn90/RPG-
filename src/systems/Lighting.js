@@ -1,5 +1,3 @@
-import { GAME } from '../config/game.config.js';
-
 /**
  * Darkness overlay for dark rooms. A screen-sized layer of darkness with soft holes cut out
  * around light sources: the player, lit torches, `light` objects and glowing projectiles.
@@ -11,9 +9,13 @@ export class Lighting {
     this.scene = scene;
     this.darkness = darkness;
     this.color = color;
-    this.rt = scene.add.renderTexture(0, 0, GAME.width, GAME.height).setOrigin(0).setScrollFactor(0).setDepth(150000);
+    this.rt = scene.add.renderTexture(0, 0, scene.scale.width, scene.scale.height).setOrigin(0).setScrollFactor(0).setDepth(150000);
     this.stamp = scene.make.image({ key: 'light', add: false });
     this.sources = []; // static lights: { x, y, radius, flicker }
+  }
+
+  resize(w, h) {
+    if (this.rt.width !== w || this.rt.height !== h) this.rt.resize(w, h);
   }
 
   addLight(x, y, radius, flicker = false) {

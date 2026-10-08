@@ -13,8 +13,8 @@
   --face-press: #c4577f;
   --label: #b8b0d0;
   --side: clamp(140px, 25vw, 240px);
-  --dpad: clamp(108px, 30vmin, 156px);
-  --face-size: clamp(48px, 14vmin, 70px);
+  --dpad: clamp(124px, 36vmin, 176px);
+  --face-size: clamp(58px, 17vmin, 82px);
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-r: env(safe-area-inset-right, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -91,8 +91,8 @@ body {
 .shoulder {
   position: absolute;
   top: 0;
-  width: clamp(64px, 18vmin, 92px);
-  height: clamp(28px, 8vmin, 38px);
+  width: clamp(76px, 22vmin, 104px);
+  height: clamp(34px, 10vmin, 44px);
   background: var(--btn);
   color: var(--label);
   font-weight: 700;
@@ -168,7 +168,7 @@ body {
   justify-content: center;
   color: rgba(255, 255, 255, 0.75);
   font-weight: 800;
-  font-size: 18px;
+  font-size: 20px;
 }
 .face-btn.a { right: 0; top: 0; }
 .face-btn.b { left: 0; bottom: 0; }
@@ -189,15 +189,15 @@ body {
   gap: 2px;
   padding: 4px 6px;
   color: var(--label);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 1px;
   font-weight: 700;
 }
 .sys-btn i {
   display: block;
-  width: 40px;
-  height: 12px;
-  border-radius: 6px;
+  width: 52px;
+  height: 16px;
+  border-radius: 8px;
   background: var(--btn);
   box-shadow: inset 0 -2px 0 var(--btn-edge);
   transform: rotate(-20deg);
@@ -230,12 +230,13 @@ body {
       'left   right'
       'sys    sys';
   }
+  /* about half the phone: the canvas grows taller to fill it (see scale.js) */
   #screen {
-    aspect-ratio: 3 / 2;
-    max-height: 56vh;
     width: 100%;
+    height: 50vh;
+    height: 50dvh;
   }
-  .pad { padding-top: 44px; }
+  .pad { padding-top: 52px; }
 }
 
 /* ---------- keyboard / gamepad: hide the touch controls ---------- */
@@ -250,8 +251,6 @@ body.touch-hidden #shell {
   grid-template-areas: 'screen';
 }
 body.touch-hidden #screen {
-  aspect-ratio: auto;
-  max-height: none;
   height: 100%;
 }
 
