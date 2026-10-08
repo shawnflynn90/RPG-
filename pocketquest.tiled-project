@@ -73,14 +73,24 @@
      "value": ""
     },
     {
+     "name": "wander",
+     "type": "bool",
+     "value": false
+    },
+    {
      "name": "facing",
      "type": "string",
      "value": "down"
     },
     {
-     "name": "wander",
-     "type": "bool",
-     "value": false
+     "name": "ifFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
     }
    ]
   },
@@ -113,6 +123,16 @@
      "name": "facing",
      "type": "string",
      "value": "down"
+    },
+    {
+     "name": "ifFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
     }
    ]
   },
@@ -145,11 +165,63 @@
      "name": "facing",
      "type": "string",
      "value": "down"
+    },
+    {
+     "name": "ifFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
     }
    ]
   },
   {
    "id": 6,
+   "name": "smith",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff906040",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "sprite",
+     "type": "string",
+     "value": "npc_smith"
+    },
+    {
+     "name": "smith",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "dialogue",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "facing",
+     "type": "string",
+     "value": "down"
+    },
+    {
+     "name": "ifFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 7,
    "name": "healer",
    "type": "class",
    "useAs": [
@@ -177,11 +249,21 @@
      "name": "facing",
      "type": "string",
      "value": "down"
+    },
+    {
+     "name": "ifFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
     }
    ]
   },
   {
-   "id": 7,
+   "id": 8,
    "name": "sign",
    "type": "class",
    "useAs": [
@@ -198,7 +280,7 @@
    ]
   },
   {
-   "id": 8,
+   "id": 9,
    "name": "chest",
    "type": "class",
    "useAs": [
@@ -219,6 +301,11 @@
     },
     {
      "name": "item",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "armor",
      "type": "string",
      "value": ""
     },
@@ -248,6 +335,11 @@
      "value": ""
     },
     {
+     "name": "ifFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
      "name": "id",
      "type": "string",
      "value": ""
@@ -255,7 +347,7 @@
    ]
   },
   {
-   "id": 9,
+   "id": 10,
    "name": "enemy",
    "type": "class",
    "useAs": [
@@ -272,7 +364,7 @@
    ]
   },
   {
-   "id": 10,
+   "id": 11,
    "name": "boss",
    "type": "class",
    "useAs": [
@@ -289,7 +381,7 @@
    ]
   },
   {
-   "id": 11,
+   "id": 12,
    "name": "gate",
    "type": "class",
    "useAs": [
@@ -304,12 +396,191 @@
      "value": ""
     },
     {
+     "name": "invert",
+     "type": "bool",
+     "value": false
+    },
+    {
      "name": "mode",
      "type": "string",
      "value": ""
     },
     {
      "name": "text",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "name": "door",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff805028",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "lock",
+     "type": "string",
+     "value": "small_key"
+    },
+    {
+     "name": "consume",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "text",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "id",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "name": "switch",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff38a8f8",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "flag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "mode",
+     "type": "string",
+     "value": "floor"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "name": "block",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffa0a8b8",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "once",
+     "type": "bool",
+     "value": false
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "name": "pot",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffc08850",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "drop",
+     "type": "string",
+     "value": "random"
+    },
+    {
+     "name": "item",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "count",
+     "type": "int",
+     "value": 1
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "name": "torch",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#fff8a030",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "flag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "lit",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "radius",
+     "type": "int",
+     "value": 48
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "name": "light",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#fff8f080",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "radius",
+     "type": "int",
+     "value": 40
+    },
+    {
+     "name": "flicker",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "name": "item",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#fff8e060",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "item",
+     "type": "string",
+     "value": "small_key"
+    },
+    {
+     "name": "count",
+     "type": "int",
+     "value": 1
+    },
+    {
+     "name": "id",
      "type": "string",
      "value": ""
     }

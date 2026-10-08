@@ -22,7 +22,11 @@ export function applySettings() {
 
 function keyName(code) {
   if (!code) return '-';
-  return code.replace(/^Key/, '').replace(/^Digit/, '').replace(/^Arrow/, '').replace('Right', 'R').replace('Left', 'L');
+  return code
+    .replace(/^Key/, '')
+    .replace(/^Digit/, '')
+    .replace(/^Arrow/, '')
+    .replace(/^(Shift|Control|Alt|Meta)(Left|Right)$/, (_, k, side) => side[0] + k.replace('Control', 'Ctrl'));
 }
 
 /**

@@ -50,6 +50,7 @@ export class WorldScene extends Phaser.Scene {
     this.boss = null;
     this.tempFlags = new Set();
     this.pendingLevelUps = [];
+    this.cutsceneQueue = [];
   }
 
   sfx(name) {
@@ -395,24 +396,42 @@ export class WorldScene extends Phaser.Scene {
     return true;
   }
 
-  /** Freeze the world while an async sequence (dialogue, menus...) runs. */
-  async cutscene(fn) {
-    if (this.inCutscene) return;
+  /**
+   * Freeze the world while an async sequence (dialogue, menus...) runs.
+   * Cutscenes requested while another is running are queued and run afterwards.
+   */
+  cutscene(fn) {
+    return new Promise((resolve) => {
+      this.cutsceneQueue.push({ fn, resolve });
+      if (!this.inCutscene) this.runNextCutscene();
+    });
+  }
+
+  async runNextCutscene() {
+    const next = this.cutsceneQueue.shift();
+    if (!next) return;
     this.inCutscene = true;
-    this.player.body.setVelocity(0, 0);
-    this.player.play4('idle');
+    if (this.player && this.player.body) {
+      this.player.body.setVelocity(0, 0);
+      this.player.play4('idle');
+    }
     this.scene.pause();
     try {
-      await fn();
+      await next.fn();
     } catch (e) {
       console.error(e);
-    } finally {
-      this.inCutscene = false;
-      // Always resume: Phaser queues pause() during an update, so a cutscene that finishes
-      // instantly must queue its resume after that pause.
-      this.scene.resume();
-      input.consume();
     }
+    if (this.cutsceneQueue.length) {
+      next.resolve();
+      this.runNextCutscene();
+      return;
+    }
+    this.inCutscene = false;
+    // Always resume: Phaser queues pause() during an update, so a cutscene that finishes
+    // instantly must queue its resume after that pause.
+    this.scene.resume();
+    input.consume();
+    next.resolve();
   }
 
   dialogue(id) {
@@ -565,7 +584,7 @@ export class WorldScene extends Phaser.Scene {
     }
     await new Promise((r) => this.time.delayedCall(1000, r));
     this.combat.puff(boss.x, boss.y, 0xffffff, 16);
-    this.cameras.main.flash(300, 255, 255, 255);
+    this.ui.cameras.main.flash(300, 255, 255, 255); // UI camera: keeps animating while the world is paused
     const bx = boss.x;
     const by = boss.y;
     boss.destroy();

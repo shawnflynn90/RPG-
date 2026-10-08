@@ -48,6 +48,7 @@ fsBtn.addEventListener('click', () => {
 });
 
 window.__game = game; // handy for debugging in the browser console
+window.__audio = Audio;
 
 /**
  * Art helper: in the browser console run  __exportSprite('player')  to download that sprite's

@@ -141,7 +141,7 @@ export class HUDScene extends Phaser.Scene {
 
     // boss bar
     const boss = this.world && this.world.boss;
-    const show = !!(boss && boss.active && boss.engaged);
+    const show = !!(boss && boss.active && boss.engaged && !boss.dead);
     this.bossUI.setVisible(show);
     if (show) {
       this.bossName.setText(boss.def.name);

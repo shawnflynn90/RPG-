@@ -176,8 +176,10 @@ export class Actor extends Phaser.Physics.Arcade.Sprite {
     this.dead = true;
   }
 
-  preUpdate(time, delta) {
-    super.preUpdate(time, delta);
+  preUpdate(frameTime, delta) {
+    super.preUpdate(frameTime, delta);
+    // All our timers (invulnUntil, slowUntil, status effects...) use the scene clock.
+    const time = this.scene.time.now;
     // y-sort: things lower on screen are drawn in front
     this.setDepth(10 + this.body.bottom);
     this.shadow.setPosition(this.footX, this.body.bottom - 1);

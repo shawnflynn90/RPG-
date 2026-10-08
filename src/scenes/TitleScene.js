@@ -36,7 +36,7 @@ export class TitleScene extends Phaser.Scene {
     pixelText(this, width / 2, 24, title, COLORS.highlight).setOrigin(0.5).setScale(2);
     this.hero = this.add.sprite(width / 2, 58, 'player').play('player:walk:down');
     this.prompt = pixelText(this, width / 2, 82, 'Press START or A', 0xffffff).setOrigin(0.5);
-    pixelText(this, width / 2, 150, 'v0.1 - milestone 1', COLORS.dim).setOrigin(0.5);
+    pixelText(this, width / 2, 150, 'v0.2 - milestone 2', COLORS.dim).setOrigin(0.5);
 
     this.mode = 'press';
     this.menu = null;
