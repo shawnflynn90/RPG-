@@ -43,3 +43,21 @@ fsBtn.addEventListener('click', () => {
 });
 
 window.__game = game; // handy for debugging in the browser console
+
+/**
+ * Art helper: in the browser console run  __exportSprite('player')  to download that sprite's
+ * current sheet (placeholder or yours) as a PNG template in the exact layout the game expects.
+ */
+window.__exportSprite = (key) => {
+  const tex = game.textures.get(key);
+  if (!tex || tex.key === '__MISSING') return console.warn(`No texture "${key}"`);
+  const src = tex.getSourceImage();
+  const c = document.createElement('canvas');
+  c.width = src.width;
+  c.height = src.height;
+  c.getContext('2d').drawImage(src, 0, 0);
+  const a = document.createElement('a');
+  a.href = c.toDataURL('image/png');
+  a.download = `${key}.png`;
+  a.click();
+};

@@ -53,6 +53,7 @@ export class Player extends Actor {
 
     if (this.knockedBack) {
       this.body.velocity.scale(0.9);
+      this.play4('hurt');
     } else if (time < this.lockUntil) {
       this.body.setVelocity(0, 0);
     } else {

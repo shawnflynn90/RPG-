@@ -48,6 +48,7 @@ export class Enemy extends Actor {
     if (this.dead || !this.player) return;
     if (this.knockedBack) {
       this.body.velocity.scale(0.88);
+      this.play4('hurt');
       return;
     }
     const ai = this.ai;

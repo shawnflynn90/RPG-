@@ -1,0 +1,319 @@
+{
+ "automappingRulesFile": "",
+ "commands": [],
+ "compatibilityVersion": 1100,
+ "extensionsPath": "extensions",
+ "folders": [
+  "public/maps",
+  "public/assets/tilesets"
+ ],
+ "propertyTypes": [
+  {
+   "id": 1,
+   "name": "spawn",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff58d858",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "facing",
+     "type": "string",
+     "value": "down"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "name": "warp",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff4890f0",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "map",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "spawn",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "facing",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "name": "npc",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#fff8d048",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "sprite",
+     "type": "string",
+     "value": "npc_elder"
+    },
+    {
+     "name": "dialogue",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "facing",
+     "type": "string",
+     "value": "down"
+    },
+    {
+     "name": "wander",
+     "type": "bool",
+     "value": false
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "name": "shop",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#fff8a048",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "sprite",
+     "type": "string",
+     "value": "npc_merchant"
+    },
+    {
+     "name": "shop",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "dialogue",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "facing",
+     "type": "string",
+     "value": "down"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "name": "teacher",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffc878f8",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "sprite",
+     "type": "string",
+     "value": "npc_mage"
+    },
+    {
+     "name": "teacher",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "dialogue",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "facing",
+     "type": "string",
+     "value": "down"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "name": "healer",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffffffff",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "sprite",
+     "type": "string",
+     "value": "npc_healer"
+    },
+    {
+     "name": "dialogue",
+     "type": "string",
+     "value": "healer"
+    },
+    {
+     "name": "price",
+     "type": "int",
+     "value": 0
+    },
+    {
+     "name": "facing",
+     "type": "string",
+     "value": "down"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "name": "sign",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffa87840",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "text",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "name": "chest",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffb07030",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "weapon",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "spell",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "item",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "count",
+     "type": "int",
+     "value": 1
+    },
+    {
+     "name": "gold",
+     "type": "int",
+     "value": 0
+    },
+    {
+     "name": "maxHp",
+     "type": "int",
+     "value": 0
+    },
+    {
+     "name": "maxMp",
+     "type": "int",
+     "value": 0
+    },
+    {
+     "name": "flag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "id",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "name": "enemy",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#fff84848",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "enemy",
+     "type": "string",
+     "value": "slime"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "name": "boss",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffc00000",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "boss",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "name": "gate",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff8888a0",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "flag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "mode",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "text",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  }
+ ]
+}

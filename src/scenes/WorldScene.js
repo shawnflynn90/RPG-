@@ -152,7 +152,7 @@ export class WorldScene extends Phaser.Scene {
       case 'sign': {
         const s = new Prop(this, cx, cy, 'sign');
         this.propGroup.add(s);
-        this.interactables.push({ bounds: () => s.bounds(), run: () => this.ui.say(p.text || '...') });
+        this.interactables.push({ bounds: () => s.bounds(), run: () => this.ui.say(String(p.text || '...').replace(/\\n/g, '\n')) });
         break;
       }
       case 'chest': {
