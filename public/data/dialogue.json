@@ -8,27 +8,125 @@
     ],
     "variants": [
       {
-        "if": { "flag": "dungeon1_cleared" },
-        "pages": ["You defeated the Stone Warden! The road north is open. Safe travels!"]
+        "if": {
+          "flag": "dungeon2_cleared"
+        },
+        "pages": [
+          "Two great evils defeated! Word of you has spread to every town."
+        ]
+      },
+      {
+        "if": {
+          "flag": "dungeon1_cleared"
+        },
+        "pages": [
+          "You defeated the Stone Warden! The road north to Town 2 is open. Safe travels!"
+        ]
       }
     ]
   },
   "healer": {
     "speaker": "Healer",
-    "pages": ["Rest here and I'll restore your strength. I'll also record your journey."]
+    "pages": [
+      "Rest here and I'll restore your strength. I'll also record your journey."
+    ]
   },
   "kid": {
     "speaker": "Kid",
     "pages": [
       "Tip: press LB and RB to switch weapons and spells!",
-      "And START opens the menu."
+      "And if you hold A after swinging, you can do a spin attack!"
     ],
     "variants": [
-      { "if": { "hasWeapon": "bow" }, "pages": ["Whoa, a bow! You can hit things from far away now."] }
+      {
+        "if": {
+          "hasWeapon": "bow"
+        },
+        "pages": [
+          "Whoa, a bow! You can hit things from far away now."
+        ]
+      }
     ]
   },
-  "town2_greeter": {
+  "villager1": {
+    "speaker": "Villager",
+    "pages": [
+      "Press SELECT to look at your map.",
+      "In dungeons, finding the Dungeon Map shows every room!"
+    ]
+  },
+  "innkeeper": {
+    "speaker": "Innkeeper",
+    "pages": [
+      "Welcome to the inn, traveler. A warm bed and a save, free of charge."
+    ]
+  },
+  "traveler": {
+    "speaker": "Traveler",
+    "pages": [
+      "I came from the crypt. The dark there is alive...",
+      "If you're poisoned, drink an Antidote, or rest at the inn."
+    ]
+  },
+  "town2_guard": {
     "speaker": "Guard",
-    "pages": ["Welcome to Town 2!", "...We're still building it. Come back in the next milestone."]
+    "pages": [
+      "You beat the Warden? Then maybe you can handle the Shadow Crypt.",
+      "Light the torches with fire magic. That's all I know."
+    ],
+    "variants": [
+      {
+        "if": {
+          "flag": "dungeon2_cleared"
+        },
+        "pages": [
+          "The Sorcerer is gone! I can finally sleep at night."
+        ]
+      }
+    ]
+  },
+  "scholar": {
+    "speaker": "Scholar",
+    "pages": [
+      "Shield Knights block attacks from the front. Hit them from the side or behind!",
+      "Magic that explodes around you, like Frost Ring or Thunder, gets past shields too."
+    ]
+  },
+  "town2_villager": {
+    "speaker": "Villager",
+    "pages": [
+      "The blacksmith can upgrade your weapons.",
+      "A Sword +3 is a fine thing indeed."
+    ],
+    "variants": [
+      {
+        "if": {
+          "minLevel": 8
+        },
+        "pages": [
+          "You look strong! Level 8 at least."
+        ]
+      }
+    ]
+  },
+  "town2_kid": {
+    "speaker": "Kid",
+    "pages": [
+      "Some doors in the crypt are locked.",
+      "Keys open locked doors. The BIG key opens the boss door!",
+      "I heard you can push blocks, too."
+    ],
+    "give": {
+      "item": "potion",
+      "count": 1
+    },
+    "giveFlag": "gift_town2_kid"
+  },
+  "town3_greeter": {
+    "speaker": "Guard",
+    "pages": [
+      "Welcome to Town 3!",
+      "...We're still building it. Come back in the next milestone."
+    ]
   }
 }

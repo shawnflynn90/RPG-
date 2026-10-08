@@ -24,7 +24,14 @@ export class Combat {
   /** Called once walls/gates exist, so projectiles break on them. */
   addBlockers(blockers) {
     for (const b of blockers) {
-      this.scene.physics.add.collider(this.projectiles, b, (p) => this.killProjectile(p));
+      this.scene.physics.add.collider(this.projectiles, b, (p, obj) => {
+        // Solid breakables (pots, torches, crystal switches) still get hit by the projectile.
+        if (obj && obj.hurt && p.proj && p.proj.team === 'player' && !p.proj.hit.has(obj)) {
+          p.proj.hit.add(obj);
+          this.hit(obj, p.proj, p.x, p.y);
+        }
+        this.killProjectile(p);
+      });
     }
   }
 

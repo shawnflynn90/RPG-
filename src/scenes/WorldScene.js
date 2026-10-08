@@ -408,7 +408,9 @@ export class WorldScene extends Phaser.Scene {
       console.error(e);
     } finally {
       this.inCutscene = false;
-      if (this.scene.isPaused()) this.scene.resume();
+      // Always resume: Phaser queues pause() during an update, so a cutscene that finishes
+      // instantly must queue its resume after that pause.
+      this.scene.resume();
       input.consume();
     }
   }

@@ -25,32 +25,171 @@
     "town1": {
       "file": "maps/town1.tmj",
       "name": "Town 1",
-      "kind": "town"
+      "kind": "town",
+      "region": "town1",
+      "music": "town"
+    },
+    "town1_healer": {
+      "file": "maps/town1_healer.tmj",
+      "name": "Town 1",
+      "kind": "interior",
+      "region": "town1",
+      "music": "interior"
+    },
+    "town1_shop": {
+      "file": "maps/town1_shop.tmj",
+      "name": "Town 1",
+      "kind": "interior",
+      "region": "town1",
+      "music": "interior"
+    },
+    "town1_magic": {
+      "file": "maps/town1_magic.tmj",
+      "name": "Town 1",
+      "kind": "interior",
+      "region": "town1",
+      "music": "interior"
     },
     "dungeon1_1": {
       "file": "maps/dungeon1_1.tmj",
       "name": "Dungeon 1",
-      "kind": "dungeon"
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        1,
+        2
+      ]
     },
     "dungeon1_2": {
       "file": "maps/dungeon1_2.tmj",
       "name": "Dungeon 1",
-      "kind": "dungeon"
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        1,
+        1
+      ]
     },
     "dungeon1_3": {
       "file": "maps/dungeon1_3.tmj",
       "name": "Dungeon 1",
-      "kind": "dungeon"
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        2,
+        1
+      ]
     },
     "dungeon1_boss": {
       "file": "maps/dungeon1_boss.tmj",
       "name": "Warden's Lair",
-      "kind": "dungeon"
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        2,
+        0
+      ],
+      "boss": true
     },
     "town2": {
       "file": "maps/town2.tmj",
       "name": "Town 2",
-      "kind": "town"
+      "kind": "town",
+      "region": "town2",
+      "music": "town2"
+    },
+    "town2_inn": {
+      "file": "maps/town2_inn.tmj",
+      "name": "Town 2",
+      "kind": "interior",
+      "region": "town2",
+      "music": "interior"
+    },
+    "town2_shop": {
+      "file": "maps/town2_shop.tmj",
+      "name": "Town 2",
+      "kind": "interior",
+      "region": "town2",
+      "music": "interior"
+    },
+    "town2_library": {
+      "file": "maps/town2_library.tmj",
+      "name": "Town 2",
+      "kind": "interior",
+      "region": "town2",
+      "music": "interior"
+    },
+    "dungeon2_1": {
+      "file": "maps/dungeon2_1.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        1,
+        2
+      ],
+      "darkness": 0.6
+    },
+    "dungeon2_2": {
+      "file": "maps/dungeon2_2.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        1,
+        1
+      ],
+      "darkness": 0.88
+    },
+    "dungeon2_3": {
+      "file": "maps/dungeon2_3.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        0,
+        1
+      ],
+      "darkness": 0.85
+    },
+    "dungeon2_4": {
+      "file": "maps/dungeon2_4.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        2,
+        1
+      ],
+      "darkness": 0.85
+    },
+    "dungeon2_boss": {
+      "file": "maps/dungeon2_boss.tmj",
+      "name": "Sorcerer's Sanctum",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        1,
+        0
+      ],
+      "boss": true,
+      "darkness": 0.7
+    },
+    "town3": {
+      "file": "maps/town3.tmj",
+      "name": "Town 3",
+      "kind": "town",
+      "region": "town3",
+      "music": "town"
     }
   },
   "leveling": {
@@ -64,5 +203,34 @@
       "attack": 0.34
     }
   },
-  "titleMusic": "title"
+  "titleMusic": "title",
+  "regions": [
+    {
+      "id": "town1",
+      "name": "Town 1",
+      "kind": "town"
+    },
+    {
+      "id": "dungeon1",
+      "name": "Dungeon 1",
+      "kind": "dungeon",
+      "boss": "warden"
+    },
+    {
+      "id": "town2",
+      "name": "Town 2",
+      "kind": "town"
+    },
+    {
+      "id": "dungeon2",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "boss": "sorcerer"
+    },
+    {
+      "id": "town3",
+      "name": "Town 3",
+      "kind": "town"
+    }
+  ]
 }

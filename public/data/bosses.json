@@ -119,5 +119,175 @@
     "xp": 30,
     "title": "Guardian of the First Gate",
     "music": "boss"
+  },
+  "sorcerer": {
+    "name": "Shade Sorcerer",
+    "title": "Keeper of the Dark",
+    "sprite": "boss_sorcerer",
+    "hp": 110,
+    "contactDamage": 3,
+    "speed": 30,
+    "restMs": 550,
+    "xp": 60,
+    "light": 44,
+    "music": "boss",
+    "resist": [
+      "poison"
+    ],
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "teleport",
+          "aimed",
+          "walk",
+          "radial",
+          "teleport",
+          "summon"
+        ]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "The Sorcerer's shadow splits and howls!",
+        "tint": "#c078f8",
+        "speedMul": 1.3,
+        "patterns": [
+          "teleport",
+          "aimed_fast",
+          "radial_poison",
+          "teleport",
+          "summon_spiders",
+          "nova"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1200
+      },
+      "teleport": {
+        "type": "teleport",
+        "fadeMs": 300,
+        "hideMs": 400,
+        "minDist": 56,
+        "maxDist": 90
+      },
+      "aimed": {
+        "type": "aimed",
+        "windupMs": 400,
+        "count": 3,
+        "spreadDeg": 16,
+        "waves": 2,
+        "waveDelayMs": 350,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 110,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26
+        }
+      },
+      "aimed_fast": {
+        "type": "aimed",
+        "windupMs": 300,
+        "count": 5,
+        "spreadDeg": 14,
+        "waves": 3,
+        "waveDelayMs": 300,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 130,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26
+        }
+      },
+      "radial": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 10,
+        "waves": 1,
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 80,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26
+        }
+      },
+      "radial_poison": {
+        "type": "radial",
+        "windupMs": 450,
+        "count": 12,
+        "waves": 2,
+        "waveDelayMs": 400,
+        "sfx": "poison",
+        "projectile": {
+          "sprite": "venom",
+          "speed": 90,
+          "range": 220,
+          "damage": 2,
+          "size": [
+            6,
+            6
+          ],
+          "light": 16,
+          "effect": {
+            "poison": {
+              "dps": 1,
+              "durationMs": 3000
+            }
+          }
+        }
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "wisp",
+        "count": 2,
+        "max": 3
+      },
+      "summon_spiders": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "spider",
+        "count": 2,
+        "max": 4
+      },
+      "nova": {
+        "type": "area",
+        "windupMs": 700,
+        "radius": 50,
+        "damage": 4,
+        "color": "#c078f8",
+        "sfx": "ice",
+        "effect": {
+          "slow": 0.5,
+          "durationMs": 2000
+        }
+      }
+    },
+    "reward": {
+      "weapon": "wand",
+      "maxMp": 4,
+      "gold": 100,
+      "flag": "dungeon2_cleared",
+      "message": "The way to Town 3 is open!"
+    }
   }
 }

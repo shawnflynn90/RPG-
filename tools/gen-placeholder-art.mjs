@@ -134,6 +134,104 @@ const TILES = [
     b.rect(x, y, T, T, hex('#585068'));
     for (let i = 0; i < 4; i++) b.rect(x + 2, y + 2 + i * 3, 12, 2, hex(['#484058', '#686078', '#888098', '#a098b8'][i]));
   }],
+  // ---- interiors (24-31)
+  ['indoor_wall', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#a06838'));
+    for (let c = 0; c < T; c += 4) b.rect(x + c, y, 1, T, hex('#804820'));
+    b.rect(x, y + T - 2, T, 2, hex('#603010'));
+  }],
+  ['indoor_wall_top', true, (b, x, y) => { b.rect(x, y, T, T, hex('#402818')); b.rect(x, y + T - 1, T, 1, hex('#683818')); }],
+  ['checker_floor', false, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#d8d0c0'));
+    b.rect(x, y, 8, 8, hex('#b8b0a0'));
+    b.rect(x + 8, y + 8, 8, 8, hex('#b8b0a0'));
+  }],
+  ['table', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#b07840'));
+    b.rect(x + 1, y + 2, 14, 9, hex('#784820'));
+    b.rect(x + 1, y + 2, 14, 2, hex('#a06830'));
+    b.rect(x + 2, y + 11, 2, 4, hex('#583010'));
+    b.rect(x + 12, y + 11, 2, 4, hex('#583010'));
+  }],
+  ['bed', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#b07840'));
+    b.rect(x + 1, y + 1, 14, 14, hex('#583010'));
+    b.rect(x + 2, y + 2, 12, 4, hex('#f8f8f8'));
+    b.rect(x + 2, y + 6, 12, 8, hex('#4878c8'));
+  }],
+  ['bookshelf', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#583010'));
+    for (const r of [2, 7, 12]) {
+      b.rect(x + 1, y + r, 14, 3, hex('#301808'));
+      for (let c = 0; c < 6; c++) b.rect(x + 2 + c * 2, y + r, 1, 3, hex(['#c84040', '#4878c8', '#48a858', '#e8c050'][c % 4]));
+    }
+  }],
+  ['window_wall', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#a06838'));
+    b.rect(x + 3, y + 3, 10, 8, hex('#402010'));
+    b.rect(x + 4, y + 4, 8, 6, hex('#98d0f8'));
+    b.rect(x + 7, y + 4, 1, 6, hex('#402010'));
+  }],
+  ['doormat', false, (b, x, y) => { b.rect(x, y, T, T, hex('#b07840')); b.rect(x + 2, y + 3, 12, 10, hex('#a83838')); b.rect(x + 3, y + 4, 10, 8, hex('#c85050')); }],
+  // ---- outdoors 2 (32-33)
+  ['sand', false, (b, x, y) => { b.rect(x, y, T, T, hex('#e8c888')); speckle(b, x, y, hex('#d0a868'), 10); }],
+  ['cactus', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#e8c888'));
+    b.rect(x + 6, y + 2, 4, 13, hex('#388838'));
+    b.rect(x + 2, y + 5, 3, 5, hex('#388838'));
+    b.rect(x + 11, y + 4, 3, 5, hex('#388838'));
+    b.rect(x + 7, y + 3, 1, 10, hex('#58b058'));
+  }],
+  // ---- dark dungeon (34-38)
+  ['stone_floor', false, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#384058'));
+    b.rect(x, y, T, 1, hex('#2c3248'));
+    b.rect(x, y, 1, T, hex('#2c3248'));
+    speckle(b, x, y, hex('#424a68'), 6);
+  }],
+  ['stone_wall', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#506080'));
+    for (const r of [0, 5, 10]) b.rect(x, y + r, T, 1, hex('#384460'));
+    b.rect(x + 5, y, 1, 5, hex('#384460'));
+    b.rect(x + 11, y + 5, 1, 5, hex('#384460'));
+    b.rect(x + 3, y + 10, 1, 6, hex('#384460'));
+  }],
+  ['stone_wall_top', true, (b, x, y) => { b.rect(x, y, T, T, hex('#141824')); speckle(b, x, y, hex('#20283a'), 6); }],
+  ['pit', true, (b, x, y) => { b.rect(x, y, T, T, hex('#000000')); b.rect(x, y, T, 2, hex('#20283a')); }],
+  ['lava', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#c83810'));
+    speckle(b, x, y, hex('#f8a030'), 14);
+    b.rect(x + 3, y + 5, 4, 1, hex('#f8e060'));
+  }],
+  // ---- misc (39-43)
+  ['barrel', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#585068'));
+    b.rect(x + 3, y + 2, 10, 13, hex('#202020'));
+    b.rect(x + 4, y + 2, 8, 12, hex('#a06830'));
+    b.rect(x + 4, y + 5, 8, 1, hex('#606060'));
+    b.rect(x + 4, y + 11, 8, 1, hex('#606060'));
+  }],
+  ['autumn_grass', false, (b, x, y) => { b.rect(x, y, T, T, hex('#b8a048')); speckle(b, x, y, hex('#d0b860'), 12); speckle(b, x, y, hex('#c87838'), 3); }],
+  ['autumn_tree', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#b8a048'));
+    b.rect(x + 6, y + 10, 4, 6, hex('#805028'));
+    b.rect(x + 2, y + 1, 12, 10, hex('#c85820'));
+    b.rect(x + 4, y + 2, 4, 3, hex('#f09040'));
+  }],
+  ['anvil', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#b8b0a0'));
+    b.rect(x + 2, y + 5, 12, 4, hex('#383840'));
+    b.rect(x + 5, y + 9, 6, 3, hex('#383840'));
+    b.rect(x + 3, y + 12, 10, 3, hex('#282830'));
+    b.rect(x + 2, y + 5, 12, 1, hex('#686878'));
+  }],
+  ['fountain', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#b8b0a0'));
+    b.rect(x + 1, y + 3, 14, 12, hex('#808890'));
+    b.rect(x + 3, y + 5, 10, 8, hex('#3870d0'));
+    b.rect(x + 7, y + 2, 2, 6, hex('#a0a8b0'));
+    b.rect(x + 6, y + 1, 4, 2, hex('#98d0f8'));
+  }],
 ];
 
 function writeIfAllowed(path, write) {

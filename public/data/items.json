@@ -40,5 +40,11 @@
     "description": "Opens the boss door.",
     "icon": "icon_bosskey",
     "key": true
+  },
+  "dungeon_map": {
+    "name": "Dungeon Map",
+    "description": "Shows every room of a dungeon (press SELECT).",
+    "icon": "icon_map",
+    "key": true
   }
 }

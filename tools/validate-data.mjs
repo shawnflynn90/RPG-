@@ -20,7 +20,7 @@ function readJSON(path) {
 }
 
 const D = {};
-for (const n of ['world', 'weapons', 'spells', 'items', 'enemies', 'bosses', 'shops', 'teachers', 'dialogue']) {
+for (const n of ['world', 'weapons', 'spells', 'items', 'armor', 'enemies', 'bosses', 'shops', 'teachers', 'smiths', 'dialogue', 'sounds', 'music']) {
   D[n] = readJSON(join(PUB, 'data', `${n}.json`)) || {};
 }
 const assets = readJSON(join(PUB, 'assets.json')) || {};
@@ -54,15 +54,39 @@ for (const [id, s] of Object.entries(D.spells)) {
 for (const [id, it] of Object.entries(D.items)) {
   if (it.icon && !textureExists(it.icon)) err(`items.${id}: icon "${it.icon}" not in assets.json`);
 }
+for (const [id, a] of Object.entries(D.armor)) {
+  need(typeof a.defense === 'number', `armor.${id}: defense must be a number`);
+  if (a.icon && !textureExists(a.icon)) err(`armor.${id}: icon "${a.icon}" not in assets.json`);
+}
+const sfxNames = new Set(Object.keys(D.sounds).filter((k) => !k.startsWith('_')));
+const checkSfx = (where, name) => name && !sfxNames.has(name) && !(assets.audio || {})[`sfx_${name}`] && warn(`${where}: sfx "${name}" not in sounds.json`);
+for (const [id, w] of Object.entries(D.weapons)) checkSfx(`weapons.${id}`, w.sfx);
+for (const [id, s] of Object.entries(D.spells)) checkSfx(`spells.${id}`, s.sfx);
+const tracks = new Set(Object.keys(D.music).filter((k) => !k.startsWith('_')));
+const checkMusic = (where, t) => t && !tracks.has(t) && !(assets.audio || {})[`music_${t}`] && err(`${where}: music track "${t}" not in music.json`);
+for (const [id, tr] of Object.entries(D.music)) {
+  if (id.startsWith('_')) continue;
+  for (const [ci, c] of (tr.channels || []).entries()) {
+    for (const tok of c.notes.trim().split(/\s+/)) {
+      if (!/^([A-G][#b]?-?\d|-|\.|x|o)$/.test(tok)) err(`music.${id} channel ${ci}: bad note "${tok}"`);
+    }
+  }
+}
+checkMusic('world.titleMusic', D.world.titleMusic);
 for (const [id, e] of Object.entries(D.enemies)) {
   need(e.sprite in sprites, `enemies.${id}: sprite "${e.sprite}" not in assets.json sprites`);
   need(typeof e.hp === 'number', `enemies.${id}: hp must be a number`);
   const ai = e.ai || {};
   if (ai.idle) need(['wander', 'flutter', 'stand'].includes(ai.idle), `enemies.${id}: ai.idle must be wander, flutter or stand`);
-  if (ai.onSight) need(['chase', 'keepDistance', 'charge', 'none'].includes(ai.onSight), `enemies.${id}: ai.onSight must be chase, keepDistance, charge or none`);
-  for (const d of e.drops || []) need(['gold', 'heart', 'mana'].includes(d.type), `enemies.${id}: drop type "${d.type}" must be gold, heart or mana`);
+  if (ai.onSight) need(['chase', 'keepDistance', 'charge', 'teleport', 'none'].includes(ai.onSight), `enemies.${id}: ai.onSight must be chase, keepDistance, charge, teleport or none`);
+  for (const d of e.drops || []) {
+    need(['gold', 'heart', 'mana', 'item'].includes(d.type), `enemies.${id}: drop type "${d.type}" must be gold, heart, mana or item`);
+    if (d.type === 'item') need(d.item in D.items, `enemies.${id}: drop item "${d.item}" unknown`);
+  }
+  const pr = ai.attack && ai.attack.projectile;
+  if (pr && pr.sprite && !textureExists(pr.sprite)) err(`enemies.${id}: projectile sprite "${pr.sprite}" not in assets.json`);
 }
-const PATTERN_TYPES = ['chase', 'charge', 'area', 'radial', 'aimed', 'summon'];
+const PATTERN_TYPES = ['chase', 'charge', 'area', 'radial', 'aimed', 'summon', 'teleport'];
 for (const [id, b] of Object.entries(D.bosses)) {
   need(b.sprite in sprites, `bosses.${id}: sprite "${b.sprite}" not in assets.json sprites`);
   need(Array.isArray(b.phases) && b.phases.length, `bosses.${id}: needs at least one phase`);
@@ -77,11 +101,14 @@ for (const [id, b] of Object.entries(D.bosses)) {
   if (r.weapon) need(r.weapon in D.weapons, `bosses.${id}.reward: unknown weapon "${r.weapon}"`);
   if (r.spell) need(r.spell in D.spells, `bosses.${id}.reward: unknown spell "${r.spell}"`);
   if (r.item) need(r.item in D.items, `bosses.${id}.reward: unknown item "${r.item}"`);
+  if (r.armor) need(r.armor in D.armor, `bosses.${id}.reward: unknown armor "${r.armor}"`);
+  checkMusic(`bosses.${id}`, b.music);
 }
 for (const [id, s] of Object.entries(D.shops)) {
   for (const e of s.stock || []) {
     if (e.weapon) need(e.weapon in D.weapons, `shops.${id}: unknown weapon "${e.weapon}"`);
     else if (e.spell) need(e.spell in D.spells, `shops.${id}: unknown spell "${e.spell}"`);
+    else if (e.armor) need(e.armor in D.armor, `shops.${id}: unknown armor "${e.armor}"`);
     else need(e.item in D.items, `shops.${id}: unknown item "${e.item}"`);
   }
 }
@@ -92,6 +119,21 @@ const ng = D.world.newGame || {};
 for (const w of ng.weapons || []) need(w in D.weapons, `world.newGame: unknown weapon "${w}"`);
 for (const s of ng.spells || []) need(s in D.spells, `world.newGame: unknown spell "${s}"`);
 for (const i of Object.keys(ng.items || {})) need(i in D.items, `world.newGame: unknown item "${i}"`);
+for (const a of ng.armor || []) need(a in D.armor, `world.newGame: unknown armor "${a}"`);
+const regionIds = new Set((D.world.regions || []).map((r) => r.id));
+for (const r of D.world.regions || []) if (r.boss) need(r.boss in D.bosses, `world.regions.${r.id}: unknown boss "${r.boss}"`);
+for (const [id, def] of Object.entries(D.world.maps || {})) {
+  if (def.region && regionIds.size && !regionIds.has(def.region)) warn(`world.maps.${id}: region "${def.region}" is not in world.regions`);
+  checkMusic(`world.maps.${id}`, def.music);
+  if (def.grid) need(Array.isArray(def.grid) && def.grid.length === 2, `world.maps.${id}: grid must be [col, row]`);
+}
+for (const [id, d] of Object.entries(D.dialogue)) {
+  for (const v of [d, ...(d.variants || [])]) {
+    const g = v.give;
+    if (g && g.item) need(g.item in D.items, `dialogue.${id}: give.item "${g.item}" unknown`);
+    if (g && g.weapon) need(g.weapon in D.weapons, `dialogue.${id}: give.weapon "${g.weapon}" unknown`);
+  }
+}
 
 // ---- maps
 const maps = {};
@@ -134,6 +176,9 @@ for (const [id, { path, json }] of Object.entries(maps)) {
           else if (p.spawn && maps[p.map].json && !spawnsOf(maps[p.map].json).has(p.spawn)) err(`${where(o)}: map "${p.map}" has no spawn named "${p.spawn}"`);
           if (!o.width || !o.height) err(`${where(o)}: warp must be a rectangle`);
           break;
+        case 'smith':
+          if (!(p.smith in D.smiths)) err(`${where(o)}: unknown smith "${p.smith}"`);
+          break;
         case 'npc':
         case 'healer':
           if (p.dialogue && !(p.dialogue in D.dialogue)) err(`${where(o)}: unknown dialogue "${p.dialogue}"`);
@@ -150,6 +195,25 @@ for (const [id, { path, json }] of Object.entries(maps)) {
           if (p.weapon && !(p.weapon in D.weapons)) err(`${where(o)}: unknown weapon "${p.weapon}"`);
           if (p.spell && !(p.spell in D.spells)) err(`${where(o)}: unknown spell "${p.spell}"`);
           if (p.item && !(p.item in D.items)) err(`${where(o)}: unknown item "${p.item}"`);
+          if (p.armor && !(p.armor in D.armor)) err(`${where(o)}: unknown armor "${p.armor}"`);
+          break;
+        case 'door':
+          if (!o.width || !o.height) err(`${where(o)}: door must be a rectangle`);
+          if (p.lock && !(p.lock in D.items)) err(`${where(o)}: lock item "${p.lock}" unknown`);
+          break;
+        case 'switch':
+          if (!p.flag) err(`${where(o)}: switch needs a flag`);
+          if (p.mode && !['floor', 'plate', 'crystal'].includes(p.mode)) err(`${where(o)}: switch mode must be floor, plate or crystal`);
+          break;
+        case 'pot':
+          if (p.item && !(p.item in D.items)) err(`${where(o)}: unknown item "${p.item}"`);
+          break;
+        case 'item':
+          if (!(p.item in D.items)) err(`${where(o)}: unknown item "${p.item}"`);
+          break;
+        case 'block':
+        case 'torch':
+        case 'light':
           break;
         case 'enemy':
           if (!((p.enemy || o.name) in D.enemies)) err(`${where(o)}: unknown enemy "${p.enemy || o.name}"`);

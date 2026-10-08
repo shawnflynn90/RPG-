@@ -225,24 +225,24 @@ export class Switch extends Breakable {
     this.refreshLook();
   }
 
-  get on() {
+  get isOn() {
     return this.mode === 'plate' ? this.scene.tempFlags.has(this.props.flag) : Game.flag(this.props.flag);
   }
 
   refreshLook() {
-    if (this.mode === 'crystal') this.setTexture(this.on ? 'crystal_on' : 'crystal_off');
-    else this.setTexture(this.on ? 'switch_down' : 'switch_up');
+    if (this.mode === 'crystal') this.setTexture(this.isOn ? 'crystal_on' : 'crystal_off');
+    else this.setTexture(this.isOn ? 'switch_down' : 'switch_up');
   }
 
   /** Called each frame by the world with what is standing on it. */
   updatePressed(pressed) {
     const s = this.scene;
-    if (this.mode === 'floor' && pressed && !this.on) {
+    if (this.mode === 'floor' && pressed && !this.isOn) {
       Game.setFlag(this.props.flag);
       s.sfx('switch');
       s.onFlagChanged();
     } else if (this.mode === 'plate') {
-      const was = this.on;
+      const was = this.isOn;
       if (pressed) s.tempFlags.add(this.props.flag);
       else s.tempFlags.delete(this.props.flag);
       if (was !== pressed) {

@@ -3,8 +3,32 @@
     "name": "Spell Teacher",
     "greeting": "I can teach you magic... for a fee.",
     "spells": [
-      { "spell": "ice", "price": 25 },
-      { "spell": "heal", "price": 70 }
+      {
+        "spell": "ice",
+        "price": 25
+      },
+      {
+        "spell": "heal",
+        "price": 70
+      }
+    ]
+  },
+  "town2_teacher": {
+    "name": "Librarian",
+    "greeting": "Knowledge has a price. A very reasonable one.",
+    "spells": [
+      {
+        "spell": "venom",
+        "price": 60
+      },
+      {
+        "spell": "shock",
+        "price": 140
+      },
+      {
+        "spell": "heal",
+        "price": 70
+      }
     ]
   }
 }

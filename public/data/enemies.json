@@ -102,5 +102,163 @@
       }
     ],
     "xp": 2
+  },
+  "knight": {
+    "name": "Shield Knight",
+    "sprite": "knight",
+    "hp": 14,
+    "contactDamage": 3,
+    "speed": 18,
+    "xp": 8,
+    "shield": {
+      "arcDeg": 110
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 80,
+      "loseRange": 130,
+      "onSight": "chase",
+      "chaseSpeed": 24,
+      "dash": {
+        "range": 38,
+        "windupMs": 420,
+        "speed": 150,
+        "durationMs": 240,
+        "cooldownMs": 2200
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          3,
+          7
+        ],
+        "chance": 0.9
+      },
+      {
+        "type": "heart",
+        "chance": 0.25
+      }
+    ]
+  },
+  "wisp": {
+    "name": "Shadow Wisp",
+    "sprite": "wisp",
+    "hp": 6,
+    "contactDamage": 1,
+    "speed": 20,
+    "xp": 6,
+    "light": 30,
+    "resist": [
+      "poison"
+    ],
+    "ai": {
+      "idle": "flutter",
+      "sightRange": 110,
+      "loseRange": 160,
+      "onSight": "teleport",
+      "teleport": {
+        "cooldownMs": 2800,
+        "minDist": 44,
+        "maxDist": 76
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 1600,
+        "windupMs": 350,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 90,
+          "range": 170,
+          "damage": 2,
+          "size": [
+            8,
+            8
+          ],
+          "light": 22
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "mana",
+        "chance": 0.5
+      },
+      {
+        "type": "gold",
+        "amount": [
+          2,
+          4
+        ],
+        "chance": 0.5
+      }
+    ]
+  },
+  "spider": {
+    "name": "Crypt Spider",
+    "sprite": "spider",
+    "hp": 7,
+    "contactDamage": 2,
+    "speed": 26,
+    "xp": 5,
+    "contactEffect": {
+      "poison": {
+        "dps": 1,
+        "durationMs": 4000
+      }
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 76,
+      "loseRange": 120,
+      "onSight": "chase",
+      "chaseSpeed": 34,
+      "dash": {
+        "range": 44,
+        "windupMs": 300,
+        "speed": 165,
+        "durationMs": 220,
+        "cooldownMs": 1500
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 2600,
+        "windupMs": 300,
+        "sfx": "poison",
+        "projectile": {
+          "sprite": "venom",
+          "speed": 110,
+          "range": 120,
+          "damage": 1,
+          "size": [
+            6,
+            6
+          ],
+          "effect": {
+            "poison": {
+              "dps": 1,
+              "durationMs": 3000
+            }
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          1,
+          4
+        ],
+        "chance": 0.7
+      },
+      {
+        "type": "item",
+        "item": "antidote",
+        "chance": 0.12
+      }
+    ]
   }
 }
