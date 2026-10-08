@@ -21,6 +21,7 @@ export const PLAYER = {
   knockbackMs: 140,
   mpRegenPerSecond: 0.5,
   interactReach: 12, // px in front of the player that counts for talking / opening chests
+  talkReach: 30, // longer reach for NPCs only (talk across a shop counter)
 };
 
 export const UI = {

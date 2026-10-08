@@ -3,7 +3,7 @@
     "name": "Spell Teacher",
     "greeting": "I can teach you magic... for a fee.",
     "spells": [
-      { "spell": "ice", "price": 40 },
+      { "spell": "ice", "price": 25 },
       { "spell": "heal", "price": 70 }
     ]
   }

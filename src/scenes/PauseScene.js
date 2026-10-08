@@ -21,7 +21,7 @@ export class PauseScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.rectangle(0, 0, 240, 160, 0x000000, 0.55).setOrigin(0);
+    this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0);
     drawPanel(this, 2, 2, 236, 18);
     this.tabTexts = TABS.map((t, i) => pixelText(this, 12 + i * 58, 7, t, COLORS.dim));
     pixelText(this, 4, 7, '<', COLORS.dim);

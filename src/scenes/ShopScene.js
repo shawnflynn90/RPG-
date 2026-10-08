@@ -21,6 +21,7 @@ export class ShopScene extends Phaser.Scene {
   }
 
   create() {
+    this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0);
     drawPanel(this, 2, 2, 236, 18);
     pixelText(this, 8, 7, this.def.name || 'Shop', COLORS.highlight);
     this.goldText = pixelText(this, 232, 7, '', COLORS.highlight).setOrigin(1, 0);

@@ -146,7 +146,7 @@ export class WorldScene extends Phaser.Scene {
         npc.name = obj.name;
         this.npcGroup.add(npc);
         this.npcs.push(npc);
-        this.interactables.push({ bounds: () => npc.hurtbox(), run: () => this.talkTo(npc) });
+        this.interactables.push({ bounds: () => npc.hurtbox(), run: () => this.talkTo(npc), isNpc: true });
         break;
       }
       case 'sign': {
@@ -223,13 +223,17 @@ export class WorldScene extends Phaser.Scene {
     if (this.inCutscene) return true;
     const pl = this.player;
     const f = DIR_VECTORS[pl.facing];
-    const reach = PLAYER.interactReach;
     const b = pl.body;
-    const probe =
+    const probe = (reach) =>
       f.x !== 0
         ? new Rect(f.x > 0 ? b.right : b.left - reach, b.top - 4, reach, b.height + 4)
         : new Rect(b.center.x - 5, f.y > 0 ? b.bottom : b.top - reach - 4, 10, reach + 4);
-    const target = this.interactables.find((it) => Rect.Overlaps(probe, it.bounds()));
+    const near = probe(PLAYER.interactReach);
+    // Second, longer probe for people only, so you can talk across shop counters.
+    const far = probe(PLAYER.talkReach);
+    const target =
+      this.interactables.find((it) => Rect.Overlaps(near, it.bounds())) ||
+      this.interactables.find((it) => it.isNpc && Rect.Overlaps(far, it.bounds()));
     if (!target) return false;
     input.consume('A');
     this.cutscene(() => target.run());
