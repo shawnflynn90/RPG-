@@ -1,12 +1,13 @@
 import Phaser from 'phaser';
 import { Actor, dirFromVector } from './Actor.js';
+import { Audio } from '../systems/Audio.js';
 
 /**
  * Data-driven boss (see public/data/bosses.json).
  * Runs the current phase's `patterns` list in order, looping, with `restMs` between them.
  * When HP drops to a phase's `hpBelow` fraction, it switches phase (message, tint, speed).
  *
- * Pattern types: chase, charge, area, radial, aimed, summon.
+ * Pattern types: chase, charge, area, radial, aimed, summon, teleport.
  */
 export class Boss extends Actor {
   constructor(scene, x, y, id, def) {
@@ -23,6 +24,12 @@ export class Boss extends Actor {
     this.body.setCollideWorldBounds(true);
     this.body.pushable = false;
     this.summons = [];
+  }
+
+  /** Bosses can't be stunned unless their data says "stunnable": true. */
+  resists(effect) {
+    if (effect === 'stun' && !this.def.stunnable) return true;
+    return super.resists(effect);
   }
 
   get phase() {
@@ -91,6 +98,7 @@ export class Boss extends Actor {
       damage: pr.damage || 2,
       knockback: pr.knockback,
       effect: pr.effect,
+      light: pr.light,
       team: 'enemy',
     });
   }
@@ -117,12 +125,14 @@ export class Boss extends Actor {
         await this.windup(p.windupMs);
         if (!this.active || this.dead) return;
         this.scene.cameras.main.shake(120, 0.008);
+        Audio.sfx(p.sfx || 'slam');
         combat.area({
           x: this.footX,
           y: this.footY - 4,
           radius: p.radius || 40,
           damage: p.damage || 3,
           knockback: p.knockback ?? 200,
+          effect: p.effect,
           color: p.color,
           team: 'enemy',
         });
@@ -133,6 +143,7 @@ export class Boss extends Actor {
         await this.windup(p.windupMs);
         for (let w = 0; w < (p.waves || 1); w++) {
           if (!this.active || this.dead) return;
+          Audio.sfx(p.sfx || 'fire');
           const n = p.count || 8;
           if (p.type === 'radial') {
             const offset = w * (Math.PI / n); // alternate waves so there are gaps to dodge through
@@ -160,6 +171,34 @@ export class Boss extends Actor {
             combat.puff(e.x, e.y, 0xc080f8, 6);
           }
         }
+        break;
+      }
+      case 'teleport': {
+        // fade out, reappear somewhere near the player
+        Audio.sfx('teleport');
+        this.mode = 'windup';
+        this.body.setVelocity(0, 0);
+        await new Promise((res) => this.scene.tweens.add({ targets: this, alpha: 0, duration: p.fadeMs || 300, onComplete: res }));
+        if (!this.active || this.dead) return;
+        this.body.enable = false;
+        this.hidden = true;
+        await this.wait(p.hideMs || 300);
+        if (!this.active || this.dead) return;
+        const pl = this.player;
+        for (let tries = 0; tries < 16; tries++) {
+          const a = Math.random() * Math.PI * 2;
+          const r = Phaser.Math.Between(p.minDist || 48, p.maxDist || 80);
+          const x = pl.footX + Math.cos(a) * r;
+          const y = pl.footY + Math.sin(a) * r;
+          if (this.scene.isWalkable(x, y, 12)) {
+            this.body.reset(x - (this.body.center.x - this.x), y - (this.body.center.y - this.y));
+            break;
+          }
+        }
+        this.body.enable = true;
+        this.hidden = false;
+        combat.puff(this.x, this.y, 0xc080f8, 10);
+        await new Promise((res) => this.scene.tweens.add({ targets: this, alpha: 1, duration: 200, onComplete: res }));
         break;
       }
       default:
@@ -190,8 +229,10 @@ export class Boss extends Actor {
   }
 
   // Bosses don't get knocked around by normal hits.
-  hurt(amount, fromX, fromY) {
-    const ok = super.hurt(amount, fromX, fromY, { knockback: 0, invulnMs: 120 });
+  hurt(amount, fromX, fromY, opts = {}) {
+    if (this.hidden) return false;
+    const ok = super.hurt(amount, fromX, fromY, { ...opts, knockback: 0, invulnMs: 120 });
+    if (ok) Audio.sfx('hit');
     if (ok && !this.dead) this.checkPhase();
     return ok;
   }
@@ -207,6 +248,7 @@ export class Boss extends Actor {
       const ph = this.phase;
       if (ph.tint) this.baseTint = Phaser.Display.Color.HexStringToColor(ph.tint).color;
       if (ph.message) this.scene.ui.toast(ph.message, 1800);
+      Audio.sfx('bossRoar');
       this.scene.cameras.main.shake(300, 0.012);
       this.invulnUntil = this.scene.time.now + 800;
       this.scene.events.emit('boss-phase', this, next);

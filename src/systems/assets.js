@@ -6,6 +6,7 @@
 // needs code changes.
 import { DB } from './db.js';
 import { drawGlyphs } from '../ui/font.js';
+import { makeLightTexture } from './Lighting.js';
 
 /** key -> resolved sprite info { frameWidth, frameHeight, directions, animations, mirrorLeft, body } */
 export const SpriteInfo = {};
@@ -52,6 +53,7 @@ export function finalizeAssets(scene) {
   for (const name of Object.keys(DB.tilesetImages)) {
     if (!scene.textures.exists(`tileset:${name}`)) throw new Error(`Tileset image for "${name}" failed to load.`);
   }
+  makeLightTexture(scene);
   // A 1x1 white pixel, handy for effects.
   if (!scene.textures.exists('pixel')) {
     const t = scene.textures.createCanvas('pixel', 1, 1);
@@ -213,6 +215,45 @@ function drawCharacter(ctx, ph, dir, pose, f) {
       R(6 + (dx > 0 ? 1 : 0), 7, 1, 1, accent);
       R(9 - (dx < 0 ? 1 : 0), 7, 1, 1, accent);
     }
+  } else if (shape === 'wisp') {
+    const bobW = pose === 'walk' ? f % 2 : 0;
+    R(3, 3 + bobW, 10, 10, shade(color, -0.2));
+    R(4, 2 + bobW, 8, 12, color);
+    R(2, 4 + bobW, 12, 8, color);
+    R(5, 4 + bobW, 4, 3, accent);
+    if (dir !== 'up') {
+      R(6 + dx, 8 + bobW, 1, 2, '#202020');
+      R(9 + dx, 8 + bobW, 1, 2, '#202020');
+    }
+  } else if (shape === 'spider') {
+    const leg = pose === 'walk' ? f % 2 : 0;
+    for (let i = 0; i < 4; i++) {
+      R(1 + leg, 7 + i * 2, 3, 1, '#201818');
+      R(12 - leg, 7 + i * 2, 3, 1, '#201818');
+    }
+    R(4, 6, 8, 8, '#201818');
+    R(5, 7, 6, 6, color);
+    R(5, 8, 6, 1, shade(color, 0.2));
+    if (dir !== 'up') {
+      R(6 + dx, 10 + Math.max(0, dy), 1, 1, accent);
+      R(9 + dx, 10 + Math.max(0, dy), 1, 1, accent);
+    }
+  } else if (shape === 'robed') {
+    R(3, 5 + bob, 10, 11 - bob, '#202020');
+    R(4, 6 + bob, 8, 10 - bob, color);
+    R(3, 14, 10, 2, dark);
+    R(4, 1 + bob, 8, 6, '#202020');
+    R(5, 1 + bob, 6, 6, color); // hood
+    if (dir !== 'up') {
+      R(6 + dx, 4 + bob, 4, 2, '#100818');
+      R(6 + dx, 4 + bob, 1, 1, accent);
+      R(9 + dx, 4 + bob, 1, 1, accent);
+    }
+    R(7, 8 + bob, 2, 6, accent); // sash
+    if (pose === 'attack') {
+      R(0, 6, 3, 3, accent);
+      R(13, 6, 3, 3, accent);
+    }
   } else if (shape === 'golem') {
     R(1, 4 + bob, 14, 12 - bob, '#202020');
     R(2, 4 + bob, 12, 11 - bob, color);
@@ -299,6 +340,63 @@ function makeImagePlaceholder(scene, key, ph) {
     case 'shadow':
       for (let y = 0; y < h; y++)
         for (let x = 0; x < w; x++) if (Math.hypot((x - cx) / (w / 2), (y - cy) / (h / 2)) <= 1) R(x, y, 1, 1, 'rgba(0,0,0,0.35)');
+      break;
+    case 'pot':
+      R(4, 3, 8, 2, '#202020');
+      R(2, 5, 12, 10, '#202020');
+      R(3, 6, 10, 8, color);
+      R(5, 3, 6, 2, accent);
+      R(4, 7, 3, 2, accent);
+      R(3, 12, 10, 2, dark);
+      break;
+    case 'switch':
+    case 'switch_down':
+      R(2, 2, 12, 12, '#303040');
+      R(3, 3, 10, 10, color);
+      if (ph.shape === 'switch') {
+        R(5, 4, 6, 6, '#202020');
+        R(5, 4, 6, 5, accent);
+      } else R(5, 7, 6, 3, accent);
+      break;
+    case 'crystal':
+      R(5, 12, 6, 3, '#404050');
+      for (let yy = 1; yy < 12; yy++) {
+        const half = yy < 6 ? yy * 0.8 : (12 - yy) * 0.8;
+        R(Math.round(8 - half), yy, Math.max(1, Math.round(half * 2)), 1, yy % 3 ? color : accent);
+      }
+      R(7, 3, 1, 4, '#ffffff');
+      break;
+    case 'torch':
+    case 'torch_lit':
+      R(6, 8, 4, 7, '#202020');
+      R(7, 8, 2, 7, color);
+      R(4, 6, 8, 3, accent === '#303038' ? dark : '#404048');
+      if (ph.shape === 'torch_lit') {
+        R(5, 1, 6, 5, accent);
+        R(6, 0, 4, 3, '#f8e060');
+        R(7, 2, 2, 3, '#ffffff');
+      }
+      break;
+    case 'door':
+      R(0, 0, 16, 16, '#202020');
+      R(1, 1, 14, 15, color);
+      R(1, 5, 14, 1, dark);
+      R(1, 10, 14, 1, dark);
+      R(6, 6, 4, 5, accent);
+      R(7, 8, 2, 2, '#202020');
+      break;
+    case 'block':
+      R(0, 0, 16, 16, '#202028');
+      R(1, 1, 14, 14, color);
+      R(1, 1, 14, 2, accent);
+      R(1, 1, 2, 14, accent);
+      R(4, 5, 8, 6, dark);
+      break;
+    case 'key':
+      R(0, 1, 4, 4, color);
+      R(1, 2, 2, 2, '#202020');
+      R(4, 2, 4, 2, color);
+      R(6, 4, 1, 2, color);
       break;
     case 'icon':
       R(0, 0, w, h, '#202020');

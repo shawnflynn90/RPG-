@@ -16,7 +16,8 @@ export class Combat {
 
   targets(team) {
     const s = this.scene;
-    if (team === 'player') return s.enemies.filter((e) => e.active && !e.dead);
+    // Player attacks also hit breakable things (pots, crystal switches...).
+    if (team === 'player') return [...s.enemies.filter((e) => e.active && !e.dead), ...(s.breakables || []).filter((b) => b.active && !b.dead)];
     return s.player && !s.player.dead ? [s.player] : [];
   }
 
@@ -43,6 +44,7 @@ export class Combat {
       rect = new Rect(ax - width / 2, f.y > 0 ? ay + start : ay - start - range, width, range);
     }
     const hb = {
+      kind: 'melee',
       rect,
       team,
       owner,
@@ -97,7 +99,7 @@ export class Combat {
     p.setRotation(opts.angle);
     p.setDepth(4000);
     p.body.setVelocity(Math.cos(opts.angle) * opts.speed, Math.sin(opts.angle) * opts.speed);
-    p.proj = { ...opts, startX: opts.x, startY: opts.y, hit: new Set() };
+    p.proj = { kind: 'projectile', ...opts, startX: opts.x, startY: opts.y, hit: new Set() };
     return p;
   }
 
@@ -110,6 +112,7 @@ export class Combat {
   // ------------------------------------------------------------------------------ areas
   /** Instant burst: { x, y, radius, damage, team, effect, knockback, color } */
   area(o) {
+    o = { kind: 'area', ...o };
     const color = Phaser.Display.Color.HexStringToColor(o.color || '#ffffff').color;
     const ring = this.scene.add.circle(o.x, o.y, o.radius).setStrokeStyle(2, color, 1).setDepth(4500);
     ring.isFilled = false;
@@ -127,6 +130,30 @@ export class Combat {
     }
   }
 
+  /** Whirl of light for spin attacks. */
+  spinFx(x, y, radius, color = '#ffffff') {
+    const c = Phaser.Display.Color.HexStringToColor(color).color;
+    const g = this.scene.add.graphics().setDepth(5000);
+    const st = { a: 0 };
+    this.scene.tweens.add({
+      targets: st,
+      a: Math.PI * 2,
+      duration: 220,
+      onUpdate: () => {
+        g.clear();
+        g.lineStyle(3, c, 0.9);
+        g.beginPath();
+        g.arc(x, y, radius * 0.8, st.a - 1.6, st.a);
+        g.strokePath();
+        g.lineStyle(1, 0xffffff, 1);
+        g.beginPath();
+        g.arc(x, y, radius * 0.8 + 2, st.a - 1.2, st.a);
+        g.strokePath();
+      },
+      onComplete: () => g.destroy(),
+    });
+  }
+
   /** A pulsing warning circle (boss windups). */
   telegraph(x, y, radius, ms, color = 0xf86048) {
     const c = this.scene.add.circle(x, y, radius, color, 0.25).setDepth(2).setStrokeStyle(1, color, 0.9);
@@ -138,7 +165,7 @@ export class Combat {
   hit(target, src, fromX, fromY) {
     const tx = target.x;
     const ty = target.y - target.frameH / 2;
-    const ok = target.hurt(src.damage || 0, fromX, fromY, { knockback: src.knockback ?? 120 });
+    const ok = target.hurt(src.damage || 0, fromX, fromY, { knockback: src.knockback ?? 120, kind: src.kind, element: src.element });
     if (ok) {
       if (!target.dead) target.applyEffect(src.effect);
       if (src.damage) this.floatText(tx, ty, String(src.damage), src.team === 'player' ? 0xffffff : 0xf87878);

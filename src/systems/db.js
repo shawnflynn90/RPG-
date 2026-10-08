@@ -1,7 +1,9 @@
 // Loads every JSON data file, the asset manifest and all Tiled maps (resolving external .tsj tilesets).
 // Everything the game knows about content comes from here; nothing is hard-coded in game code.
 
-const DATA_FILES = ['world', 'weapons', 'spells', 'items', 'enemies', 'bosses', 'shops', 'teachers', 'dialogue'];
+const DATA_FILES = [
+  'world', 'weapons', 'spells', 'items', 'armor', 'enemies', 'bosses', 'shops', 'teachers', 'smiths', 'dialogue', 'sounds', 'music',
+];
 
 export const DB = {
   world: null,
@@ -14,6 +16,10 @@ export const DB = {
   shops: {},
   teachers: {},
   dialogue: {},
+  armor: {},
+  smiths: {},
+  sounds: {},
+  music: {},
   /** mapId -> Tiled JSON (with tilesets embedded) */
   maps: {},
   /** tileset name -> image URL, to be loaded as texture `tileset:<name>` */

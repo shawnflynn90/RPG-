@@ -3,6 +3,10 @@ import { input } from '../input/InputManager.js';
 import { pixelText, wrapText, LINE_HEIGHT } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 import { UI } from '../config/game.config.js';
+import { Audio } from '../systems/Audio.js';
+import { Game } from '../systems/GameState.js';
+
+const TEXT_SPEEDS = [0.5, 1, 2.2];
 
 const BOX = { x: 4, y: 110, w: 232, h: 46 };
 
@@ -73,6 +77,73 @@ export class UIScene extends Phaser.Scene {
     this.held = null;
   }
 
+  /** Cinematic boss title card with letterbox bars. */
+  bossIntro(name, title) {
+    return new Promise((resolve) => {
+      const top = this.add.rectangle(0, -20, 240, 20, 0x000000).setOrigin(0);
+      const bot = this.add.rectangle(0, 160, 240, 20, 0x000000).setOrigin(0);
+      const band = this.add.rectangle(-240, 64, 240, 30, 0x000000, 0.75).setOrigin(0);
+      const t1 = pixelText(this, 120, 69, name.toUpperCase(), 0xf86048).setOrigin(0.5, 0).setScale(2).setAlpha(0);
+      const t2 = pixelText(this, 120, 86, title, COLORS.highlight).setOrigin(0.5, 0).setAlpha(0);
+      const objs = [top, bot, band, t1, t2];
+      this.tweens.add({ targets: top, y: 0, duration: 250 });
+      this.tweens.add({ targets: bot, y: 140, duration: 250 });
+      this.tweens.add({ targets: band, x: 0, duration: 300, delay: 200, ease: 'Quad.easeOut' });
+      this.tweens.add({ targets: [t1, t2], alpha: 1, duration: 250, delay: 450 });
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        this.skipFn = null;
+        this.tweens.add({
+          targets: objs,
+          alpha: 0,
+          duration: 250,
+          onComplete: () => {
+            for (const o of objs) o.destroy();
+            resolve();
+          },
+        });
+      };
+      this.time.delayedCall(2200, finish);
+      this.skipFn = () => this.time.now > this.introStart + 600 && finish();
+      this.introStart = this.time.now;
+    });
+  }
+
+  /** Big "LEVEL UP!" moment. info: { level, hp, mp, attack } */
+  levelUp(info) {
+    return new Promise((resolve) => {
+      Audio.sfx('levelUp');
+      this.cameras.main.flash(250, 255, 255, 220);
+      const objs = [];
+      const glow = this.add.rectangle(0, 0, 240, 160, 0xf8e060, 0.15).setOrigin(0);
+      objs.push(glow);
+      const big = pixelText(this, 120, 48, 'LEVEL UP!', COLORS.highlight).setOrigin(0.5).setScale(3);
+      objs.push(big);
+      this.tweens.add({ targets: big, scale: { from: 5, to: 3 }, duration: 250, ease: 'Back.easeOut' });
+      const lines = [`Level ${info.level}`];
+      if (info.hp) lines.push(`Max HP +${info.hp}`);
+      if (info.mp) lines.push(`Max MP +${info.mp}`);
+      if (info.attack) lines.push(`Attack +${info.attack}`);
+      lines.push('HP and MP restored!');
+      const h = lines.length * LINE_HEIGHT + 12;
+      objs.push(drawPanel(this, 60, 70, 120, h));
+      lines.forEach((l, i) => objs.push(pixelText(this, 120, 76 + i * LINE_HEIGHT, l, i === 0 ? COLORS.highlight : COLORS.text).setOrigin(0.5, 0)));
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        for (const o of objs) o.destroy();
+        this.skipFn = null;
+        resolve();
+      };
+      this.introStart = this.time.now;
+      this.skipFn = () => this.time.now > this.introStart + 700 && finish();
+      this.time.delayedCall(2600, finish);
+    });
+  }
+
   /** Small message at the top of the screen that fades out by itself. */
   toast(message, ms = 1600) {
     const lines = wrapText(message, 200);
@@ -99,13 +170,17 @@ export class UIScene extends Phaser.Scene {
   }
 
   update(_, dt) {
+    if (this.skipFn && (input.pressed('confirm') || input.justPressed('start'))) this.skipFn();
     const a = this.active;
     if (!a) return;
     if (a.kind === 'say') {
       const full = a.boxes[a.page];
       if (a.shown < full.length) {
-        const speed = input.isDown('A') || input.isDown('B') ? UI.textSpeed * 4 : UI.textSpeed;
+        const base = UI.textSpeed * TEXT_SPEEDS[Game.settings.textSpeed ?? 1];
+        const speed = input.isDown('A') || input.isDown('B') ? base * 4 : base;
+        const before = Math.floor(a.shown);
         a.shown = Math.min(full.length, a.shown + (speed * dt) / 1000);
+        if (Math.floor(a.shown) !== before && before % 3 === 0 && full[before] !== ' ') Audio.sfx('text');
         a.text.setText(full.slice(0, Math.floor(a.shown)));
         if (input.pressed('confirm')) {
           a.shown = full.length;
@@ -120,6 +195,7 @@ export class UIScene extends Phaser.Scene {
       } else {
         a.arrow.setVisible(Math.floor(this.time.now / 300) % 2 === 0);
         if (input.pressed('confirm') || input.pressed('cancel')) {
+          Audio.sfx('menuMove');
           a.page++;
           if (a.page >= a.boxes.length) {
             this.closeBox();

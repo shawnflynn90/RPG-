@@ -25,19 +25,42 @@ class InputManager {
     this.now = 0;
     this.lastSource = null;
     this.sourceListeners = [];
+    this.keysHeld = new Set();
+    this.capture = null; // { type: 'keyboard'|'gamepad', cb }
+    this.prevPadButtons = new Set();
+    this.applyMappings(null, null);
+  }
+
+  /** Use custom mappings (from the Options menu); null = defaults from input.config.js. */
+  applyMappings(keyboard, gamepadButtons) {
+    this.keyboardMap = keyboard || KEYBOARD;
+    this.gamepadMap = gamepadButtons || GAMEPAD.buttons;
     this.codeToButtons = new Map();
-    for (const [btn, codes] of Object.entries(KEYBOARD)) {
+    for (const [btn, codes] of Object.entries(this.keyboardMap)) {
       for (const code of codes) {
         if (!this.codeToButtons.has(code)) this.codeToButtons.set(code, []);
         this.codeToButtons.get(code).push(btn);
       }
     }
-    this.keysHeld = new Set();
+    this.keysHeld.clear();
+    this.sources.keyboard = new Set();
+  }
+
+  /** Wait for the next key (type 'keyboard') or gamepad button (type 'gamepad'); cb(codeOrIndex). */
+  captureNext(type, cb) {
+    this.capture = { type, cb, since: performance.now() };
   }
 
   /** Call once at startup. */
   attach() {
     window.addEventListener('keydown', (e) => {
+      if (this.capture && this.capture.type === 'keyboard') {
+        e.preventDefault();
+        const { cb } = this.capture;
+        this.capture = null;
+        cb(e.code);
+        return;
+      }
       const btns = this.codeToButtons.get(e.code);
       if (!btns) return;
       e.preventDefault();
@@ -88,7 +111,17 @@ class InputManager {
     const set = new Set();
     for (const pad of pads) {
       if (!pad || !pad.connected) continue;
-      for (const [btn, idxs] of Object.entries(GAMEPAD.buttons)) {
+      if (this.capture && this.capture.type === 'gamepad' && performance.now() - this.capture.since > 250) {
+        const idx = pad.buttons.findIndex((b, i) => b && b.pressed && !this.prevPadButtons.has(i));
+        if (idx >= 0) {
+          const { cb } = this.capture;
+          this.capture = null;
+          cb(idx);
+        }
+      }
+      this.prevPadButtons = new Set(pad.buttons.map((b, i) => (b && b.pressed ? i : -1)).filter((i) => i >= 0));
+      if (this.capture) continue; // don't press game buttons while capturing
+      for (const [btn, idxs] of Object.entries(this.gamepadMap)) {
         if (idxs.some((i) => pad.buttons[i] && (pad.buttons[i].pressed || pad.buttons[i].value > 0.5))) set.add(btn);
       }
       const { xAxis, yAxis, deadzone } = GAMEPAD.stick;

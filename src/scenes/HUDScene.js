@@ -20,8 +20,13 @@ export class HUDScene extends Phaser.Scene {
     pixelText(this, 4, 11, 'MP', 0x78a8f8);
     this.hpBar = this.makeBar(18, 4, 50, 0xe84050);
     this.mpBar = this.makeBar(18, 13, 50, 0x4888f0);
+    this.xpBar = this.add.rectangle(18, 18, 0, 1, 0x88d8f8).setOrigin(0, 0);
     this.add.image(8, 24, 'coin');
     this.goldText = pixelText(this, 14, 20, '0', 0xf8e060);
+    this.levelText = pixelText(this, 68, 20, '', 0x88d8f8).setOrigin(1, 0);
+    this.statusText = pixelText(this, 4, 32, '', 0x98e878);
+    this.keyIcon = this.add.image(203, 30, 'icon_key').setVisible(false);
+    this.keyText = pixelText(this, 211, 26, '', 0xffffff);
 
     // equipped weapon (L) and spell (R)
     this.slots = {};
@@ -93,9 +98,9 @@ export class HUDScene extends Phaser.Scene {
   }
 
   flashEquip(kind, id) {
-    const def = (kind === 'weapon' ? DB.weapons : DB.spells)[id];
+    const def = kind === 'weapon' ? Game.weaponStats(id) : DB.spells[id];
     if (!def) return;
-    this.equipName.setText(def.name).setAlpha(1);
+    this.equipName.setText(def.displayName || def.name).setAlpha(1);
     this.tweens.killTweensOf(this.equipName);
     this.tweens.add({ targets: this.equipName, alpha: 0, delay: 900, duration: 300 });
   }
@@ -106,13 +111,28 @@ export class HUDScene extends Phaser.Scene {
     this.setBar(this.hpBar, s.hp / s.maxHp);
     this.setBar(this.mpBar, s.mp / s.maxMp);
     this.goldText.setText(String(s.gold));
+    this.levelText.setText(`Lv${s.level}`);
+    const next = Game.xpToNext();
+    this.xpBar.width = next === Infinity ? 50 : Math.round((50 * s.xp) / next);
+    const keys = (s.items.small_key || 0) + (s.items.boss_key ? 1 : 0);
+    this.keyIcon.setVisible(keys > 0);
+    this.keyText.setText(keys > 0 ? `${s.items.small_key || 0}${s.items.boss_key ? '+B' : ''}` : '');
+    const pl = this.world && this.world.player;
+    if (pl && pl.active) {
+      const st = [];
+      if (pl.status.poison) st.push('POISON');
+      if (pl.status.burn) st.push('BURN');
+      if (pl.stunned) st.push('STUN');
+      if (this.time.now < pl.slowUntil) st.push('SLOW');
+      this.statusText.setText(st.join(' '));
+      this.statusText.setTint(pl.status.poison ? 0x98e878 : pl.status.burn ? 0xf8a050 : 0xf8f078);
+    }
 
-    const w = DB.weapons[s.weapon];
+    const w = Game.weaponStats();
     const sp = DB.spells[s.spell];
     this.setIcon(this.slots.weapon, w && w.icon);
     this.setIcon(this.slots.spell, sp && sp.icon);
-    const pl = this.world && this.world.player;
-    const cd = pl && sp ? pl.spellCooldown(s.spell) : 0;
+    const cd = pl && pl.active && sp ? pl.spellCooldown(s.spell) : 0;
     const noMp = sp && s.mp < sp.mpCost;
     this.slots.spell.cd.setVisible(cd > 0 || noMp);
     this.slots.spell.cd.height = noMp ? 16 : 16 * cd;

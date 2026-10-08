@@ -22,6 +22,88 @@ export class TouchControls {
     /** pointerId -> { kind: 'dpad' | 'button', btns: Set } */
     this.pointers = new Map();
     this.vibrate = TOUCH.vibrate;
+    this.editing = null; // layout edit mode state
+    // Groups that can be dragged around in "Move touch buttons" mode.
+    this.groups = {
+      lb: document.querySelector('#left-pad .shoulder'),
+      dpad: this.dpad,
+      rb: document.querySelector('#right-pad .shoulder'),
+      face: document.getElementById('face'),
+      sys: document.getElementById('sys'),
+    };
+    this.layout = { scale: 1, offsets: {} };
+  }
+
+  orientation() {
+    return window.matchMedia('(orientation: portrait)').matches ? 'portrait' : 'landscape';
+  }
+
+  /** Apply size + per-orientation offsets. layout = { scale, offsets: { landscape: { dpad: [dx, dy] } } } */
+  applyLayout(layout) {
+    this.layout = { scale: layout.scale || 1, offsets: layout.offsets || {} };
+    document.documentElement.style.setProperty('--touch-scale', String(this.layout.scale));
+    const offs = this.layout.offsets[this.orientation()] || {};
+    for (const [k, el] of Object.entries(this.groups)) {
+      const [dx, dy] = offs[k] || [0, 0];
+      el.style.translate = `${dx}px ${dy}px`;
+    }
+  }
+
+  /** Drag the buttons around; onDone(offsets) is called when the player taps DONE. */
+  startEdit(onDone) {
+    this.wasVisible = document.body.classList.contains('touch-visible');
+    this.setVisible(true);
+    document.body.classList.add('touch-edit');
+    const bar = document.createElement('div');
+    bar.id = 'touch-edit-bar';
+    bar.innerHTML = '<span>Drag the buttons where you like them</span><button data-act="reset">Reset</button><button data-act="done">Done</button>';
+    document.body.appendChild(bar);
+    const orient = this.orientation();
+    const offs = JSON.parse(JSON.stringify(this.layout.offsets));
+    offs[orient] = offs[orient] || {};
+    this.editing = { orient, offs, drag: null, bar };
+    bar.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      const act = e.target.dataset && e.target.dataset.act;
+      if (act === 'reset') {
+        offs[orient] = {};
+        this.applyLayout({ ...this.layout, offsets: offs });
+      } else if (act === 'done') {
+        this.editing = null;
+        bar.remove();
+        document.body.classList.remove('touch-edit');
+        this.setVisible(this.wasVisible);
+        onDone(offs);
+      }
+    });
+  }
+
+  editDown(e) {
+    const ed = this.editing;
+    for (const [k, el] of Object.entries(this.groups)) {
+      const r = el.getBoundingClientRect();
+      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) {
+        const [dx, dy] = ed.offs[ed.orient][k] || [0, 0];
+        ed.drag = { k, el, sx: e.clientX, sy: e.clientY, dx, dy, id: e.pointerId };
+        el.classList.add('dragging');
+        return;
+      }
+    }
+  }
+
+  editMove(e) {
+    const d = this.editing && this.editing.drag;
+    if (!d || d.id !== e.pointerId) return;
+    const nx = Math.round(d.dx + e.clientX - d.sx);
+    const ny = Math.round(d.dy + e.clientY - d.sy);
+    this.editing.offs[this.editing.orient][d.k] = [nx, ny];
+    d.el.style.translate = `${nx}px ${ny}px`;
+  }
+
+  editUp() {
+    const d = this.editing && this.editing.drag;
+    if (d) d.el.classList.remove('dragging');
+    if (this.editing) this.editing.drag = null;
   }
 
   attach() {
@@ -34,7 +116,7 @@ export class TouchControls {
 
     // Belt and braces against scrolling, pinch-zoom, double-tap zoom, long-press menus.
     const block = (e) => {
-      if (e.target.closest && e.target.closest('#fullscreen-btn')) return;
+      if (e.target.closest && e.target.closest('#fullscreen-btn, #touch-edit-bar')) return;
       e.preventDefault();
     };
     document.addEventListener('touchstart', block, opts);
@@ -47,7 +129,8 @@ export class TouchControls {
     window.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'touch') input.setSource('touch');
     });
-    input.onSourceChange((src) => this.setVisible(src === 'touch'));
+    input.onSourceChange((src) => !this.editing && this.setVisible(src === 'touch'));
+    window.addEventListener('resize', () => this.applyLayout(this.layout));
 
     // Start visible on touch devices, hidden on desktop.
     const touchy = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
@@ -67,6 +150,7 @@ export class TouchControls {
   onDown(e) {
     if (e.target.closest('#fullscreen-btn')) return;
     e.preventDefault();
+    if (this.editing) return this.editDown(e);
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     const dpadRect = this.dpad.getBoundingClientRect();
     // A slightly generous hit area around the D-pad.
@@ -87,6 +171,7 @@ export class TouchControls {
   }
 
   onMove(e) {
+    if (this.editing) return this.editMove(e);
     const p = this.pointers.get(e.pointerId);
     if (!p) return;
     e.preventDefault();
@@ -100,6 +185,7 @@ export class TouchControls {
   }
 
   onUp(e) {
+    if (this.editing) return this.editUp(e);
     if (!this.pointers.has(e.pointerId)) return;
     this.pointers.delete(e.pointerId);
     this.sync();

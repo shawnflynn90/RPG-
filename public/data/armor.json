@@ -1,0 +1,34 @@
+{
+  "cloth": {
+    "name": "Traveler's Cloak",
+    "description": "Simple cloth. Better than nothing.",
+    "icon": "icon_cloth",
+    "defense": 0,
+    "price": 0
+  },
+  "leather": {
+    "name": "Leather Armor",
+    "description": "Takes 1 less damage from every hit.",
+    "icon": "icon_leather",
+    "defense": 1,
+    "price": 70
+  },
+  "chain": {
+    "name": "Chain Mail",
+    "description": "Takes 2 less damage, but you move a little slower.",
+    "icon": "icon_chain",
+    "defense": 2,
+    "speedMul": 0.92,
+    "price": 220
+  },
+  "warden_plate": {
+    "name": "Warden Plate",
+    "description": "Takes 1 less damage and you can't be poisoned.",
+    "icon": "icon_plate",
+    "defense": 1,
+    "resist": [
+      "poison"
+    ],
+    "price": 160
+  }
+}

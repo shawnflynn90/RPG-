@@ -5,9 +5,13 @@ import { input } from '../input/InputManager.js';
 import { pixelText, wrapText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 
+import { Audio } from '../systems/Audio.js';
+
 /**
- * Buying screen for shops (data/shops.json) and spell teachers (data/teachers.json).
- * Shop stock entries: { weapon | item | spell, price }.  Teacher entries: { spell, price }.
+ * Buying screen for shops (data/shops.json), spell teachers (data/teachers.json) and
+ * blacksmiths (data/smiths.json).
+ * Shop stock entries: { weapon | item | spell | armor, price }.  Teacher entries: { spell, price }.
+ * Blacksmiths upgrade the player's weapons using each weapon's "upgrades" list.
  */
 export class ShopScene extends Phaser.Scene {
   constructor() {
@@ -16,7 +20,7 @@ export class ShopScene extends Phaser.Scene {
 
   init(data) {
     this.kind = data.kind;
-    this.def = (data.kind === 'teacher' ? DB.teachers : DB.shops)[data.id];
+    this.def = { teacher: DB.teachers, smith: DB.smiths, shop: DB.shops }[data.kind][data.id];
     this.onClose = data.onClose || (() => {});
   }
 
@@ -32,7 +36,32 @@ export class ShopScene extends Phaser.Scene {
     this.refresh();
   }
 
+  smithEntries() {
+    const s = Game.s;
+    return s.weapons.map((id) => {
+      const w = Game.weaponStats(id);
+      const base = DB.weapons[id];
+      const next = (base.upgrades || [])[w.level];
+      if (!next) return { label: w.displayName, right: 'MAX', disabled: true, color: COLORS.dim, desc: `${base.name} is fully upgraded.` };
+      const changes = Object.entries(next)
+        .filter(([k]) => k !== 'price')
+        .map(([k, v]) => (k === 'cooldownMs' ? (v < 0 ? 'faster' : 'slower') : `${k} ${v > 0 ? '+' : ''}${v}`))
+        .join(', ');
+      const tooPoor = s.gold < next.price;
+      return {
+        label: w.displayName,
+        right: `${next.price}G`,
+        disabled: tooPoor,
+        color: tooPoor ? COLORS.bad : undefined,
+        upgrade: id,
+        price: next.price,
+        desc: `Upgrade to +${w.level + 1}: ${changes}.`,
+      };
+    });
+  }
+
   entries() {
+    if (this.kind === 'smith') return this.smithEntries();
     const list = this.kind === 'teacher' ? this.def.spells : this.def.stock;
     const s = Game.s;
     return list.map((e) => {
@@ -43,6 +72,10 @@ export class ShopScene extends Phaser.Scene {
         kind = 'weapon';
         def = DB.weapons[e.weapon];
         owned = s.weapons.includes(e.weapon);
+      } else if (e.armor) {
+        kind = 'armor';
+        def = DB.armor[e.armor];
+        owned = s.armors.includes(e.armor);
       } else if (e.spell) {
         kind = 'spell';
         def = DB.spells[e.spell];
@@ -91,15 +124,26 @@ export class ShopScene extends Phaser.Scene {
 
   buy(it) {
     if (it && it.leave) return this.close();
+    if (it && it.upgrade) {
+      if (Game.s.gold < it.price) return this.showDesc("You can't afford that.");
+      Game.s.gold -= it.price;
+      Game.s.weaponLevels[it.upgrade] = (Game.s.weaponLevels[it.upgrade] || 0) + 1;
+      Audio.sfx('upgrade');
+      this.refresh();
+      return this.showDesc(`${Game.weaponStats(it.upgrade).displayName}! It feels stronger.`);
+    }
     if (!it || !it.def) return;
     if (it.owned) return this.showDesc(it.kind === 'spell' ? 'You already know that spell.' : 'You already have that.');
     if (Game.s.gold < it.price) return this.showDesc("You can't afford that.");
     Game.s.gold -= it.price;
     if (it.kind === 'weapon') Game.addWeapon(it.entry.weapon);
     if (it.kind === 'spell') Game.addSpell(it.entry.spell);
+    if (it.kind === 'armor') Game.addArmor(it.entry.armor);
+    Audio.sfx('coin');
     if (it.kind === 'item') Game.addItem(it.entry.item, 1);
     this.refresh();
-    this.showDesc(it.kind === 'spell' ? `You learned ${it.def.name}! Equip it with RB or in the menu.` : `Bought ${it.def.name}!`);
+    const tip = { spell: ' Equip it with RB or in the menu.', armor: ' Equip it in the menu (Armor).' }[it.kind] || '';
+    this.showDesc(it.kind === 'spell' ? `You learned ${it.def.name}!${tip}` : `Bought ${it.def.name}!${tip}`);
   }
 
   update() {

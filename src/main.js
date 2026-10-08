@@ -11,6 +11,9 @@ import { HUDScene } from './scenes/HUDScene.js';
 import { PauseScene } from './scenes/PauseScene.js';
 import { ShopScene } from './scenes/ShopScene.js';
 import { UIScene } from './scenes/UIScene.js';
+import { OptionsScene, applySettings } from './scenes/OptionsScene.js';
+import { MapScene } from './scenes/MapScene.js';
+import { Audio } from './systems/Audio.js';
 
 input.attach();
 touchControls.attach();
@@ -27,13 +30,15 @@ const game = new Phaser.Game({
   physics: { default: 'arcade', arcade: { debug: GAME.debugPhysics } },
   input: { keyboard: false, gamepad: false, mouse: false, touch: false }, // we use our own input layer
   // Order = draw order (later scenes are drawn on top).
-  scene: [BootScene, TitleScene, WorldScene, HUDScene, PauseScene, ShopScene, UIScene],
+  scene: [BootScene, TitleScene, WorldScene, HUDScene, PauseScene, ShopScene, MapScene, OptionsScene, UIScene],
 });
 
 // Merge keyboard/gamepad/touch once per frame, before any scene updates.
 game.events.on(Phaser.Core.Events.PRE_STEP, (time) => input.update(time));
 
 installScaler(game);
+Audio.init(game);
+applySettings();
 
 const fsBtn = document.getElementById('fullscreen-btn');
 if (!document.fullscreenEnabled) fsBtn.style.display = 'none';

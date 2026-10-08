@@ -13,9 +13,20 @@
       "chaseSpeed": 32
     },
     "drops": [
-      { "type": "gold", "amount": [1, 3], "chance": 0.7 },
-      { "type": "heart", "chance": 0.15 }
-    ]
+      {
+        "type": "gold",
+        "amount": [
+          1,
+          3
+        ],
+        "chance": 0.7
+      },
+      {
+        "type": "heart",
+        "chance": 0.15
+      }
+    ],
+    "xp": 2
   },
   "archer": {
     "name": "Skeleton Archer",
@@ -34,13 +45,33 @@
         "type": "projectile",
         "cooldownMs": 1700,
         "windupMs": 350,
-        "projectile": { "sprite": "bone", "speed": 95, "range": 160, "damage": 2, "size": [6, 6] }
+        "projectile": {
+          "sprite": "bone",
+          "speed": 95,
+          "range": 160,
+          "damage": 2,
+          "size": [
+            6,
+            6
+          ]
+        }
       }
     },
     "drops": [
-      { "type": "gold", "amount": [2, 5], "chance": 0.8 },
-      { "type": "mana", "chance": 0.25 }
-    ]
+      {
+        "type": "gold",
+        "amount": [
+          2,
+          5
+        ],
+        "chance": 0.8
+      },
+      {
+        "type": "mana",
+        "chance": 0.25
+      }
+    ],
+    "xp": 4
   },
   "bat": {
     "name": "Cave Bat",
@@ -53,8 +84,23 @@
       "sightRange": 80,
       "loseRange": 120,
       "onSight": "charge",
-      "charge": { "windupMs": 450, "speed": 140, "durationMs": 380, "restMs": 650 }
+      "charge": {
+        "windupMs": 450,
+        "speed": 140,
+        "durationMs": 380,
+        "restMs": 650
+      }
     },
-    "drops": [{ "type": "gold", "amount": [1, 2], "chance": 0.5 }]
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          1,
+          2
+        ],
+        "chance": 0.5
+      }
+    ],
+    "xp": 2
   }
 }

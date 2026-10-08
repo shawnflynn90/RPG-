@@ -20,6 +20,12 @@ function freshState() {
     spells: [...ng.spells],
     spell: ng.spells[0] || null,
     items: { ...ng.items },
+    armors: [...(ng.armor || [])],
+    armor: (ng.armor || [])[0] || null,
+    weaponLevels: {},
+    level: 1,
+    xp: 0,
+    visited: {},
     flags: {},
     respawn: { map: DB.world.start.map, spawn: DB.world.start.spawn },
     playTimeMs: 0,
@@ -37,7 +43,16 @@ class GameStateManager {
   constructor() {
     this.state = null;
     this.slot = 0;
-    this.settings = { vibrate: true };
+    this.settings = {
+      vibrate: true,
+      musicVolume: 6,
+      sfxVolume: 8,
+      textSpeed: 1, // 0 slow, 1 normal, 2 fast
+      touchScale: 1,
+      touchOffsets: {}, // per orientation: { landscape: { dpad: [dx, dy], ... } }
+      keyboard: null, // custom keyboard mapping (null = defaults from input.config.js)
+      gamepad: null,
+    };
     try {
       Object.assign(this.settings, JSON.parse(localStorage.getItem(SAVE.settingsKey) || '{}'));
     } catch {
@@ -118,6 +133,8 @@ class GameStateManager {
     if (cond.hasSpell && !s.spells.includes(cond.hasSpell)) return false;
     if (cond.hasItem && !(s.items[cond.hasItem] > 0)) return false;
     if (cond.minGold && s.gold < cond.minGold) return false;
+    if (cond.minLevel && s.level < cond.minLevel) return false;
+    if (cond.visited && !s.visited[cond.visited]) return false;
     return true;
   }
 
@@ -129,6 +146,71 @@ class GameStateManager {
   addSpell(id) {
     if (!this.state.spells.includes(id)) this.state.spells.push(id);
     if (!this.state.spell) this.state.spell = id;
+  }
+
+  addArmor(id) {
+    if (!this.state.armors.includes(id)) this.state.armors.push(id);
+    if (!this.state.armor) this.state.armor = id;
+  }
+
+  // ---- derived stats ---------------------------------------------------------------
+  /** A weapon's definition with blacksmith upgrades, level bonus applied. */
+  weaponStats(id = this.state.weapon) {
+    const base = DB.weapons[id];
+    if (!base) return null;
+    const lvl = this.state.weaponLevels[id] || 0;
+    const w = { ...base, level: lvl, maxLevel: (base.upgrades || []).length };
+    for (const up of (base.upgrades || []).slice(0, lvl)) {
+      for (const [k, v] of Object.entries(up)) if (k !== 'price' && typeof v === 'number') w[k] = (w[k] || 0) + v;
+    }
+    w.damage += this.attackBonus();
+    w.displayName = lvl ? `${base.name} +${lvl}` : base.name;
+    return w;
+  }
+
+  attackBonus() {
+    const lv = DB.world.leveling;
+    return lv ? Math.floor((lv.perLevel.attack || 0) * (this.state.level - 1)) : 0;
+  }
+
+  get armorDef() {
+    return DB.armor[this.state.armor] || { defense: 0 };
+  }
+
+  get defense() {
+    return this.armorDef.defense || 0;
+  }
+
+  resists(effect) {
+    return (this.armorDef.resist || []).includes(effect);
+  }
+
+  // ---- experience --------------------------------------------------------------------
+  xpToNext(level = this.state.level) {
+    const lv = DB.world.leveling;
+    if (!lv || level >= lv.maxLevel) return Infinity;
+    return Math.round(lv.xpBase * Math.pow(lv.xpGrowth, level - 1));
+  }
+
+  /** Add XP; returns the number of levels gained (stats are raised and HP/MP refilled). */
+  addXp(n) {
+    const lv = DB.world.leveling;
+    if (!lv || !n) return 0;
+    const s = this.state;
+    s.xp += n;
+    let gained = 0;
+    while (s.xp >= this.xpToNext()) {
+      s.xp -= this.xpToNext();
+      s.level++;
+      gained++;
+      s.maxHp += lv.perLevel.maxHp || 0;
+      s.maxMp += lv.perLevel.maxMp || 0;
+    }
+    if (gained) {
+      s.hp = s.maxHp;
+      s.mp = s.maxMp;
+    }
+    return gained;
   }
 
   addItem(id, n = 1) {
@@ -159,6 +241,10 @@ class GameStateManager {
     if (r.spell) {
       this.addSpell(r.spell);
       lines.push(`You learned ${DB.spells[r.spell].name}!`);
+    }
+    if (r.armor) {
+      this.addArmor(r.armor);
+      lines.push(`You got ${DB.armor[r.armor].name}!`);
     }
     if (r.item) {
       const n = r.count || 1;

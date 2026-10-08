@@ -36,6 +36,8 @@ export class Actor extends Phaser.Physics.Arcade.Sprite {
     this.flashUntil = 0;
     this.baseTint = null;
     this._tint = null;
+    this.stunUntil = 0;
+    this.status = {}; // poison / burn: { until, dps, acc }
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setupBody();
@@ -84,13 +86,31 @@ export class Actor extends Phaser.Physics.Arcade.Sprite {
     return this.scene.time.now < this.knockUntil;
   }
 
+  get stunned() {
+    return this.scene.time.now < this.stunUntil;
+  }
+
+  /** Override to make an actor immune to an effect ('poison', 'burn', 'stun', 'slow'). */
+  resists(effect) {
+    return !!(this.def && (this.def.resist || []).includes(effect));
+  }
+
   get invulnerable() {
     return this.scene.time.now < this.invulnUntil;
   }
 
+  /**
+   * Status effects from weapons, spells and enemy attacks:
+   *   slow: 0.4 (+ durationMs)   poison/burn: { dps, durationMs }   stun: { durationMs }
+   */
   applyEffect(effect) {
-    if (!effect) return;
-    if (effect.slow) {
+    if (!effect || this.dead) return;
+    const now = this.scene.time.now;
+    for (const k of ['poison', 'burn']) {
+      if (effect[k] && !this.resists(k)) this.status[k] = { until: now + (effect[k].durationMs || 3000), dps: effect[k].dps || 1, acc: 0 };
+    }
+    if (effect.stun && !this.resists('stun')) this.stunUntil = now + (effect.stun.durationMs || 1000);
+    if (effect.slow && !this.resists('slow')) {
       this.slowFactor = 1 - effect.slow;
       this.slowUntil = this.scene.time.now + (effect.durationMs || 2000);
     }
@@ -122,6 +142,34 @@ export class Actor extends Phaser.Physics.Arcade.Sprite {
     this._tint = 'flash';
   }
 
+  cure(kinds = ['poison', 'burn']) {
+    for (const k of kinds) delete this.status[k];
+  }
+
+  /** Damage over time from poison / burn. */
+  tickStatus(time, delta) {
+    for (const [k, st] of Object.entries(this.status)) {
+      if (time >= st.until) {
+        delete this.status[k];
+        continue;
+      }
+      st.acc += (st.dps * delta) / 1000;
+      if (st.acc >= 1) {
+        const n = Math.floor(st.acc);
+        st.acc -= n;
+        this.hp = Math.max(0, this.hp - n);
+        if (this.scene.combat) this.scene.combat.floatText(this.x, this.y - this.frameH / 2, String(n), k === 'poison' ? 0x98f878 : 0xf8a050);
+        this.onDot(k, n);
+        if (this.hp <= 0 && !this.dead) {
+          this.die();
+          return;
+        }
+      }
+    }
+  }
+
+  onDot() {}
+
   onHurt() {}
 
   die() {
@@ -137,9 +185,15 @@ export class Actor extends Phaser.Physics.Arcade.Sprite {
     // flicker while invulnerable
     if (this.invulnerable && this.flickerOnInvuln) this.setAlpha(Math.floor(time / 60) % 2 ? 0.35 : 1);
     else if (this.alpha !== 1 && this.flickerOnInvuln) this.setAlpha(1);
-    // tint: white flash > slowed (icy blue) > baseTint (e.g. boss phase 2) > none
+    if (!this.dead) this.tickStatus(time, delta);
+    if (!this.active) return;
+    // tint: white flash > stunned > slowed (icy) > poisoned > burning > baseTint (e.g. boss phase 2) > none
     if (!(time < this.flashUntil)) {
-      const want = time < this.slowUntil ? 0x88c8ff : (this.baseTint ?? null);
+      let want = this.baseTint ?? null;
+      if (this.status.burn) want = 0xf8a868;
+      if (this.status.poison) want = 0x98e878;
+      if (time < this.slowUntil) want = 0x88c8ff;
+      if (time < this.stunUntil) want = Math.floor(time / 100) % 2 ? 0xf8f078 : 0xffffff;
       if (want !== this._tint) {
         if (want === null) this.clearTint();
         else this.setTint(want);

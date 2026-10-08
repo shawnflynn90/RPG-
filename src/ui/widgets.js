@@ -1,5 +1,6 @@
 import { input } from '../input/InputManager.js';
 import { pixelText, LINE_HEIGHT } from './font.js';
+import { Audio } from '../systems/Audio.js';
 
 export const COLORS = {
   panel: 0x182058,
@@ -89,11 +90,18 @@ export class ListMenu {
       if (moved) {
         this.index = (this.index + moved + this.items.length) % this.items.length;
         this.render();
+        Audio.sfx('menuMove');
         return { type: 'move', index: this.index };
       }
-      if (input.pressed('confirm')) return { type: 'select', index: this.index };
+      if (input.pressed('confirm')) {
+        Audio.sfx(this.selected && this.selected.disabled ? 'error' : 'menuSelect');
+        return { type: 'select', index: this.index };
+      }
     }
-    if (this.cancelable && input.pressed('cancel')) return { type: 'cancel' };
+    if (this.cancelable && input.pressed('cancel')) {
+      Audio.sfx('menuBack');
+      return { type: 'cancel' };
+    }
     return null;
   }
 

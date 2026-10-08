@@ -1,70 +1,822 @@
 {
   "_readme": "The ONE asset manifest. Set \"file\" to your PNG (path relative to /public) to replace a placeholder. See README: 'Adding your sprites'.",
-
   "layouts": {
     "character": {
       "frameWidth": 16,
       "frameHeight": 16,
-      "directions": ["down", "left", "right", "up"],
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
       "animations": {
-        "idle": { "column": 0, "frames": 1, "fps": 1 },
-        "walk": { "column": 1, "frames": 4, "fps": 8 },
-        "attack": { "column": 5, "frames": 2, "fps": 12, "repeat": 0 },
-        "hurt": { "column": 7, "frames": 1, "fps": 1 }
+        "idle": {
+          "column": 0,
+          "frames": 1,
+          "fps": 1
+        },
+        "walk": {
+          "column": 1,
+          "frames": 4,
+          "fps": 8
+        },
+        "attack": {
+          "column": 5,
+          "frames": 2,
+          "fps": 12,
+          "repeat": 0
+        },
+        "hurt": {
+          "column": 7,
+          "frames": 1,
+          "fps": 1
+        }
       }
     },
     "boss": {
       "frameWidth": 32,
       "frameHeight": 32,
-      "directions": ["down", "left", "right", "up"],
+      "directions": [
+        "down",
+        "left",
+        "right",
+        "up"
+      ],
       "animations": {
-        "idle": { "column": 0, "frames": 1, "fps": 1 },
-        "walk": { "column": 1, "frames": 4, "fps": 6 },
-        "attack": { "column": 5, "frames": 2, "fps": 8, "repeat": 0 },
-        "hurt": { "column": 7, "frames": 1, "fps": 1 }
+        "idle": {
+          "column": 0,
+          "frames": 1,
+          "fps": 1
+        },
+        "walk": {
+          "column": 1,
+          "frames": 4,
+          "fps": 6
+        },
+        "attack": {
+          "column": 5,
+          "frames": 2,
+          "fps": 8,
+          "repeat": 0
+        },
+        "hurt": {
+          "column": 7,
+          "frames": 1,
+          "fps": 1
+        }
       }
     }
   },
-
   "sprites": {
-    "player": { "layout": "character", "file": null, "body": { "width": 10, "height": 8 }, "placeholder": { "color": "#3878e8", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "npc_elder": { "layout": "character", "file": null, "placeholder": { "color": "#a07848", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "npc_merchant": { "layout": "character", "file": null, "placeholder": { "color": "#48a058", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "npc_mage": { "layout": "character", "file": null, "placeholder": { "color": "#8848c8", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "npc_healer": { "layout": "character", "file": null, "placeholder": { "color": "#f0f0f0", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "npc_kid": { "layout": "character", "file": null, "placeholder": { "color": "#f0a030", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "npc_guard": { "layout": "character", "file": null, "placeholder": { "color": "#7088a0", "accent": "#f8d0a0", "shape": "humanoid" } },
-    "slime": { "layout": "character", "file": null, "body": { "width": 12, "height": 9 }, "placeholder": { "color": "#58c858", "accent": "#e8ffe8", "shape": "blob" } },
-    "skeleton": { "layout": "character", "file": null, "body": { "width": 10, "height": 8 }, "placeholder": { "color": "#e0e0d0", "accent": "#303030", "shape": "humanoid" } },
-    "bat": { "layout": "character", "file": null, "body": { "width": 10, "height": 8 }, "placeholder": { "color": "#684888", "accent": "#f84848", "shape": "bat" } },
-    "boss_warden": { "layout": "boss", "file": null, "body": { "width": 22, "height": 18 }, "placeholder": { "color": "#8890a0", "accent": "#f8d040", "shape": "golem" } }
+    "player": {
+      "layout": "character",
+      "file": null,
+      "body": {
+        "width": 10,
+        "height": 8
+      },
+      "placeholder": {
+        "color": "#3878e8",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_elder": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#a07848",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_merchant": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#48a058",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_mage": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#8848c8",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_healer": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#f0f0f0",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_kid": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#f0a030",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_guard": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#7088a0",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "slime": {
+      "layout": "character",
+      "file": null,
+      "body": {
+        "width": 12,
+        "height": 9
+      },
+      "placeholder": {
+        "color": "#58c858",
+        "accent": "#e8ffe8",
+        "shape": "blob"
+      }
+    },
+    "skeleton": {
+      "layout": "character",
+      "file": null,
+      "body": {
+        "width": 10,
+        "height": 8
+      },
+      "placeholder": {
+        "color": "#e0e0d0",
+        "accent": "#303030",
+        "shape": "humanoid"
+      }
+    },
+    "bat": {
+      "layout": "character",
+      "file": null,
+      "body": {
+        "width": 10,
+        "height": 8
+      },
+      "placeholder": {
+        "color": "#684888",
+        "accent": "#f84848",
+        "shape": "bat"
+      }
+    },
+    "boss_warden": {
+      "layout": "boss",
+      "file": null,
+      "body": {
+        "width": 22,
+        "height": 18
+      },
+      "placeholder": {
+        "color": "#8890a0",
+        "accent": "#f8d040",
+        "shape": "golem"
+      }
+    },
+    "npc_smith": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#683828",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_villager": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#c86888",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_scholar": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#4868a8",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "knight": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#8898b0",
+        "accent": "#202838",
+        "shape": "humanoid"
+      },
+      "body": {
+        "width": 10,
+        "height": 8
+      }
+    },
+    "wisp": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#a070f8",
+        "accent": "#f8f0ff",
+        "shape": "wisp"
+      },
+      "body": {
+        "width": 8,
+        "height": 8
+      }
+    },
+    "spider": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#503848",
+        "accent": "#f84848",
+        "shape": "spider"
+      },
+      "body": {
+        "width": 12,
+        "height": 8
+      }
+    },
+    "boss_sorcerer": {
+      "layout": "boss",
+      "file": null,
+      "placeholder": {
+        "color": "#402868",
+        "accent": "#f8e060",
+        "shape": "robed"
+      },
+      "body": {
+        "width": 16,
+        "height": 14
+      }
+    }
   },
-
   "images": {
-    "arrow": { "file": null, "placeholder": { "shape": "rect", "color": "#f8e8c0", "size": [6, 2] } },
-    "fireball": { "file": null, "placeholder": { "shape": "circle", "color": "#f87830", "accent": "#f8e050", "size": [8, 8] } },
-    "bone": { "file": null, "placeholder": { "shape": "diamond", "color": "#f0f0e0", "size": [6, 6] } },
-    "rock": { "file": null, "placeholder": { "shape": "circle", "color": "#a09088", "accent": "#c8b8b0", "size": [8, 8] } },
-    "coin": { "file": null, "placeholder": { "shape": "circle", "color": "#f8d030", "accent": "#fff8a0", "size": [7, 7] } },
-    "heart": { "file": null, "placeholder": { "shape": "heart", "color": "#f04858", "size": [7, 7] } },
-    "mana": { "file": null, "placeholder": { "shape": "diamond", "color": "#4890f8", "accent": "#a8d8ff", "size": [7, 7] } },
-    "chest_closed": { "file": null, "placeholder": { "shape": "chest", "color": "#b07030", "accent": "#f8d040", "size": [16, 16] } },
-    "chest_open": { "file": null, "placeholder": { "shape": "chest_open", "color": "#b07030", "accent": "#f8d040", "size": [16, 16] } },
-    "sign": { "file": null, "placeholder": { "shape": "sign", "color": "#a87840", "accent": "#e8c890", "size": [16, 16] } },
-    "gate": { "file": null, "placeholder": { "shape": "bars", "color": "#8888a0", "accent": "#c8c8e0", "size": [16, 16] } },
-    "shadow": { "file": null, "placeholder": { "shape": "shadow", "color": "#000000", "size": [12, 4] } },
-
-    "icon_sword": { "file": null, "placeholder": { "shape": "icon", "color": "#d0d8e8", "label": "Sw", "size": [12, 12] } },
-    "icon_spear": { "file": null, "placeholder": { "shape": "icon", "color": "#a8c0d8", "label": "Sp", "size": [12, 12] } },
-    "icon_axe": { "file": null, "placeholder": { "shape": "icon", "color": "#e8b070", "label": "Ax", "size": [12, 12] } },
-    "icon_bow": { "file": null, "placeholder": { "shape": "icon", "color": "#c89858", "label": "Bo", "size": [12, 12] } },
-    "icon_fire": { "file": null, "placeholder": { "shape": "icon", "color": "#f87830", "label": "Fi", "size": [12, 12] } },
-    "icon_ice": { "file": null, "placeholder": { "shape": "icon", "color": "#78d0f8", "label": "Ic", "size": [12, 12] } },
-    "icon_heal": { "file": null, "placeholder": { "shape": "icon", "color": "#78e878", "label": "He", "size": [12, 12] } },
-    "icon_potion": { "file": null, "placeholder": { "shape": "icon", "color": "#f05868", "label": "Po", "size": [12, 12] } },
-    "icon_ether": { "file": null, "placeholder": { "shape": "icon", "color": "#5878f0", "label": "Et", "size": [12, 12] } }
+    "arrow": {
+      "file": null,
+      "placeholder": {
+        "shape": "rect",
+        "color": "#f8e8c0",
+        "size": [
+          6,
+          2
+        ]
+      }
+    },
+    "fireball": {
+      "file": null,
+      "placeholder": {
+        "shape": "circle",
+        "color": "#f87830",
+        "accent": "#f8e050",
+        "size": [
+          8,
+          8
+        ]
+      }
+    },
+    "bone": {
+      "file": null,
+      "placeholder": {
+        "shape": "diamond",
+        "color": "#f0f0e0",
+        "size": [
+          6,
+          6
+        ]
+      }
+    },
+    "rock": {
+      "file": null,
+      "placeholder": {
+        "shape": "circle",
+        "color": "#a09088",
+        "accent": "#c8b8b0",
+        "size": [
+          8,
+          8
+        ]
+      }
+    },
+    "coin": {
+      "file": null,
+      "placeholder": {
+        "shape": "circle",
+        "color": "#f8d030",
+        "accent": "#fff8a0",
+        "size": [
+          7,
+          7
+        ]
+      }
+    },
+    "heart": {
+      "file": null,
+      "placeholder": {
+        "shape": "heart",
+        "color": "#f04858",
+        "size": [
+          7,
+          7
+        ]
+      }
+    },
+    "mana": {
+      "file": null,
+      "placeholder": {
+        "shape": "diamond",
+        "color": "#4890f8",
+        "accent": "#a8d8ff",
+        "size": [
+          7,
+          7
+        ]
+      }
+    },
+    "chest_closed": {
+      "file": null,
+      "placeholder": {
+        "shape": "chest",
+        "color": "#b07030",
+        "accent": "#f8d040",
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    "chest_open": {
+      "file": null,
+      "placeholder": {
+        "shape": "chest_open",
+        "color": "#b07030",
+        "accent": "#f8d040",
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    "sign": {
+      "file": null,
+      "placeholder": {
+        "shape": "sign",
+        "color": "#a87840",
+        "accent": "#e8c890",
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    "gate": {
+      "file": null,
+      "placeholder": {
+        "shape": "bars",
+        "color": "#8888a0",
+        "accent": "#c8c8e0",
+        "size": [
+          16,
+          16
+        ]
+      }
+    },
+    "shadow": {
+      "file": null,
+      "placeholder": {
+        "shape": "shadow",
+        "color": "#000000",
+        "size": [
+          12,
+          4
+        ]
+      }
+    },
+    "icon_sword": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#d0d8e8",
+        "label": "Sw",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_spear": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#a8c0d8",
+        "label": "Sp",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_axe": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#e8b070",
+        "label": "Ax",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_bow": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#c89858",
+        "label": "Bo",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_fire": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f87830",
+        "label": "Fi",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_ice": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#78d0f8",
+        "label": "Ic",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_heal": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#78e878",
+        "label": "He",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_potion": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f05868",
+        "label": "Po",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "icon_ether": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#5878f0",
+        "label": "Et",
+        "size": [
+          12,
+          12
+        ]
+      }
+    },
+    "spark": {
+      "file": null,
+      "placeholder": {
+        "shape": "diamond",
+        "color": "#f8f070",
+        "size": [
+          6,
+          6
+        ],
+        "accent": "#ffffff"
+      }
+    },
+    "venom": {
+      "file": null,
+      "placeholder": {
+        "shape": "circle",
+        "color": "#78d848",
+        "size": [
+          6,
+          6
+        ],
+        "accent": "#d8f8a8"
+      }
+    },
+    "shadowball": {
+      "file": null,
+      "placeholder": {
+        "shape": "circle",
+        "color": "#7848c8",
+        "size": [
+          10,
+          10
+        ],
+        "accent": "#e0c8ff"
+      }
+    },
+    "pot": {
+      "file": null,
+      "placeholder": {
+        "shape": "pot",
+        "color": "#b07848",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#e0b080"
+      }
+    },
+    "switch_up": {
+      "file": null,
+      "placeholder": {
+        "shape": "switch",
+        "color": "#8890a8",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#f8d040"
+      }
+    },
+    "switch_down": {
+      "file": null,
+      "placeholder": {
+        "shape": "switch_down",
+        "color": "#8890a8",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#78f878"
+      }
+    },
+    "crystal_off": {
+      "file": null,
+      "placeholder": {
+        "shape": "crystal",
+        "color": "#5868a8",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#9098c8"
+      }
+    },
+    "crystal_on": {
+      "file": null,
+      "placeholder": {
+        "shape": "crystal",
+        "color": "#38a8f8",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#c8f0ff"
+      }
+    },
+    "torch_off": {
+      "file": null,
+      "placeholder": {
+        "shape": "torch",
+        "color": "#606070",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#303038"
+      }
+    },
+    "torch_on": {
+      "file": null,
+      "placeholder": {
+        "shape": "torch_lit",
+        "color": "#606070",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#f8a030"
+      }
+    },
+    "door_locked": {
+      "file": null,
+      "placeholder": {
+        "shape": "door",
+        "color": "#805028",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#f8d040"
+      }
+    },
+    "door_boss": {
+      "file": null,
+      "placeholder": {
+        "shape": "door",
+        "color": "#702838",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#f87050"
+      }
+    },
+    "block": {
+      "file": null,
+      "placeholder": {
+        "shape": "block",
+        "color": "#8890a0",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#c0c8d8"
+      }
+    },
+    "icon_key": {
+      "file": null,
+      "placeholder": {
+        "shape": "key",
+        "color": "#f8d040",
+        "size": [
+          8,
+          8
+        ]
+      }
+    },
+    "icon_wand": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#c8a8f8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Wa"
+      }
+    },
+    "icon_venom": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#78d848",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Ve"
+      }
+    },
+    "icon_shock": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f8f070",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Th"
+      }
+    },
+    "icon_antidote": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#a8f8c8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "An"
+      }
+    },
+    "icon_bosskey": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f87050",
+        "size": [
+          12,
+          12
+        ],
+        "label": "BK"
+      }
+    },
+    "icon_cloth": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#c0b090",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Cl"
+      }
+    },
+    "icon_leather": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#a87040",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Le"
+      }
+    },
+    "icon_chain": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#a8b0c0",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Ch"
+      }
+    },
+    "icon_plate": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#d0d8e8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Pl"
+      }
+    },
+    "icon_map": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#e8d8a8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Mp"
+      }
+    },
+    "icon_key_item": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f8d040",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Ky"
+      }
+    }
   },
-
   "fonts": {},
   "audio": {}
 }

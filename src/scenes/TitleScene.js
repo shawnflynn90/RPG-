@@ -4,6 +4,7 @@ import { Game } from '../systems/GameState.js';
 import { input } from '../input/InputManager.js';
 import { pixelText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
+import { Audio } from '../systems/Audio.js';
 
 export function formatTime(ms) {
   const m = Math.floor(ms / 60000);
@@ -40,6 +41,7 @@ export class TitleScene extends Phaser.Scene {
     this.mode = 'press';
     this.menu = null;
     this.panel = null;
+    Audio.music(DB.world.titleMusic || 'title');
   }
 
   openMain() {
@@ -48,6 +50,7 @@ export class TitleScene extends Phaser.Scene {
     const items = [];
     if (hasSave) items.push({ label: 'Continue', action: 'continue' });
     items.push({ label: 'New Game', action: 'new' });
+    items.push({ label: 'Options', action: 'options' });
     this.showMenu(items, 'main', 80);
   }
 
@@ -90,6 +93,7 @@ export class TitleScene extends Phaser.Scene {
       }
       return;
     }
+    if (this.mode === 'sub') return;
     const r = this.menu.update();
     if (!r) return;
     const item = this.menu.selected;
@@ -98,6 +102,10 @@ export class TitleScene extends Phaser.Scene {
         this.clearMenu();
         this.mode = 'press';
         this.prompt.setVisible(true);
+      } else if (r.type === 'select' && item.action === 'options') {
+        this.mode = 'sub';
+        this.scene.launch('Options', { onClose: () => (this.mode = 'main') });
+        this.scene.bringToTop('Options');
       } else if (r.type === 'select') this.openSlots(item.action);
     } else if (this.mode === 'slots') {
       if (r.type === 'cancel') return this.openMain();

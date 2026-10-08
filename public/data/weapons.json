@@ -12,7 +12,28 @@
     "lockMs": 160,
     "knockback": 150,
     "color": "#f8f8f8",
-    "price": 30
+    "price": 30,
+    "sfx": "swing",
+    "charge": {
+      "timeMs": 650,
+      "damageMul": 2,
+      "radius": 24
+    },
+    "upgrades": [
+      {
+        "price": 40,
+        "damage": 1
+      },
+      {
+        "price": 90,
+        "damage": 1,
+        "cooldownMs": -30
+      },
+      {
+        "price": 180,
+        "damage": 2
+      }
+    ]
   },
   "spear": {
     "name": "Spear",
@@ -27,7 +48,29 @@
     "lockMs": 240,
     "knockback": 170,
     "color": "#d8e8f8",
-    "price": 60
+    "price": 60,
+    "sfx": "thrust",
+    "charge": {
+      "timeMs": 700,
+      "damageMul": 2,
+      "radius": 22
+    },
+    "upgrades": [
+      {
+        "price": 60,
+        "damage": 1,
+        "range": 4
+      },
+      {
+        "price": 130,
+        "damage": 1
+      },
+      {
+        "price": 240,
+        "damage": 2,
+        "range": 4
+      }
+    ]
   },
   "axe": {
     "name": "Axe",
@@ -42,7 +85,28 @@
     "lockMs": 420,
     "knockback": 260,
     "color": "#f8c878",
-    "price": 120
+    "price": 120,
+    "sfx": "heavy",
+    "charge": {
+      "timeMs": 800,
+      "damageMul": 2.5,
+      "radius": 30
+    },
+    "upgrades": [
+      {
+        "price": 100,
+        "damage": 2
+      },
+      {
+        "price": 200,
+        "damage": 2,
+        "cooldownMs": -60
+      },
+      {
+        "price": 350,
+        "damage": 3
+      }
+    ]
   },
   "bow": {
     "name": "Bow",
@@ -53,7 +117,73 @@
     "cooldownMs": 420,
     "lockMs": 160,
     "knockback": 90,
-    "projectile": { "sprite": "arrow", "speed": 210, "range": 170, "size": [6, 6] },
-    "price": 80
+    "projectile": {
+      "sprite": "arrow",
+      "speed": 210,
+      "range": 170,
+      "size": [
+        6,
+        6
+      ]
+    },
+    "price": 80,
+    "sfx": "bow",
+    "charge": {
+      "timeMs": 700,
+      "damageMul": 2.5,
+      "pierce": true
+    },
+    "upgrades": [
+      {
+        "price": 70,
+        "damage": 1
+      },
+      {
+        "price": 150,
+        "damage": 1,
+        "cooldownMs": -60
+      },
+      {
+        "price": 260,
+        "damage": 2
+      }
+    ]
+  },
+  "wand": {
+    "name": "Storm Wand",
+    "description": "Shoots sparks that pass through enemies.",
+    "icon": "icon_wand",
+    "shape": "projectile",
+    "sfx": "spark",
+    "damage": 3,
+    "cooldownMs": 500,
+    "lockMs": 180,
+    "knockback": 80,
+    "projectile": {
+      "sprite": "spark",
+      "speed": 170,
+      "range": 120,
+      "size": [
+        6,
+        6
+      ],
+      "pierce": true
+    },
+    "charge": {
+      "timeMs": 800,
+      "damageMul": 2,
+      "pierce": true
+    },
+    "upgrades": [
+      {
+        "price": 120,
+        "damage": 1
+      },
+      {
+        "price": 240,
+        "damage": 2
+      }
+    ],
+    "price": 220
   }
 }

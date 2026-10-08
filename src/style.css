@@ -254,3 +254,64 @@ body.touch-hidden #screen {
   max-height: none;
   height: 100%;
 }
+
+/* ---------- touch size (Options) ---------- */
+:root {
+  --touch-scale: 1;
+}
+#dpad {
+  width: calc(var(--dpad) * var(--touch-scale));
+  height: calc(var(--dpad) * var(--touch-scale));
+}
+#face {
+  width: calc(var(--face-size) * 2.3 * var(--touch-scale));
+  height: calc(var(--face-size) * 1.8 * var(--touch-scale));
+}
+.face-btn {
+  width: calc(var(--face-size) * var(--touch-scale));
+  height: calc(var(--face-size) * var(--touch-scale));
+}
+.shoulder {
+  transform: scale(var(--touch-scale));
+}
+#left-pad .shoulder { transform-origin: top left; }
+#right-pad .shoulder { transform-origin: top right; }
+
+/* ---------- "Move touch buttons" edit mode ---------- */
+body.touch-edit #dpad,
+body.touch-edit #face,
+body.touch-edit .shoulder,
+body.touch-edit #sys {
+  outline: 2px dashed #f8e060;
+  outline-offset: 3px;
+  cursor: grab;
+}
+body.touch-edit .dragging {
+  outline-color: #78f878;
+}
+#touch-edit-bar {
+  position: fixed;
+  left: 50%;
+  top: calc(var(--safe-t) + 8px);
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #182058;
+  border: 2px solid #f8f8f8;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+#touch-edit-bar button {
+  font: inherit;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 0;
+  background: #f8e060;
+  color: #182058;
+}
