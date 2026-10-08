@@ -176,6 +176,7 @@ export class Combat {
     const ty = target.y - target.frameH / 2;
     const ok = target.hurt(src.damage || 0, fromX, fromY, { knockback: src.knockback ?? 120, kind: src.kind, element: src.element });
     if (ok) {
+      if (this.scene.particles) this.scene.particles.burst(tx, ty + target.frameH / 2, src.element === 'fire' ? 'fire' : 'hit', 5);
       if (!target.dead) target.applyEffect(src.effect);
       if (src.damage) this.floatText(tx, ty, String(src.damage), src.team === 'player' ? 0xffffff : 0xf87878);
     }

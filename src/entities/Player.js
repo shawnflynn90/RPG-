@@ -275,7 +275,7 @@ export class Player extends Actor {
     } else if (sp.type === 'heal') {
       const before = Game.s.hp;
       Game.heal(sp.amount || 10, 0);
-      combat.puff(this.x, this.y, 0x78f878, 8);
+      this.scene.particles.burst(this.x, this.y + 4, 'heal', 14);
       combat.floatText(this.x, this.y - 10, `+${Math.round(Game.s.hp - before)}`, 0x78f878);
     }
     this.scene.events.emit('spell-cast', id);

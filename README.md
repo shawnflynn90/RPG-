@@ -5,7 +5,7 @@ It runs at the GBA's native **240×160** resolution, scaled up with crisp pixels
 on-screen retro controls, or on a desktop with a keyboard or gamepad. It installs as a **PWA** and works offline.
 
 Nearly everything is **data-driven**:
-- Weapons, spells, items, armour, enemies, bosses, shops, teachers, blacksmiths, dialogue, sound effects, music and the world layout are JSON files.
+- Weapons, spells, tools, items, armour, enemies, bosses, shops, teachers, blacksmiths, dialogue, quests, cutscenes, credits, sound effects, music and the world layout are JSON files.
 - Maps are **Tiled** maps.
 - Art is listed in a single asset manifest.
 
@@ -23,7 +23,7 @@ You can add content without touching game code.
 6. [Adding your sprites](#adding-your-sprites)
 7. [Sound and music](#sound-and-music)
 8. [Building maps in Tiled](#building-maps-in-tiled) (objects, puzzles, dark rooms)
-9. [Adding content](#adding-content) (weapons, spells, armour, enemies, bosses, shops, smiths, dialogue)
+9. [Adding content](#adding-content) (weapons, spells, tools, armour, enemies, bosses, shops, smiths, dialogue, quests, cutscenes)
 10. [Adding a new town or dungeon](#adding-a-new-town-or-dungeon)
 11. [Checking your data: `npm run validate`](#checking-your-data)
 12. [Settings, options menu and control mapping](#settings-options-menu-and-control-mapping)
@@ -62,10 +62,10 @@ All input methods drive the same virtual buttons. You can remap keyboard and gam
 |---|---|---|---|
 | D-pad | Move (8 directions) / menus | Arrows or WASD | D-pad or left stick |
 | **A** | Attack / talk / open / confirm. **Hold after a swing to charge** a spin attack (or piercing shot) | J, Z or Space | A (bottom) |
-| **B** | Cast equipped spell / back | K or X | X (left) or B (right) |
+| **B** | Use equipped spell or tool (bombs, hookshot) / back | K or X | X (left) or B (right) |
 | **LB** | Cycle weapon / previous tab | Q or U | LB or LT |
-| **RB** | Cycle spell / next tab | E or I | RB or RT |
-| **Start** | Pause menu (items, weapons, spells, armour, save, options) | Enter, Esc or P | Start / Menu |
+| **RB** | Cycle spell or tool / next tab | E or I | RB or RT |
+| **Start** | Pause menu (items, weapons, spells, armour, quests, save, options) | Enter, Esc or P | Start / Menu |
 | **Select** | Map screen | Tab, Right Shift or M | Back / View |
 
 To push a block, walk into it for a moment.
@@ -127,7 +127,8 @@ The service worker only exists in production builds (`build`/`preview`), so it n
 │   ├── maps/                  Tiled maps (.tmj)
 │   └── data/                  Game content (JSON)
 │       ├── world.json         Maps, regions, starting position, new-game stats, levelling curve
-│       ├── weapons.json  spells.json  items.json  armor.json
+│       ├── weapons.json  spells.json  tools.json  items.json  armor.json
+│       ├── quests.json  cutscenes.json  credits.json
 │       ├── enemies.json  bosses.json
 │       ├── shops.json  teachers.json  smiths.json  dialogue.json
 │       └── sounds.json  music.json   (synthesized sound effects + chiptune music)
@@ -139,7 +140,8 @@ The service worker only exists in production builds (`build`/`preview`), so it n
 │   ├── input/                 InputManager (single input layer + rebinding), TouchControls (+ layout editor)
 │   ├── scenes/                Boot, Title, World, HUD, UI (dialogue/cards), Pause, Shop, Map, Options
 │   ├── entities/              Actor, Player, Enemy, Boss, Props (NPC, chest, gate, door, switch, block, pot, torch...)
-│   ├── systems/               db, assets, Combat, GameState (saves/levels), Audio, Lighting
+│   ├── systems/               db, assets, Combat, GameState (saves/levels/quests), Audio, Lighting,
+│   │                          Tools (bombs/hookshot), Cutscenes, Particles
 │   └── ui/                    Pixel font, panels, list menus
 ├── tools/                     validate-data, placeholder art generator, starter-map generator
 └── docs/sprite-templates/     Placeholder sheets exported as PNG templates
@@ -182,8 +184,9 @@ You can export any sprite's current sheet (placeholder or yours) from the runnin
 Character sprite keys:
 - **Player:** `player`
 - **NPCs:** `npc_elder`, `npc_merchant`, `npc_mage`, `npc_healer`, `npc_kid`, `npc_guard`, `npc_smith`, `npc_villager`, `npc_scholar`
-- **Enemies:** `slime`, `skeleton`, `bat`, `knight`, `wisp`, `spider`
-- **Bosses:** `boss_warden`, `boss_sorcerer`
+- **More NPCs:** `npc_farmer`, `npc_explorer`, `npc_monk`
+- **Enemies:** `slime`, `skeleton`, `bat`, `knight`, `wisp`, `spider`, `ice_slime`, `yeti`, `frost_wisp`
+- **Bosses:** `boss_warden`, `boss_sorcerer`, `boss_wyrm`
 
 **Changing the layout:** the layouts live at the top of `assets.json` under `"layouts"`. You can change them, add your own, or override anything for a single sprite:
 
@@ -215,6 +218,8 @@ The entries under `"images"` are single PNGs. Suggested sizes match the placehol
 | `gate`, `door_locked`, `door_boss` | 16×16 | Barriers (tiled to fill their rectangle) |
 | `switch_up`, `switch_down`, `crystal_off`, `crystal_on` | 16×16 | Floor switch / pressure plate, crystal switch |
 | `torch_off`, `torch_on` | 16×16 | Torches |
+| `bomb`, `snowball`, `icicle` | 10×10 / 8×8 / 6×6 | Bombs and ice projectiles |
+| `cracked_wall`, `hook_post` | 16×16 | Bombable wall, hookshot post |
 | `shadow` | 12×4 | Soft shadow under characters |
 | `icon_*` | 12×12 (`icon_key` 8×8) | HUD and menu icons for weapons, spells, items and armour |
 
@@ -293,6 +298,10 @@ Install [Tiled](https://www.mapeditor.org) (1.10 or newer) and open **`pocketque
 
 You can also make individual tiles solid **on any layer**. Give them the bool property `collides = true` in the tileset editor. The placeholder tileset already does this for water, trees, walls, pits, lava and furniture.
 
+Two more tile properties:
+- **`low = true`:** solid to walk on, but arrows, spells and the **hookshot** fly over it. Pits, water, lava and frozen water use this.
+- **`ice = true`:** slippery floor. The player slides with momentum.
+
 A map smaller than the screen (240×160 px) is centred automatically, which is how the 10×8-tile interiors are drawn.
 
 ### Objects
@@ -305,7 +314,7 @@ Add an **Object Layer** and set each object's **Class** (called *Type* in older 
 |---|---|---|---|
 | `spawn` | point | **Name**, `facing` | Where the player appears when arriving by warp. |
 | `warp` | rectangle | `map`, `spawn`, `facing` | Walking into it moves the player to another map. Doors into houses are warps. |
-| `npc` | point | `sprite`, `dialogue`, `facing`, `wander`, `ifFlag`, `ifNotFlag` | A person you can talk to. `ifFlag` / `ifNotFlag` make them appear or disappear with story flags. |
+| `npc` | point | `sprite`, `dialogue`, `facing`, `wander`, `ifFlag`, `ifNotFlag`, `cutscene` | A person you can talk to. `ifFlag` / `ifNotFlag` make them appear or disappear with story flags. With `cutscene`, talking to them plays that cutscene (once). |
 | `shop` | point | `sprite`, `shop` | Shopkeeper (weapons, armour, items, spells). You can talk across a counter. |
 | `teacher` | point | `sprite`, `teacher` | Spell teacher. |
 | `smith` | point | `sprite`, `smith` | Blacksmith; upgrades the player's weapons. |
@@ -316,9 +325,12 @@ Add an **Object Layer** and set each object's **Class** (called *Type* in older 
 
 | Class | Shape | Properties | What it does |
 |---|---|---|---|
-| `chest` | point | `weapon`, `spell`, `item` + `count`, `armor`, `gold`, `maxHp`, `maxMp`, `flag`, `ifFlag` | Treasure chest. `flag` is set when it's opened. With `ifFlag`, the chest only appears once that flag is set (e.g. a puzzle reward). |
+| `chest` | point | `weapon`, `spell`, `tool`, `item` + `count`, `armor`, `gold`, `maxHp`, `maxMp`, `flag`, `ifFlag` | Treasure chest. `flag` is set when it's opened. With `ifFlag`, the chest only appears once that flag is set (e.g. a puzzle reward). |
 | `item` | point | `item`, `count` | An item lying on the floor (e.g. a key); picked up by walking over it. |
 | `pot` | point | `drop` (`random` / `gold` / `heart` / `mana` / `none`), `item` | Breaks when hit; drops something. |
+| `crack` | rectangle | `text` | Cracked wall: solid until a **bomb** blasts it (stays open, saved). |
+| `hook` | point | | Hook post: the **hookshot** latches on and pulls you to it, even across pits and water. |
+| `trigger` | rectangle | `cutscene` | Plays a cutscene when the player walks in. |
 | `enemy` | point | `enemy` | Spawns an enemy each time the room loads. |
 | `boss` | point | `boss` | Spawns the boss until it is beaten. |
 
@@ -404,6 +416,108 @@ Ways to get spells:
 - a spell teacher
 - a chest with `spell` (works as a scroll)
 - a boss `reward.spell`
+
+### Tools — `tools.json`
+
+Tools share the **B** button with spells (cycle with RB) and are found or bought like weapons.
+
+```json
+"bombs":    { "name": "Bombs", "icon": "icon_bomb", "type": "bomb", "ammo": "bomb", "startAmmo": 5,
+              "cooldownMs": 500, "fuseMs": 1500, "radius": 30, "damage": 8, "selfDamage": 2 },
+"hookshot": { "name": "Hookshot", "icon": "icon_hookshot", "type": "hookshot",
+              "cooldownMs": 400, "range": 128, "speed": 280, "damage": 1, "effect": { "stun": { "durationMs": 1400 } } }
+```
+
+**Bombs:**
+- Each use costs one `ammo` item (buy more in shops: `{ "item": "bomb", "count": 5, "price": 20 }`).
+- `startAmmo` is given once, with the tool.
+- The blast hurts enemies, and **you** if you stand too close. It breaks pots, lights torches and opens `crack` walls.
+
+**Hookshot:**
+- Latches onto `hook` posts and pulls you to them, flying over pits and water.
+- Stuns enemies, breaks pots and grabs items.
+
+Where tools come from:
+- a chest with `tool`
+- a shop entry `{ "tool": "bombs", "price": 80 }`
+- a boss `reward.tool`
+- `newGame.spells`
+
+### Quests — `quests.json`
+
+```json
+"slime_trouble": {
+  "name": "Slime Trouble", "giver": "Farmer, Town 1",
+  "description": "Slimes keep eating the farmer's crops. Defeat 6 slimes.",
+  "goals": [ { "text": "Defeat slimes", "kills": { "slime": 6 } } ],
+  "reward": { "gold": 40, "item": "potion", "count": 2 }
+}
+```
+
+**Goals:** a goal can be one of these:
+- `{ "kills": { "enemyId": n } }`: only kills after the quest starts count.
+- `{ "item": "id", "count": n }`: goal items are taken away on turn-in unless `"takeItems": false`.
+- `{ "flag": "name" }`.
+
+**Starting and finishing:** quests start and finish through dialogue. Put `"startQuest": "id"` on the entry or variant that offers the quest, and `"completeQuest": "id"` on a variant that checks `{"questReady": "id"}`. The farmer in `dialogue.json` is a full example:
+
+```json
+"farmer": { "pages": ["Could you defeat 6 slimes?"], "startQuest": "slime_trouble",
+  "variants": [
+    { "if": { "questDone": "slime_trouble" },   "pages": ["Thank you, hero!"] },
+    { "if": { "questReady": "slime_trouble" },  "pages": ["You did it!"], "completeQuest": "slime_trouble" },
+    { "if": { "questActive": "slime_trouble" }, "pages": ["Still slimes out there..."] } ] }
+```
+
+**Quest log:**
+- Pause → **Quests** lists active and finished quests with their progress.
+- A message pops up when a quest is ready to turn in.
+- Dialogue conditions can also use `questActive`, `questReady`, `questDone` and `questNotStarted`.
+
+### Cutscenes — `cutscenes.json`
+
+Little scripted scenes where characters walk, talk and the camera pans, all written in data:
+
+```json
+"town3_arrival": { "if": {}, "once": true, "steps": [
+  { "emote": "Guard", "icon": "!" },
+  { "move": "Guard", "to": [13, 11], "speed": 70 },
+  { "face": "Guard", "toward": "player" },
+  { "say": ["Welcome to Town 3, friend."], "speaker": "Guard" },
+  { "camera": [13, 3], "ms": 800 },
+  { "say": ["Up north is the Frost Cavern..."], "speaker": "Guard" },
+  { "camera": "player", "ms": 600 },
+  { "move": "Guard", "to": [15, 7] }
+] }
+```
+
+- **Actors:** `"player"` or an NPC's **Name** from Tiled.
+- **Positions:** given in **tiles**.
+
+| Step | Effect |
+|---|---|
+| `say` (+ `speaker`) | Dialogue box |
+| `ask`, `options`, `flags` | Yes/no style choice. Sets the flag at the chosen index. |
+| `move`, `to`, `speed`, `wait: false` | Walk an actor to a tile |
+| `face` + `dir` or `toward` | Turn an actor |
+| `emote` + `icon` | Speech bubble ("!", "?") |
+| `camera: [x, y]` / `camera: "player"` (+ `ms`) | Pan the camera, then follow the player again |
+| `wait`, `shake`, `flash`, `fade` | Timing and screen effects |
+| `sfx`, `music` | Sound |
+| `flag`, `give`, `startQuest` | Story |
+| `hide`, `show` | Make an NPC disappear or reappear |
+| `warp: { map, spawn }` | Change map |
+| `credits: true` | Roll the credits (`credits.json`) |
+
+**Triggers:**
+- a `trigger` rectangle in Tiled
+- `cutscene` on an NPC
+- `"onEnter": "id"` on a map in `world.json` (used for the intro)
+- `"cutscene": "id"` on a boss (plays after its defeat; the Frost Wyrm uses this for the ending)
+
+**Rules:**
+- A cutscene only plays when its `if` conditions match.
+- It plays once unless `"once": false`.
 
 ### Status effects
 
@@ -519,14 +633,15 @@ A boss has these fields:
 | `aimed` | `windupMs`, `count`, `spreadDeg`, `waves`, `waveDelayMs`, `projectile` (a fan aimed at the player) |
 | `summon` | `windupMs`, `enemy`, `count`, `max` |
 | `teleport` | `fadeMs`, `hideMs`, `minDist`, `maxDist` (vanishes and reappears near the player) |
+| `rain` | `windupMs`, `count`, `radius`, `spread`, `damage`, `effect` (warning circles around the player, then strikes) |
 
-`reward` accepts `weapon`, `spell`, `item` + `count`, `armor`, `gold`, `maxHp`, `maxMp`, `flag` and `message`.
+`reward` accepts `weapon`, `spell`, `tool`, `item` + `count`, `armor`, `gold`, `maxHp`, `maxMp`, `flag` and `message`. Add `"cutscene": "id"` to a boss to play a scene after it falls.
 Beating a boss also sets the flag `boss:<id>`. Use the reward `flag` on `gate`s to open the road to the next town.
 
 ### Shops, teachers and blacksmiths
 
 ```json
-// shops.json: stock entries can be weapon, armor, item or spell
+// shops.json: stock entries can be weapon, armor, tool, item (+ count) or spell
 "town2_shop": { "name": "Crypt Outfitters", "greeting": "...", "stock": [ { "armor": "chain", "price": 220 }, { "item": "antidote", "price": 8 } ] }
 // teachers.json
 "town2_teacher": { "name": "Librarian", "greeting": "...", "spells": [ { "spell": "shock", "price": 140 } ] }
@@ -547,7 +662,8 @@ Beating a boss also sets the flag `boss:<id>`. Use the reward `flag` on `gate`s 
 ```
 
 - The first variant whose `if` matches is used.
-- Conditions: `flag`, `notFlag`, `hasWeapon`, `hasSpell`, `hasItem`, `minGold`, `minLevel`, `visited`.
+- Conditions: `flag`, `notFlag`, `hasWeapon`, `hasSpell`, `hasItem`, `minGold`, `minLevel`, `visited`, `questActive`, `questReady`, `questDone`, `questNotStarted`.
+- `startQuest` / `completeQuest`: see Quests above.
 - `give` hands over a one-time reward.
 
 ---
@@ -625,10 +741,31 @@ If something fails to load in the game itself, the error is also shown on screen
 - `__game.scene.getScene('World').goTo('dungeon2_2', 'south')` teleports you.
 - `__exportSprite('player')` downloads a sheet template.
 - `__audio.sfx('levelUp')` plays a sound effect.
+- `__state` is the save data and helpers, e.g. `__state.s.gold = 999` or `__state.addSpell('hookshot')`.
 
 ---
 
 ## What's in the game so far
+
+**Milestone 3**
+- **Tools on the B button:**
+  - **Bombs:** blast enemies and cracked walls; buy more ammo in shops.
+  - **Hookshot:** latch onto posts across pits and water; stuns enemies and grabs items.
+- **Ice floors** you slide on, and **"low" tiles** (pits, water, lava) that projectiles and the hookshot fly over.
+- **Quests** with a quest log (Pause → Quests), kill and collect goals, and "ready to turn in" alerts:
+  - *Slime Trouble* (Town 1)
+  - *The Lost Ring* (Town 2)
+  - *Frozen Supplies* and *Yeti Hunt* (Town 3)
+- **Data-driven cutscenes:** characters walk, emote and talk; the camera pans. They're used for:
+  - the opening scene in Town 1
+  - the arrival in Town 3
+  - the ending after the third boss, which rolls the **credits**
+- **Town 3:** a snowy town with an inn, a bomb shop, a snow monk teaching **Blizzard**, a hidden cracked-wall cache, and quest givers.
+- **Frost Cavern (Dungeon 3):** 5 icy rooms with slippery floors, cracked walls, the **Hookshot**, a frozen river and a chasm crossed by hook posts, a Big Key and Frost Herbs.
+- **The Frost Wyrm:** a third boss with icicle breath, ice-spike **rain**, charges, summons and a frost nova. Town 4 is stubbed beyond it.
+- **New enemies:** Ice Slimes (slow you on touch), Yetis (snowballs and charges) and Frost Wisps (teleport and fire icicle fans).
+- **New gear:** Fur Coat (immune to slow).
+- **Particles:** dust when walking, hit sparks, fire from bombs, ice when sliding, healing and coins.
 
 **Milestone 1**
 - Touch, keyboard and gamepad controls through one input layer.

@@ -91,6 +91,11 @@
      "name": "ifNotFlag",
      "type": "string",
      "value": ""
+    },
+    {
+     "name": "cutscene",
+     "type": "string",
+     "value": ""
     }
    ]
   },
@@ -131,6 +136,11 @@
     },
     {
      "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "cutscene",
      "type": "string",
      "value": ""
     }
@@ -175,6 +185,11 @@
      "name": "ifNotFlag",
      "type": "string",
      "value": ""
+    },
+    {
+     "name": "cutscene",
+     "type": "string",
+     "value": ""
     }
    ]
   },
@@ -215,6 +230,11 @@
     },
     {
      "name": "ifNotFlag",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "cutscene",
      "type": "string",
      "value": ""
     }
@@ -259,6 +279,11 @@
      "name": "ifNotFlag",
      "type": "string",
      "value": ""
+    },
+    {
+     "name": "cutscene",
+     "type": "string",
+     "value": ""
     }
    ]
   },
@@ -296,6 +321,11 @@
     },
     {
      "name": "spell",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "tool",
      "type": "string",
      "value": ""
     },
@@ -585,6 +615,56 @@
      "value": ""
     }
    ]
+  },
+  {
+   "id": 20,
+   "name": "trigger",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffe060f8",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "cutscene",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "name": "crack",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ff706888",
+   "drawFill": true,
+   "members": [
+    {
+     "name": "text",
+     "type": "string",
+     "value": ""
+    },
+    {
+     "name": "id",
+     "type": "string",
+     "value": ""
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "name": "hook",
+   "type": "class",
+   "useAs": [
+    "object"
+   ],
+   "color": "#ffa07040",
+   "drawFill": true,
+   "members": []
   }
  ]
 }

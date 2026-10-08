@@ -589,7 +589,7 @@ export class WorldScene extends Phaser.Scene {
     if (c.opened) return this.ui.say('The chest is empty.');
     const lines = c.open();
     this.sfx('chest');
-    this.combat.puff(c.x, c.y - 6, 0xf8e060, 8);
+    this.particles.burst(c.x, c.y - 6, 'coin', 14);
     await this.ui.say(lines.length ? lines : ['The chest is empty.']);
     if (c.contents.flag) this.onFlagChanged();
   }
@@ -756,7 +756,7 @@ export class WorldScene extends Phaser.Scene {
       // pickups
       for (const pk of [...this.pickupGroup.getChildren()]) {
         if (Rect.Overlaps(pb, pk.getBounds())) {
-          this.combat.puff(pk.x, pk.y, 0xf8f8a0, 4);
+          this.particles.burst(pk.x, pk.y, pk.kind === 'heart' ? 'heal' : pk.kind === 'mana' ? 'magic' : 'coin', 5);
           pk.collect();
         }
       }
