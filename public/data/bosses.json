@@ -1,0 +1,60 @@
+{
+  "warden": {
+    "name": "Stone Warden",
+    "sprite": "boss_warden",
+    "hp": 70,
+    "contactDamage": 3,
+    "speed": 26,
+    "restMs": 650,
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": ["walk", "volley", "walk", "slam"]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "The Warden's core glows red!",
+        "tint": "#f87050",
+        "speedMul": 1.4,
+        "patterns": ["charge", "volley_fast", "summon", "charge", "slam", "aimed"]
+      }
+    ],
+    "patterns": {
+      "walk": { "type": "chase", "durationMs": 1600 },
+      "slam": { "type": "area", "windupMs": 650, "radius": 40, "damage": 4, "color": "#f8d878" },
+      "volley": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 8,
+        "waves": 1,
+        "projectile": { "sprite": "rock", "speed": 80, "range": 220, "damage": 2, "size": [8, 8] }
+      },
+      "volley_fast": {
+        "type": "radial",
+        "windupMs": 400,
+        "count": 10,
+        "waves": 3,
+        "waveDelayMs": 380,
+        "projectile": { "sprite": "rock", "speed": 95, "range": 220, "damage": 2, "size": [8, 8] }
+      },
+      "aimed": {
+        "type": "aimed",
+        "windupMs": 300,
+        "count": 3,
+        "spreadDeg": 18,
+        "waves": 2,
+        "waveDelayMs": 300,
+        "projectile": { "sprite": "rock", "speed": 120, "range": 220, "damage": 2, "size": [8, 8] }
+      },
+      "charge": { "type": "charge", "windupMs": 600, "speed": 170, "durationMs": 650 },
+      "summon": { "type": "summon", "windupMs": 500, "enemy": "slime", "count": 2, "max": 4 }
+    },
+    "reward": {
+      "weapon": "axe",
+      "maxHp": 4,
+      "gold": 50,
+      "flag": "dungeon1_cleared",
+      "message": "The path north is open!"
+    }
+  }
+}

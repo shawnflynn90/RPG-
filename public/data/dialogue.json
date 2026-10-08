@@ -1,0 +1,34 @@
+{
+  "elder": {
+    "speaker": "Elder",
+    "pages": [
+      "Welcome, traveler. This is Town 1.",
+      "A monster has made its home in the dungeon to the north-east. The road to the next town runs right through it.",
+      "Buy what you need at the market stall, and visit the healer before you go."
+    ],
+    "variants": [
+      {
+        "if": { "flag": "dungeon1_cleared" },
+        "pages": ["You defeated the Stone Warden! The road north is open. Safe travels!"]
+      }
+    ]
+  },
+  "healer": {
+    "speaker": "Healer",
+    "pages": ["Rest here and I'll restore your strength. I'll also record your journey."]
+  },
+  "kid": {
+    "speaker": "Kid",
+    "pages": [
+      "Tip: press LB and RB to switch weapons and spells!",
+      "And START opens the menu."
+    ],
+    "variants": [
+      { "if": { "hasWeapon": "bow" }, "pages": ["Whoa, a bow! You can hit things from far away now."] }
+    ]
+  },
+  "town2_greeter": {
+    "speaker": "Guard",
+    "pages": ["Welcome to Town 2!", "...We're still building it. Come back in the next milestone."]
+  }
+}

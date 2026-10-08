@@ -97,6 +97,7 @@ const G = {
   '&': [0, '.#..', '#.#.', '#.#.', '.#..', '#.#.', '#..#', '.##.'],
   // Special symbols (use the \u escapes in strings):
   '▼': [3, '#####', '.###.', '..#..'], // ▼  "more text" indicator
+  '▲': [3, '..#..', '.###.', '#####'], // up arrow
   '▶': [1, '#...', '##..', '###.', '##..', '#...'], // ▶  menu cursor
   '♥': [1, '.#.#.', '#####', '#####', '.###.', '..#..'], // ♥
   '…': [6, '#.#.#'], // …
@@ -157,9 +158,50 @@ export function createPixelFont(scene) {
   });
 }
 
+/** Draw text straight onto a 2D canvas (used for placeholder icons). Returns the width drawn. */
+export function drawGlyphs(ctx, str, x, y, color = '#ffffff') {
+  ctx.fillStyle = color;
+  let cx = x;
+  for (const ch of str) {
+    const g = G[ch] || G['?'];
+    const [top, ...rows] = g;
+    rows.forEach((row, ry) => [...row].forEach((c, rx) => c === '#' && ctx.fillRect(cx + rx, y + top + ry, 1, 1)));
+    cx += ch === ' ' ? 3 : Math.max(...rows.map((r) => r.length)) + 1;
+  }
+  return cx - x - 1;
+}
+
+/** Width in pixels of a string in the pixel font. */
+export function measureText(str) {
+  let w = 0;
+  for (const ch of str) {
+    const g = G[ch] || G['?'];
+    w += ch === ' ' ? 3 : Math.max(...g.slice(1).map((r) => r.length)) + 1;
+  }
+  return Math.max(0, w - 1);
+}
+
 /** Convenience: crisp pixel text. Origin top-left. */
 export function pixelText(scene, x, y, str, color = 0xffffff) {
-  const t = scene.add.bitmapText(x, y, FONT_KEY, str, FONT_SIZE);
+  const t = scene.add.bitmapText(x, y, FONT_KEY, str); // native size of whichever font is loaded
   t.setTint(color);
   return t;
+}
+
+/** Word-wrap a string (respecting \n) to lines no wider than maxWidth pixels. */
+export function wrapText(str, maxWidth) {
+  const out = [];
+  for (const para of String(str).split('\n')) {
+    let line = '';
+    for (const word of para.split(' ')) {
+      const test = line ? line + ' ' + word : word;
+      if (measureText(test) <= maxWidth || !line) line = test;
+      else {
+        out.push(line);
+        line = word;
+      }
+    }
+    out.push(line);
+  }
+  return out;
 }

@@ -1,0 +1,20 @@
+{
+  "title": "Pocket Quest",
+  "start": { "map": "town1", "spawn": "start" },
+  "newGame": {
+    "maxHp": 20,
+    "maxMp": 12,
+    "gold": 30,
+    "weapons": ["sword"],
+    "spells": ["fire"],
+    "items": { "potion": 2 }
+  },
+  "maps": {
+    "town1": { "file": "maps/town1.tmj", "name": "Town 1", "kind": "town" },
+    "dungeon1_1": { "file": "maps/dungeon1_1.tmj", "name": "Dungeon 1", "kind": "dungeon" },
+    "dungeon1_2": { "file": "maps/dungeon1_2.tmj", "name": "Dungeon 1", "kind": "dungeon" },
+    "dungeon1_3": { "file": "maps/dungeon1_3.tmj", "name": "Dungeon 1", "kind": "dungeon" },
+    "dungeon1_boss": { "file": "maps/dungeon1_boss.tmj", "name": "Warden's Lair", "kind": "dungeon" },
+    "town2": { "file": "maps/town2.tmj", "name": "Town 2", "kind": "town" }
+  }
+}

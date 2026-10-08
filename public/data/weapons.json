@@ -1,0 +1,59 @@
+{
+  "sword": {
+    "name": "Sword",
+    "description": "Quick, short swing in front of you.",
+    "icon": "icon_sword",
+    "shape": "arc",
+    "damage": 3,
+    "cooldownMs": 280,
+    "range": 14,
+    "width": 20,
+    "activeMs": 110,
+    "lockMs": 160,
+    "knockback": 150,
+    "color": "#f8f8f8",
+    "price": 30
+  },
+  "spear": {
+    "name": "Spear",
+    "description": "Long reach thrust. Hit enemies before they reach you.",
+    "icon": "icon_spear",
+    "shape": "thrust",
+    "damage": 3,
+    "cooldownMs": 420,
+    "range": 28,
+    "width": 6,
+    "activeMs": 140,
+    "lockMs": 240,
+    "knockback": 170,
+    "color": "#d8e8f8",
+    "price": 60
+  },
+  "axe": {
+    "name": "Axe",
+    "description": "Slow, heavy, wide chop. Sends enemies flying.",
+    "icon": "icon_axe",
+    "shape": "arc",
+    "damage": 7,
+    "cooldownMs": 720,
+    "range": 16,
+    "width": 28,
+    "activeMs": 150,
+    "lockMs": 420,
+    "knockback": 260,
+    "color": "#f8c878",
+    "price": 120
+  },
+  "bow": {
+    "name": "Bow",
+    "description": "Fires arrows. Weak, but safe from a distance.",
+    "icon": "icon_bow",
+    "shape": "projectile",
+    "damage": 2,
+    "cooldownMs": 420,
+    "lockMs": 160,
+    "knockback": 90,
+    "projectile": { "sprite": "arrow", "speed": 210, "range": 170, "size": [6, 6] },
+    "price": 80
+  }
+}

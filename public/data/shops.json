@@ -1,0 +1,20 @@
+{
+  "town1_shop": {
+    "name": "Market Stall",
+    "greeting": "Welcome! Have a look at my wares.",
+    "stock": [
+      {
+        "weapon": "spear",
+        "price": 60
+      },
+      {
+        "item": "potion",
+        "price": 10
+      },
+      {
+        "item": "ether",
+        "price": 15
+      }
+    ]
+  }
+}

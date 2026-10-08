@@ -1,0 +1,16 @@
+{
+  "potion": {
+    "name": "Potion",
+    "description": "Restores 10 HP.",
+    "icon": "icon_potion",
+    "use": { "hp": 10 },
+    "price": 10
+  },
+  "ether": {
+    "name": "Ether",
+    "description": "Restores 8 MP.",
+    "icon": "icon_ether",
+    "use": { "mp": 8 },
+    "price": 15
+  }
+}

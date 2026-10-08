@@ -1,0 +1,70 @@
+{
+  "_readme": "The ONE asset manifest. Set \"file\" to your PNG (path relative to /public) to replace a placeholder. See README: 'Adding your sprites'.",
+
+  "layouts": {
+    "character": {
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "directions": ["down", "left", "right", "up"],
+      "animations": {
+        "idle": { "column": 0, "frames": 1, "fps": 1 },
+        "walk": { "column": 1, "frames": 4, "fps": 8 },
+        "attack": { "column": 5, "frames": 2, "fps": 12, "repeat": 0 },
+        "hurt": { "column": 7, "frames": 1, "fps": 1 }
+      }
+    },
+    "boss": {
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "directions": ["down", "left", "right", "up"],
+      "animations": {
+        "idle": { "column": 0, "frames": 1, "fps": 1 },
+        "walk": { "column": 1, "frames": 4, "fps": 6 },
+        "attack": { "column": 5, "frames": 2, "fps": 8, "repeat": 0 },
+        "hurt": { "column": 7, "frames": 1, "fps": 1 }
+      }
+    }
+  },
+
+  "sprites": {
+    "player": { "layout": "character", "file": null, "body": { "width": 10, "height": 8 }, "placeholder": { "color": "#3878e8", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "npc_elder": { "layout": "character", "file": null, "placeholder": { "color": "#a07848", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "npc_merchant": { "layout": "character", "file": null, "placeholder": { "color": "#48a058", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "npc_mage": { "layout": "character", "file": null, "placeholder": { "color": "#8848c8", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "npc_healer": { "layout": "character", "file": null, "placeholder": { "color": "#f0f0f0", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "npc_kid": { "layout": "character", "file": null, "placeholder": { "color": "#f0a030", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "npc_guard": { "layout": "character", "file": null, "placeholder": { "color": "#7088a0", "accent": "#f8d0a0", "shape": "humanoid" } },
+    "slime": { "layout": "character", "file": null, "body": { "width": 12, "height": 9 }, "placeholder": { "color": "#58c858", "accent": "#e8ffe8", "shape": "blob" } },
+    "skeleton": { "layout": "character", "file": null, "body": { "width": 10, "height": 8 }, "placeholder": { "color": "#e0e0d0", "accent": "#303030", "shape": "humanoid" } },
+    "bat": { "layout": "character", "file": null, "body": { "width": 10, "height": 8 }, "placeholder": { "color": "#684888", "accent": "#f84848", "shape": "bat" } },
+    "boss_warden": { "layout": "boss", "file": null, "body": { "width": 22, "height": 18 }, "placeholder": { "color": "#8890a0", "accent": "#f8d040", "shape": "golem" } }
+  },
+
+  "images": {
+    "arrow": { "file": null, "placeholder": { "shape": "rect", "color": "#f8e8c0", "size": [6, 2] } },
+    "fireball": { "file": null, "placeholder": { "shape": "circle", "color": "#f87830", "accent": "#f8e050", "size": [8, 8] } },
+    "bone": { "file": null, "placeholder": { "shape": "diamond", "color": "#f0f0e0", "size": [6, 6] } },
+    "rock": { "file": null, "placeholder": { "shape": "circle", "color": "#a09088", "accent": "#c8b8b0", "size": [8, 8] } },
+    "coin": { "file": null, "placeholder": { "shape": "circle", "color": "#f8d030", "accent": "#fff8a0", "size": [7, 7] } },
+    "heart": { "file": null, "placeholder": { "shape": "heart", "color": "#f04858", "size": [7, 7] } },
+    "mana": { "file": null, "placeholder": { "shape": "diamond", "color": "#4890f8", "accent": "#a8d8ff", "size": [7, 7] } },
+    "chest_closed": { "file": null, "placeholder": { "shape": "chest", "color": "#b07030", "accent": "#f8d040", "size": [16, 16] } },
+    "chest_open": { "file": null, "placeholder": { "shape": "chest_open", "color": "#b07030", "accent": "#f8d040", "size": [16, 16] } },
+    "sign": { "file": null, "placeholder": { "shape": "sign", "color": "#a87840", "accent": "#e8c890", "size": [16, 16] } },
+    "gate": { "file": null, "placeholder": { "shape": "bars", "color": "#8888a0", "accent": "#c8c8e0", "size": [16, 16] } },
+    "shadow": { "file": null, "placeholder": { "shape": "shadow", "color": "#000000", "size": [12, 4] } },
+
+    "icon_sword": { "file": null, "placeholder": { "shape": "icon", "color": "#d0d8e8", "label": "Sw", "size": [12, 12] } },
+    "icon_spear": { "file": null, "placeholder": { "shape": "icon", "color": "#a8c0d8", "label": "Sp", "size": [12, 12] } },
+    "icon_axe": { "file": null, "placeholder": { "shape": "icon", "color": "#e8b070", "label": "Ax", "size": [12, 12] } },
+    "icon_bow": { "file": null, "placeholder": { "shape": "icon", "color": "#c89858", "label": "Bo", "size": [12, 12] } },
+    "icon_fire": { "file": null, "placeholder": { "shape": "icon", "color": "#f87830", "label": "Fi", "size": [12, 12] } },
+    "icon_ice": { "file": null, "placeholder": { "shape": "icon", "color": "#78d0f8", "label": "Ic", "size": [12, 12] } },
+    "icon_heal": { "file": null, "placeholder": { "shape": "icon", "color": "#78e878", "label": "He", "size": [12, 12] } },
+    "icon_potion": { "file": null, "placeholder": { "shape": "icon", "color": "#f05868", "label": "Po", "size": [12, 12] } },
+    "icon_ether": { "file": null, "placeholder": { "shape": "icon", "color": "#5878f0", "label": "Et", "size": [12, 12] } }
+  },
+
+  "fonts": {},
+  "audio": {}
+}

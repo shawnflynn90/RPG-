@@ -4,7 +4,13 @@ import { GAME } from './config/game.config.js';
 import { input } from './input/InputManager.js';
 import { touchControls } from './input/TouchControls.js';
 import { installScaler } from './scale.js';
-import { InputTestScene } from './scenes/InputTestScene.js';
+import { BootScene } from './scenes/BootScene.js';
+import { TitleScene } from './scenes/TitleScene.js';
+import { WorldScene } from './scenes/WorldScene.js';
+import { HUDScene } from './scenes/HUDScene.js';
+import { PauseScene } from './scenes/PauseScene.js';
+import { ShopScene } from './scenes/ShopScene.js';
+import { UIScene } from './scenes/UIScene.js';
 
 input.attach();
 touchControls.attach();
@@ -20,7 +26,8 @@ const game = new Phaser.Game({
   scale: { mode: Phaser.Scale.NONE },
   physics: { default: 'arcade', arcade: { debug: GAME.debugPhysics } },
   input: { keyboard: false, gamepad: false, mouse: false, touch: false }, // we use our own input layer
-  scene: [InputTestScene],
+  // Order = draw order (later scenes are drawn on top).
+  scene: [BootScene, TitleScene, WorldScene, HUDScene, PauseScene, ShopScene, UIScene],
 });
 
 // Merge keyboard/gamepad/touch once per frame, before any scene updates.
