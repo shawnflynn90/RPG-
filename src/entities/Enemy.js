@@ -311,6 +311,7 @@ export class Enemy extends Actor {
     super.die();
     Audio.sfx('enemyDie');
     Game.recordKill(this.id);
+    if (this.spawnKey) Game.s.slain[this.spawnKey] = true;
     this.scene.particles.burst(this.x, this.y, 'hit', 8);
     this.scene.combat.puff(this.x, this.y, 0xffffff, 10);
     this.scene.spawnDrops(this.x, this.y, this.def.drops || []);

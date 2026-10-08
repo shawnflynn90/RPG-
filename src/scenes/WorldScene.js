@@ -68,6 +68,14 @@ export class WorldScene extends Phaser.Scene {
     if (!DB.world.maps[this.mapId]) throw new Error(`Map "${this.mapId}" is not listed in data/world.json`);
     const def = mapSettings(this.mapId);
     this.mapDef = def;
+    // Dungeon enemies stay beaten until you leave the dungeon or die; a cleared dungeon stays empty.
+    const region = (DB.world.regions || []).find((r) => r.id === def.region);
+    this.inDungeon = !!region && region.kind === 'dungeon';
+    this.dungeonCleared = this.inDungeon && !!region.boss && Game.flag(`boss:${region.boss}`);
+    if (Game.s.slainRegion !== (def.region || null)) {
+      Game.s.slain = {};
+      Game.s.slainRegion = def.region || null;
+    }
 
     // ---- tilemap ------------------------------------------------------------------
     const cacheKey = `map:${this.mapId}`;
@@ -225,9 +233,12 @@ export class WorldScene extends Phaser.Scene {
         this.addChest(cx, cy, `chest:${uid}`, contents);
         break;
       }
-      case 'enemy':
-        this.spawnEnemy(p.enemy || obj.name, cx, cy);
+      case 'enemy': {
+        if (this.dungeonCleared || Game.s.slain[uid]) break;
+        const e = this.spawnEnemy(p.enemy || obj.name, cx, cy);
+        if (e && this.inDungeon) e.spawnKey = uid;
         break;
+      }
       case 'boss': {
         const id = p.boss || obj.name;
         const bdef = DB.bosses[id];
@@ -733,6 +744,7 @@ export class WorldScene extends Phaser.Scene {
       this.player.setTint(0x808080);
       await new Promise((r) => setTimeout(r, 700));
       await this.ui.say('You collapsed...');
+      Game.s.slain = {}; // the dungeon's monsters come back
       Game.heal();
       this.player.cure();
       const r = Game.s.respawn;

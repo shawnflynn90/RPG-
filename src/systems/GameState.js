@@ -26,6 +26,9 @@ function freshState() {
     level: 1,
     xp: 0,
     visited: {},
+    // enemies beaten on this trip into a dungeon ("map:objectId"); cleared when you leave it or die
+    slain: {},
+    slainRegion: null,
     kills: {}, // enemy id -> total defeated
     quests: {}, // quest id -> { state: 'active' | 'done', base: {kills at start}, notified }
     flags: {},
