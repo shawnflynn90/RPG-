@@ -49,6 +49,7 @@ export class WorldScene extends Phaser.Scene {
     this.transitioning = false;
     this.inCutscene = false;
     this.bossFightActive = false;
+    this.ambushActive = false;
     this.player = null;
     this.boss = null;
     this.tempFlags = new Set();
@@ -215,7 +216,7 @@ export class WorldScene extends Phaser.Scene {
       case 'chest': {
         const contents = {};
         for (const k of ['weapon', 'spell', 'tool', 'item', 'armor', 'count', 'gold', 'maxHp', 'maxMp', 'flag']) if (p[k] !== undefined) contents[k] = p[k];
-        if (p.ifFlag && !Game.flag(p.ifFlag)) {
+        if (p.ifFlag && !Game.allFlags(p.ifFlag)) {
           // appears when a flag is set (e.g. after solving a puzzle)
           this.hiddenChests = this.hiddenChests || [];
           this.hiddenChests.push({ cx, cy, uid: `chest:${uid}`, contents, flag: p.ifFlag });
@@ -442,7 +443,7 @@ export class WorldScene extends Phaser.Scene {
     for (const s of this.switches) s.refreshLook();
     if (this.hiddenChests) {
       this.hiddenChests = this.hiddenChests.filter((hc) => {
-        if (!Game.flag(hc.flag)) return true;
+        if (!Game.allFlags(hc.flag)) return true;
         const c = this.addChest(hc.cx, hc.cy, hc.uid, hc.contents);
         this.combat.puff(c.x, c.y, 0xf8e060, 10);
         this.sfx('chest');
@@ -669,6 +670,27 @@ export class WorldScene extends Phaser.Scene {
     }
   }
 
+  /** Ambush rooms (gates with mode 'clear'): lock the player in until every enemy is beaten. */
+  updateAmbush() {
+    const flag = `ambush:${this.mapId}`;
+    if (!this.gates.some((g) => g.props.mode === 'clear') || Game.flag(flag)) return;
+    const alive = this.enemies.some((e) => e.active && !e.dead);
+    if (!this.ambushActive) {
+      const moved = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.entryPoint.x, this.entryPoint.y) > 24;
+      if (!moved) return;
+      if (!alive) return Game.setFlag(flag);
+      this.ambushActive = true;
+      for (const g of this.gates) g.refresh();
+      this.cameras.main.shake(120, 0.006);
+      this.ui.toast('Ambush! Defeat every foe.', 1400);
+    } else if (!alive) {
+      this.ambushActive = false;
+      Game.setFlag(flag);
+      for (const g of this.gates) g.refresh();
+      this.sfx('unlock');
+    }
+  }
+
   async onBossDefeated(boss) {
     this.bossFightActive = false;
     this.events.emit('boss-end', boss);
@@ -800,6 +822,7 @@ export class WorldScene extends Phaser.Scene {
       }
     }
     this.maybeStartBoss();
+    this.updateAmbush();
     if (time > (this.nextQuestCheck || 0)) {
       this.nextQuestCheck = time + 400;
       for (const id of Game.newlyReadyQuests()) {

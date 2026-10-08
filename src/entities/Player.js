@@ -47,7 +47,7 @@ export class Player extends Actor {
       this.play4('attack');
       return;
     }
-    s.mp = Math.min(s.maxMp, s.mp + (PLAYER.mpRegenPerSecond * dt) / 1000);
+    s.mp = Math.min(s.maxMp, s.mp + (PLAYER.mpRegenPerSecond * (Game.armorDef.mpRegenMul || 1) * dt) / 1000);
 
     if (input.pressed('cycleWeapon') && s.weapons.length > 1) {
       const id = Game.cycle('weapons', 'weapon');
@@ -146,7 +146,7 @@ export class Player extends Actor {
     this.play4('attack', false);
     Audio.sfx(w.sfx || (w.shape === 'projectile' ? 'bow' : w.shape === 'thrust' ? 'thrust' : 'swing'));
     if (w.shape === 'projectile') this.shoot(w, w.damage, w.projectile?.pierce);
-    else this.scene.combat.melee(this, w, 'player');
+    else this.scene.combat.melee(this, w, 'player').source = Game.s.weapon;
     if (w.charge) this.charging = { start: time, weapon: Game.s.weapon, ready: false };
   }
 
@@ -165,6 +165,8 @@ export class Player extends Actor {
       knockback: w.knockback,
       effect: w.effect,
       pierce,
+      element: w.element,
+      source: Game.s.weapon,
       light: pr.light,
       team: 'player',
     });
@@ -209,6 +211,9 @@ export class Player extends Actor {
         damage,
         knockback: (w.knockback || 140) * 1.3,
         color: w.color || '#ffffff',
+        element: w.element,
+        effect: w.effect,
+        source: Game.s.weapon,
         team: 'player',
         hitsSwitches: true,
       });

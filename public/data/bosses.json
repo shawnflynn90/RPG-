@@ -110,19 +110,19 @@
       }
     },
     "reward": {
-      "weapon": "axe",
+      "item": "seal_stone",
       "maxHp": 4,
       "gold": 50,
       "flag": "dungeon1_cleared",
-      "message": "The path north is open!"
+      "message": "The first seal is broken! The road north to Ashford is open."
     },
     "xp": 30,
-    "title": "Guardian of the First Gate",
+    "title": "Keeper of the First Seal",
     "music": "boss"
   },
   "sorcerer": {
     "name": "Shade Sorcerer",
-    "title": "Keeper of the Dark",
+    "title": "Keeper of the Second Seal",
     "sprite": "boss_sorcerer",
     "hp": 110,
     "contactDamage": 3,
@@ -283,16 +283,17 @@
       }
     },
     "reward": {
+      "item": "seal_stone",
       "weapon": "wand",
-      "maxMp": 4,
+      "maxHp": 4,
       "gold": 100,
       "flag": "dungeon2_cleared",
-      "message": "The way to Town 3 is open!"
+      "message": "The second seal is broken! The road to Frostholm is open."
     }
   },
   "wyrm": {
     "name": "Frost Wyrm",
-    "title": "Terror of the Deep Ice",
+    "title": "Keeper of the Third Seal",
     "sprite": "boss_wyrm",
     "hp": 150,
     "contactDamage": 4,
@@ -304,7 +305,6 @@
       "poison"
     ],
     "music": "boss",
-    "cutscene": "ending",
     "phases": [
       {
         "hpBelow": 1.0,
@@ -449,10 +449,688 @@
       }
     },
     "reward": {
-      "gold": 150,
+      "item": "seal_stone",
       "maxHp": 6,
+      "gold": 150,
       "flag": "dungeon3_cleared",
-      "message": "The way north is open!"
+      "message": "The third seal is broken! The road to Sunspire is open."
+    }
+  },
+  "moss_golem": {
+    "name": "Moss Golem",
+    "title": "Root of the Catacombs",
+    "sprite": "boss_moss",
+    "hp": 48,
+    "contactDamage": 3,
+    "speed": 24,
+    "restMs": 700,
+    "xp": 20,
+    "music": "boss",
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "walk",
+          "slam",
+          "volley"
+        ]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "Vines whip around the Golem!",
+        "tint": "#a8f070",
+        "speedMul": 1.3,
+        "patterns": [
+          "charge",
+          "volley",
+          "summon",
+          "slam"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1500
+      },
+      "slam": {
+        "type": "area",
+        "windupMs": 700,
+        "radius": 36,
+        "damage": 3,
+        "color": "#a8e070",
+        "sfx": "slam"
+      },
+      "volley": {
+        "type": "radial",
+        "windupMs": 550,
+        "count": 8,
+        "waves": 1,
+        "projectile": {
+          "sprite": "rock",
+          "speed": 75,
+          "range": 200,
+          "damage": 2,
+          "size": [
+            8,
+            8
+          ]
+        }
+      },
+      "charge": {
+        "type": "charge",
+        "windupMs": 650,
+        "speed": 160,
+        "durationMs": 600
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "slime",
+        "count": 2,
+        "max": 3
+      }
+    },
+    "reward": {
+      "weapon": "bow",
+      "message": "Stone eyes guard sealed gates here. Shoot them with arrows! (LB switches weapons.)"
+    }
+  },
+  "crypt_knight": {
+    "name": "Crypt Knight",
+    "title": "Oathbreaker of the Crypt",
+    "sprite": "boss_cknight",
+    "hp": 75,
+    "contactDamage": 3,
+    "speed": 28,
+    "restMs": 600,
+    "xp": 35,
+    "music": "boss",
+    "resist": [
+      "poison"
+    ],
+    "light": 30,
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "walk",
+          "charge",
+          "aimed",
+          "walk",
+          "slash"
+        ]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "The Knight's armor smokes with shadow!",
+        "tint": "#f86060",
+        "speedMul": 1.35,
+        "patterns": [
+          "charge",
+          "aimed",
+          "summon",
+          "charge",
+          "slash",
+          "radial"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1300
+      },
+      "charge": {
+        "type": "charge",
+        "windupMs": 550,
+        "speed": 185,
+        "durationMs": 620
+      },
+      "aimed": {
+        "type": "aimed",
+        "windupMs": 400,
+        "count": 3,
+        "spreadDeg": 16,
+        "waves": 2,
+        "waveDelayMs": 320,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 110,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 24
+        }
+      },
+      "slash": {
+        "type": "area",
+        "windupMs": 550,
+        "radius": 34,
+        "damage": 4,
+        "color": "#f86060",
+        "sfx": "slam"
+      },
+      "radial": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 10,
+        "waves": 2,
+        "waveDelayMs": 380,
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 85,
+          "range": 220,
+          "damage": 2,
+          "size": [
+            8,
+            8
+          ],
+          "light": 20
+        }
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "bat",
+        "count": 2,
+        "max": 3
+      }
+    },
+    "reward": {
+      "tool": "bombs",
+      "message": "Cracked walls crumble before bombs. Select bombs with RB, drop one with B."
+    }
+  },
+  "yeti_chief": {
+    "name": "Yeti Chieftain",
+    "title": "Lord of the Glacier",
+    "sprite": "boss_yeti",
+    "hp": 100,
+    "contactDamage": 4,
+    "speed": 28,
+    "restMs": 550,
+    "xp": 50,
+    "music": "boss",
+    "resist": [
+      "slow"
+    ],
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "walk",
+          "throw",
+          "charge",
+          "icicles"
+        ]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "The Chieftain roars and the cave shakes!",
+        "tint": "#a8d8ff",
+        "speedMul": 1.35,
+        "patterns": [
+          "charge",
+          "icicles_big",
+          "summon",
+          "throw",
+          "radial"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1300
+      },
+      "throw": {
+        "type": "aimed",
+        "windupMs": 420,
+        "count": 3,
+        "spreadDeg": 18,
+        "waves": 2,
+        "waveDelayMs": 300,
+        "sfx": "bow",
+        "projectile": {
+          "sprite": "snowball",
+          "speed": 115,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      },
+      "charge": {
+        "type": "charge",
+        "windupMs": 600,
+        "speed": 180,
+        "durationMs": 650
+      },
+      "icicles": {
+        "type": "rain",
+        "windupMs": 800,
+        "count": 4,
+        "radius": 14,
+        "damage": 3,
+        "spread": 50
+      },
+      "icicles_big": {
+        "type": "rain",
+        "windupMs": 700,
+        "count": 6,
+        "radius": 14,
+        "damage": 4,
+        "spread": 64,
+        "effect": {
+          "slow": 0.5,
+          "durationMs": 1500
+        }
+      },
+      "radial": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 12,
+        "waves": 1,
+        "projectile": {
+          "sprite": "snowball",
+          "speed": 85,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ]
+        }
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "ice_slime",
+        "count": 2,
+        "max": 3
+      }
+    },
+    "reward": {
+      "tool": "hookshot",
+      "message": "Fire the Hookshot at a post to fly over pits. Select it with RB."
+    }
+  },
+  "fire_drake": {
+    "name": "Fire Drake",
+    "title": "Guardian of the Flame",
+    "sprite": "boss_drake",
+    "hp": 130,
+    "contactDamage": 4,
+    "speed": 32,
+    "restMs": 500,
+    "xp": 70,
+    "music": "boss",
+    "resist": [
+      "burn"
+    ],
+    "light": 40,
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "walk",
+          "breath",
+          "charge",
+          "rain"
+        ]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "The Drake's scales blaze white-hot!",
+        "tint": "#f8e060",
+        "speedMul": 1.35,
+        "patterns": [
+          "breath_fast",
+          "rain_big",
+          "charge",
+          "radial",
+          "summon"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1300
+      },
+      "breath": {
+        "type": "aimed",
+        "windupMs": 420,
+        "count": 5,
+        "spreadDeg": 12,
+        "waves": 2,
+        "waveDelayMs": 300,
+        "sfx": "fire",
+        "projectile": {
+          "sprite": "fireball",
+          "speed": 120,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26,
+          "effect": {
+            "burn": {
+              "dps": 1,
+              "durationMs": 2000
+            }
+          }
+        }
+      },
+      "breath_fast": {
+        "type": "aimed",
+        "windupMs": 320,
+        "count": 7,
+        "spreadDeg": 11,
+        "waves": 3,
+        "waveDelayMs": 260,
+        "sfx": "fire",
+        "projectile": {
+          "sprite": "fireball",
+          "speed": 140,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26,
+          "effect": {
+            "burn": {
+              "dps": 1,
+              "durationMs": 2000
+            }
+          }
+        }
+      },
+      "charge": {
+        "type": "charge",
+        "windupMs": 600,
+        "speed": 185,
+        "durationMs": 700
+      },
+      "rain": {
+        "type": "rain",
+        "windupMs": 800,
+        "count": 4,
+        "radius": 14,
+        "damage": 4,
+        "spread": 52,
+        "effect": {
+          "burn": {
+            "dps": 1,
+            "durationMs": 2000
+          }
+        }
+      },
+      "rain_big": {
+        "type": "rain",
+        "windupMs": 700,
+        "count": 7,
+        "radius": 14,
+        "damage": 4,
+        "spread": 66,
+        "effect": {
+          "burn": {
+            "dps": 1,
+            "durationMs": 2000
+          }
+        }
+      },
+      "radial": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 12,
+        "waves": 2,
+        "waveDelayMs": 380,
+        "projectile": {
+          "sprite": "fireball",
+          "speed": 85,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 20
+        }
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "fire_imp",
+        "count": 2,
+        "max": 3
+      }
+    },
+    "reward": {
+      "weapon": "flame_brand",
+      "message": "Strike the cold braziers with the Flame Brand to open the way!"
+    }
+  },
+  "hollow_king": {
+    "name": "Hollow King",
+    "title": "He Who Sealed the Sun Road",
+    "sprite": "boss_hollow",
+    "hp": 240,
+    "contactDamage": 4,
+    "speed": 32,
+    "restMs": 480,
+    "xp": 150,
+    "music": "boss",
+    "resist": [
+      "poison",
+      "slow"
+    ],
+    "light": 48,
+    "cutscene": "ending",
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "teleport",
+          "aimed",
+          "walk",
+          "radial",
+          "rain"
+        ]
+      },
+      {
+        "hpBelow": 0.66,
+        "message": "\"You broke my seals... I will break YOU!\"",
+        "tint": "#f8c838",
+        "speedMul": 1.2,
+        "patterns": [
+          "teleport",
+          "aimed_fast",
+          "summon",
+          "charge",
+          "nova",
+          "rain_big"
+        ]
+      },
+      {
+        "hpBelow": 0.33,
+        "message": "The King's crown cracks. Hollow light pours out!",
+        "tint": "#f86048",
+        "speedMul": 1.45,
+        "patterns": [
+          "teleport",
+          "radial_big",
+          "charge",
+          "aimed_fast",
+          "summon_knights",
+          "nova",
+          "rain_big"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1100
+      },
+      "teleport": {
+        "type": "teleport",
+        "fadeMs": 280,
+        "hideMs": 380,
+        "minDist": 56,
+        "maxDist": 96
+      },
+      "aimed": {
+        "type": "aimed",
+        "windupMs": 380,
+        "count": 3,
+        "spreadDeg": 16,
+        "waves": 2,
+        "waveDelayMs": 320,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 120,
+          "range": 230,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26
+        }
+      },
+      "aimed_fast": {
+        "type": "aimed",
+        "windupMs": 300,
+        "count": 5,
+        "spreadDeg": 13,
+        "waves": 3,
+        "waveDelayMs": 280,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 140,
+          "range": 230,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 26
+        }
+      },
+      "radial": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 12,
+        "waves": 1,
+        "projectile": {
+          "sprite": "fireball",
+          "speed": 85,
+          "range": 230,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 20
+        }
+      },
+      "radial_big": {
+        "type": "radial",
+        "windupMs": 450,
+        "count": 16,
+        "waves": 3,
+        "waveDelayMs": 400,
+        "projectile": {
+          "sprite": "fireball",
+          "speed": 90,
+          "range": 230,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "light": 20,
+          "effect": {
+            "burn": {
+              "dps": 1,
+              "durationMs": 2000
+            }
+          }
+        }
+      },
+      "rain": {
+        "type": "rain",
+        "windupMs": 800,
+        "count": 4,
+        "radius": 14,
+        "damage": 4,
+        "spread": 56
+      },
+      "rain_big": {
+        "type": "rain",
+        "windupMs": 700,
+        "count": 7,
+        "radius": 14,
+        "damage": 5,
+        "spread": 70
+      },
+      "charge": {
+        "type": "charge",
+        "windupMs": 550,
+        "speed": 195,
+        "durationMs": 650
+      },
+      "nova": {
+        "type": "area",
+        "windupMs": 700,
+        "radius": 56,
+        "damage": 5,
+        "color": "#f8c838",
+        "sfx": "slam",
+        "effect": {
+          "stun": {
+            "durationMs": 600
+          }
+        }
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "fire_imp",
+        "count": 2,
+        "max": 3
+      },
+      "summon_knights": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "sand_knight",
+        "count": 1,
+        "max": 2
+      }
+    },
+    "reward": {
+      "item": "seal_stone",
+      "gold": 300,
+      "flag": "dungeon4_cleared",
+      "message": "The last seal shatters. The Sun Road is free!"
     }
   }
 }

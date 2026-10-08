@@ -24,7 +24,7 @@
   "maps": {
     "town1": {
       "file": "maps/town1.tmj",
-      "name": "Town 1",
+      "name": "Brightwater",
       "kind": "town",
       "region": "town1",
       "music": "town",
@@ -32,55 +32,178 @@
     },
     "town1_healer": {
       "file": "maps/town1_healer.tmj",
-      "name": "Town 1",
+      "name": "Brightwater",
       "kind": "interior",
       "region": "town1",
       "music": "interior"
     },
     "town1_shop": {
       "file": "maps/town1_shop.tmj",
-      "name": "Town 1",
+      "name": "Brightwater",
       "kind": "interior",
       "region": "town1",
       "music": "interior"
     },
     "town1_magic": {
       "file": "maps/town1_magic.tmj",
-      "name": "Town 1",
+      "name": "Brightwater",
       "kind": "interior",
       "region": "town1",
       "music": "interior"
     },
+    "town2": {
+      "file": "maps/town2.tmj",
+      "name": "Ashford",
+      "kind": "town",
+      "region": "town2",
+      "music": "town2",
+      "onEnter": "town2_arrival"
+    },
+    "town2_inn": {
+      "file": "maps/town2_inn.tmj",
+      "name": "Ashford",
+      "kind": "interior",
+      "region": "town2",
+      "music": "interior"
+    },
+    "town2_shop": {
+      "file": "maps/town2_shop.tmj",
+      "name": "Ashford",
+      "kind": "interior",
+      "region": "town2",
+      "music": "interior"
+    },
+    "town2_library": {
+      "file": "maps/town2_library.tmj",
+      "name": "Ashford",
+      "kind": "interior",
+      "region": "town2",
+      "music": "interior"
+    },
+    "town3": {
+      "file": "maps/town3.tmj",
+      "name": "Frostholm",
+      "kind": "town",
+      "region": "town3",
+      "music": "snow"
+    },
+    "town3_inn": {
+      "file": "maps/town3_inn.tmj",
+      "name": "Frostholm",
+      "kind": "interior",
+      "region": "town3",
+      "music": "interior"
+    },
+    "town3_shop": {
+      "file": "maps/town3_shop.tmj",
+      "name": "Frostholm",
+      "kind": "interior",
+      "region": "town3",
+      "music": "interior"
+    },
+    "town4": {
+      "file": "maps/town4.tmj",
+      "name": "Sunspire",
+      "kind": "town",
+      "region": "town4",
+      "music": "town2",
+      "onEnter": "town4_arrival"
+    },
+    "town4_inn": {
+      "file": "maps/town4_inn.tmj",
+      "name": "Sunspire",
+      "kind": "interior",
+      "region": "town4",
+      "music": "interior"
+    },
+    "town4_shop": {
+      "file": "maps/town4_shop.tmj",
+      "name": "Sunspire",
+      "kind": "interior",
+      "region": "town4",
+      "music": "interior"
+    },
+    "town4_temple": {
+      "file": "maps/town4_temple.tmj",
+      "name": "Sunspire",
+      "kind": "interior",
+      "region": "town4",
+      "music": "interior"
+    },
     "dungeon1_1": {
       "file": "maps/dungeon1_1.tmj",
-      "name": "Dungeon 1",
+      "name": "Mossy Catacombs",
       "kind": "dungeon",
       "region": "dungeon1",
       "music": "dungeon",
       "grid": [
-        1,
-        2
+        5,
+        5
       ]
     },
     "dungeon1_2": {
       "file": "maps/dungeon1_2.tmj",
-      "name": "Dungeon 1",
+      "name": "Mossy Catacombs",
       "kind": "dungeon",
       "region": "dungeon1",
       "music": "dungeon",
       "grid": [
-        1,
-        1
+        5,
+        4
       ]
     },
     "dungeon1_3": {
       "file": "maps/dungeon1_3.tmj",
-      "name": "Dungeon 1",
+      "name": "Mossy Catacombs",
       "kind": "dungeon",
       "region": "dungeon1",
       "music": "dungeon",
       "grid": [
-        2,
+        4,
+        4
+      ]
+    },
+    "dungeon1_4": {
+      "file": "maps/dungeon1_4.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        3,
+        4
+      ]
+    },
+    "dungeon1_5": {
+      "file": "maps/dungeon1_5.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "dungeon1_6": {
+      "file": "maps/dungeon1_6.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "dungeon1_7": {
+      "file": "maps/dungeon1_7.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        3,
         1
       ]
     },
@@ -91,38 +214,186 @@
       "region": "dungeon1",
       "music": "dungeon",
       "grid": [
-        2,
+        3,
         0
       ],
       "boss": true
     },
-    "town2": {
-      "file": "maps/town2.tmj",
-      "name": "Town 2",
-      "kind": "town",
-      "region": "town2",
-      "music": "town2"
+    "dungeon1_8": {
+      "file": "maps/dungeon1_8.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        6,
+        5
+      ]
     },
-    "town2_inn": {
-      "file": "maps/town2_inn.tmj",
-      "name": "Town 2",
-      "kind": "interior",
-      "region": "town2",
-      "music": "interior"
+    "dungeon1_9": {
+      "file": "maps/dungeon1_9.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        6,
+        4
+      ]
     },
-    "town2_shop": {
-      "file": "maps/town2_shop.tmj",
-      "name": "Town 2",
-      "kind": "interior",
-      "region": "town2",
-      "music": "interior"
+    "dungeon1_10": {
+      "file": "maps/dungeon1_10.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        4,
+        5
+      ]
     },
-    "town2_library": {
-      "file": "maps/town2_library.tmj",
-      "name": "Town 2",
-      "kind": "interior",
-      "region": "town2",
-      "music": "interior"
+    "dungeon1_11": {
+      "file": "maps/dungeon1_11.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        3,
+        5
+      ]
+    },
+    "dungeon1_12": {
+      "file": "maps/dungeon1_12.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "dungeon1_13": {
+      "file": "maps/dungeon1_13.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "dungeon1_14": {
+      "file": "maps/dungeon1_14.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        5,
+        3
+      ]
+    },
+    "dungeon1_15": {
+      "file": "maps/dungeon1_15.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        5,
+        2
+      ]
+    },
+    "dungeon1_16": {
+      "file": "maps/dungeon1_16.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "dungeon1_17": {
+      "file": "maps/dungeon1_17.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "dungeon1_18": {
+      "file": "maps/dungeon1_18.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "dungeon1_19": {
+      "file": "maps/dungeon1_19.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "dungeon1_20": {
+      "file": "maps/dungeon1_20.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "dungeon1_21": {
+      "file": "maps/dungeon1_21.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "dungeon1_22": {
+      "file": "maps/dungeon1_22.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "dungeon1_23": {
+      "file": "maps/dungeon1_23.tmj",
+      "name": "Mossy Catacombs",
+      "kind": "dungeon",
+      "region": "dungeon1",
+      "music": "dungeon",
+      "grid": [
+        0,
+        3
+      ]
     },
     "dungeon2_1": {
       "file": "maps/dungeon2_1.tmj",
@@ -131,10 +402,9 @@
       "region": "dungeon2",
       "music": "dark",
       "grid": [
-        1,
-        2
-      ],
-      "darkness": 0.6
+        5,
+        4
+      ]
     },
     "dungeon2_2": {
       "file": "maps/dungeon2_2.tmj",
@@ -143,10 +413,10 @@
       "region": "dungeon2",
       "music": "dark",
       "grid": [
-        1,
-        1
+        4,
+        4
       ],
-      "darkness": 0.88
+      "darkness": 0.61
     },
     "dungeon2_3": {
       "file": "maps/dungeon2_3.tmj",
@@ -155,10 +425,10 @@
       "region": "dungeon2",
       "music": "dark",
       "grid": [
-        0,
-        1
+        3,
+        4
       ],
-      "darkness": 0.85
+      "darkness": 0.88
     },
     "dungeon2_4": {
       "file": "maps/dungeon2_4.tmj",
@@ -167,10 +437,44 @@
       "region": "dungeon2",
       "music": "dark",
       "grid": [
-        2,
-        1
+        3,
+        3
+      ]
+    },
+    "dungeon2_5": {
+      "file": "maps/dungeon2_5.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        3,
+        2
       ],
-      "darkness": 0.85
+      "darkness": 0.62
+    },
+    "dungeon2_6": {
+      "file": "maps/dungeon2_6.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        4,
+        2
+      ],
+      "darkness": 0.8
+    },
+    "dungeon2_7": {
+      "file": "maps/dungeon2_7.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        5,
+        2
+      ]
     },
     "dungeon2_boss": {
       "file": "maps/dungeon2_boss.tmj",
@@ -179,32 +483,207 @@
       "region": "dungeon2",
       "music": "dark",
       "grid": [
+        5,
+        1
+      ],
+      "boss": true
+    },
+    "dungeon2_8": {
+      "file": "maps/dungeon2_8.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        6,
+        4
+      ],
+      "darkness": 0.82
+    },
+    "dungeon2_9": {
+      "file": "maps/dungeon2_9.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        5,
+        3
+      ],
+      "darkness": 0.74
+    },
+    "dungeon2_10": {
+      "file": "maps/dungeon2_10.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        4,
+        3
+      ]
+    },
+    "dungeon2_11": {
+      "file": "maps/dungeon2_11.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        2,
+        3
+      ],
+      "darkness": 0.81
+    },
+    "dungeon2_12": {
+      "file": "maps/dungeon2_12.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "dungeon2_13": {
+      "file": "maps/dungeon2_13.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        6,
+        2
+      ]
+    },
+    "dungeon2_14": {
+      "file": "maps/dungeon2_14.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        7,
+        2
+      ]
+    },
+    "dungeon2_15": {
+      "file": "maps/dungeon2_15.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        6,
+        3
+      ],
+      "darkness": 0.79
+    },
+    "dungeon2_16": {
+      "file": "maps/dungeon2_16.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        7,
+        3
+      ]
+    },
+    "dungeon2_17": {
+      "file": "maps/dungeon2_17.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        2,
+        4
+      ],
+      "darkness": 0.74
+    },
+    "dungeon2_18": {
+      "file": "maps/dungeon2_18.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
         1,
+        4
+      ],
+      "darkness": 0.83
+    },
+    "dungeon2_19": {
+      "file": "maps/dungeon2_19.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        3,
+        1
+      ],
+      "darkness": 0.81
+    },
+    "dungeon2_20": {
+      "file": "maps/dungeon2_20.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        6,
+        1
+      ]
+    },
+    "dungeon2_21": {
+      "file": "maps/dungeon2_21.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        2,
+        2
+      ],
+      "darkness": 0.86
+    },
+    "dungeon2_22": {
+      "file": "maps/dungeon2_22.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "dungeon2_23": {
+      "file": "maps/dungeon2_23.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        0,
+        4
+      ],
+      "darkness": 0.84
+    },
+    "dungeon2_24": {
+      "file": "maps/dungeon2_24.tmj",
+      "name": "Shadow Crypt",
+      "kind": "dungeon",
+      "region": "dungeon2",
+      "music": "dark",
+      "grid": [
+        4,
         0
       ],
-      "boss": true,
       "darkness": 0.7
-    },
-    "town3": {
-      "file": "maps/town3.tmj",
-      "name": "Town 3",
-      "kind": "town",
-      "region": "town3",
-      "music": "snow"
-    },
-    "town3_inn": {
-      "file": "maps/town3_inn.tmj",
-      "name": "Town 3",
-      "kind": "interior",
-      "region": "town3",
-      "music": "interior"
-    },
-    "town3_shop": {
-      "file": "maps/town3_shop.tmj",
-      "name": "Town 3",
-      "kind": "interior",
-      "region": "town3",
-      "music": "interior"
     },
     "dungeon3_1": {
       "file": "maps/dungeon3_1.tmj",
@@ -213,8 +692,8 @@
       "region": "dungeon3",
       "music": "ice",
       "grid": [
-        1,
-        2
+        4,
+        4
       ]
     },
     "dungeon3_2": {
@@ -224,8 +703,8 @@
       "region": "dungeon3",
       "music": "ice",
       "grid": [
-        1,
-        1
+        5,
+        4
       ]
     },
     "dungeon3_3": {
@@ -235,8 +714,8 @@
       "region": "dungeon3",
       "music": "ice",
       "grid": [
-        0,
-        1
+        5,
+        3
       ]
     },
     "dungeon3_4": {
@@ -246,10 +725,42 @@
       "region": "dungeon3",
       "music": "ice",
       "grid": [
-        2,
+        4,
+        3
+      ]
+    },
+    "dungeon3_5": {
+      "file": "maps/dungeon3_5.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "dungeon3_6": {
+      "file": "maps/dungeon3_6.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "dungeon3_7": {
+      "file": "maps/dungeon3_7.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        3,
         1
-      ],
-      "darkness": 0.5
+      ]
     },
     "dungeon3_boss": {
       "file": "maps/dungeon3_boss.tmj",
@@ -258,17 +769,483 @@
       "region": "dungeon3",
       "music": "ice",
       "grid": [
-        1,
+        3,
         0
       ],
       "boss": true
     },
-    "town4": {
-      "file": "maps/town4.tmj",
-      "name": "Town 4",
-      "kind": "town",
-      "region": "town4",
-      "music": "town"
+    "dungeon3_8": {
+      "file": "maps/dungeon3_8.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        3,
+        4
+      ]
+    },
+    "dungeon3_9": {
+      "file": "maps/dungeon3_9.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "dungeon3_10": {
+      "file": "maps/dungeon3_10.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        6,
+        4
+      ]
+    },
+    "dungeon3_11": {
+      "file": "maps/dungeon3_11.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "dungeon3_12": {
+      "file": "maps/dungeon3_12.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        5,
+        2
+      ]
+    },
+    "dungeon3_13": {
+      "file": "maps/dungeon3_13.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        4,
+        1
+      ]
+    },
+    "dungeon3_14": {
+      "file": "maps/dungeon3_14.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        4,
+        0
+      ]
+    },
+    "dungeon3_15": {
+      "file": "maps/dungeon3_15.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "dungeon3_16": {
+      "file": "maps/dungeon3_16.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        2,
+        3
+      ]
+    },
+    "dungeon3_17": {
+      "file": "maps/dungeon3_17.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        6,
+        3
+      ]
+    },
+    "dungeon3_18": {
+      "file": "maps/dungeon3_18.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        2,
+        2
+      ]
+    },
+    "dungeon3_19": {
+      "file": "maps/dungeon3_19.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "dungeon3_20": {
+      "file": "maps/dungeon3_20.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        5,
+        1
+      ]
+    },
+    "dungeon3_21": {
+      "file": "maps/dungeon3_21.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "dungeon3_22": {
+      "file": "maps/dungeon3_22.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        2,
+        0
+      ]
+    },
+    "dungeon3_23": {
+      "file": "maps/dungeon3_23.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        7,
+        3
+      ]
+    },
+    "dungeon3_24": {
+      "file": "maps/dungeon3_24.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        5,
+        0
+      ]
+    },
+    "dungeon4_1": {
+      "file": "maps/dungeon4_1.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        1,
+        4
+      ]
+    },
+    "dungeon4_2": {
+      "file": "maps/dungeon4_2.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        2,
+        4
+      ]
+    },
+    "dungeon4_3": {
+      "file": "maps/dungeon4_3.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        3,
+        4
+      ]
+    },
+    "dungeon4_4": {
+      "file": "maps/dungeon4_4.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        3,
+        3
+      ]
+    },
+    "dungeon4_5": {
+      "file": "maps/dungeon4_5.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        3,
+        2
+      ]
+    },
+    "dungeon4_6": {
+      "file": "maps/dungeon4_6.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        3,
+        1
+      ],
+      "darkness": 0.64
+    },
+    "dungeon4_7": {
+      "file": "maps/dungeon4_7.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        4,
+        1
+      ],
+      "darkness": 0.54
+    },
+    "dungeon4_boss": {
+      "file": "maps/dungeon4_boss.tmj",
+      "name": "The Hollow Throne",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        4,
+        0
+      ],
+      "boss": true
+    },
+    "dungeon4_8": {
+      "file": "maps/dungeon4_8.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        0,
+        4
+      ]
+    },
+    "dungeon4_9": {
+      "file": "maps/dungeon4_9.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        2,
+        3
+      ],
+      "darkness": 0.7
+    },
+    "dungeon4_10": {
+      "file": "maps/dungeon4_10.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        4,
+        4
+      ]
+    },
+    "dungeon4_11": {
+      "file": "maps/dungeon4_11.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        4,
+        3
+      ],
+      "darkness": 0.56
+    },
+    "dungeon4_12": {
+      "file": "maps/dungeon4_12.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        3,
+        0
+      ]
+    },
+    "dungeon4_13": {
+      "file": "maps/dungeon4_13.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        4,
+        2
+      ]
+    },
+    "dungeon4_14": {
+      "file": "maps/dungeon4_14.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        1,
+        3
+      ]
+    },
+    "dungeon4_15": {
+      "file": "maps/dungeon4_15.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        0,
+        3
+      ],
+      "darkness": 0.53
+    },
+    "dungeon4_16": {
+      "file": "maps/dungeon4_16.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        5,
+        3
+      ],
+      "darkness": 0.56
+    },
+    "dungeon4_17": {
+      "file": "maps/dungeon4_17.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        2,
+        1
+      ]
+    },
+    "dungeon4_18": {
+      "file": "maps/dungeon4_18.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        5,
+        1
+      ],
+      "darkness": 0.67
+    },
+    "dungeon4_19": {
+      "file": "maps/dungeon4_19.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        6,
+        1
+      ]
+    },
+    "dungeon4_20": {
+      "file": "maps/dungeon4_20.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        2,
+        2
+      ],
+      "darkness": 0.63
+    },
+    "dungeon4_21": {
+      "file": "maps/dungeon4_21.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        5,
+        0
+      ],
+      "darkness": 0.57
+    },
+    "dungeon4_22": {
+      "file": "maps/dungeon4_22.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        5,
+        4
+      ]
+    },
+    "dungeon4_23": {
+      "file": "maps/dungeon4_23.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        5,
+        2
+      ]
+    },
+    "dungeon4_24": {
+      "file": "maps/dungeon4_24.tmj",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "region": "dungeon4",
+      "music": "dark",
+      "grid": [
+        1,
+        2
+      ],
+      "darkness": 0.54
     }
   },
   "leveling": {
@@ -286,18 +1263,18 @@
   "regions": [
     {
       "id": "town1",
-      "name": "Town 1",
+      "name": "Brightwater",
       "kind": "town"
     },
     {
       "id": "dungeon1",
-      "name": "Dungeon 1",
+      "name": "Mossy Catacombs",
       "kind": "dungeon",
       "boss": "warden"
     },
     {
       "id": "town2",
-      "name": "Town 2",
+      "name": "Ashford",
       "kind": "town"
     },
     {
@@ -308,7 +1285,7 @@
     },
     {
       "id": "town3",
-      "name": "Town 3",
+      "name": "Frostholm",
       "kind": "town"
     },
     {
@@ -319,8 +1296,14 @@
     },
     {
       "id": "town4",
-      "name": "Town 4",
+      "name": "Sunspire",
       "kind": "town"
+    },
+    {
+      "id": "dungeon4",
+      "name": "Hollow Spire",
+      "kind": "dungeon",
+      "boss": "hollow_king"
     }
   ]
 }

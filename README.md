@@ -1,7 +1,8 @@
 # Pocket Quest
 
 A GBA-style, top-down action-adventure dungeon crawler for the browser, built with **Phaser 3** and **Vite**.
-It runs at the GBA's native **240×160** resolution, scaled up with crisp pixels. You can play it on a phone with
+It runs at the GBA's native **240×160** resolution, scaled up with crisp pixels. On a portrait phone the screen
+grows taller (up to 240×256) so the game fills about half the phone, with the controls below. You can play it on a phone with
 on-screen retro controls, or on a desktop with a keyboard or gamepad. It installs as a **PWA** and works offline.
 
 Nearly everything is **data-driven**:
@@ -277,12 +278,9 @@ Volume is set in Options.
 Install [Tiled](https://www.mapeditor.org) (1.10 or newer) and open **`pocketquest.tiled-project`**
 (*File → Open File or Project*). This registers every object type below, so each one shows the right properties.
 
-`public/maps/` holds 18 starter maps:
-- **Town 1** and its 3 interiors
-- **Dungeon 1:** 4 rooms
-- **Town 2** and its 3 interiors
-- **The Shadow Crypt (Dungeon 2):** 5 rooms
-- **Town 3** (a stub)
+`public/maps/` holds the whole world:
+- **4 cities** and their interiors: Brightwater, Ashford, Frostholm and Sunspire (made by `tools/gen-maps.mjs`)
+- **4 dungeons** of about 25 rooms each (made by `tools/gen-dungeons.mjs`, see [Generated dungeons](#generated-dungeons))
 
 ### Map rules
 
@@ -338,11 +336,11 @@ Add an **Object Layer** and set each object's **Class** (called *Type* in older 
 
 | Class | Shape | Properties | What it does |
 |---|---|---|---|
-| `gate` | rectangle | `flag`, `invert`, `mode`, `text` | Solid bars. <br>• With `flag`: opens when the flag is set. <br>• `"a,b"` needs every listed flag. <br>• `invert = true`: open until the flag is set. <br>• `mode = boss`: shuts during the room's boss fight. |
+| `gate` | rectangle | `flag`, `invert`, `mode`, `text` | Solid bars. <br>• With `flag`: opens when the flag is set. <br>• `"a,b"` needs every listed flag. <br>• `invert = true`: open until the flag is set. <br>• `mode = boss`: shuts during the room's boss fight. <br>• `mode = clear`: an **ambush**. Shuts when you step into the room and opens once every enemy is beaten (then sets the flag `ambush:<map>`, which an `ifFlag` chest can use). |
 | `door` | rectangle | `lock` (item, default `small_key`), `consume`, `text` | Locked door. Press A with the key item to open it, and it stays open. Use `lock = boss_key` for the boss door. |
-| `switch` | point | `flag`, `mode` | `floor`: step on it once and it stays down. <br>`plate`: only down while the player or a block stands on it. <br>`crystal`: hit it with a weapon or spell to toggle its flag. |
+| `switch` | point | `flag`, `mode` | `floor`: step on it once and it stays down. <br>`plate`: only down while the player or a block stands on it. <br>`crystal`: hit it with a weapon or spell to toggle its flag. <br>`hitBy = bow` (with `crystal`): a **stone eye** that only reacts to that weapon's shots and stays on. |
 | `block` | point | `once` | Pushable block. Walk into it to slide it one tile. It resets when you leave the room. |
-| `torch` | point | `flag`, `lit`, `radius` | Light it with fire (any spell with `"element": "fire"`) to set its flag. It lights up dark rooms. |
+| `torch` | point | `flag`, `lit`, `radius`, `hitBy` | Light it with fire (any spell or weapon with `"element": "fire"`) to set its flag. It lights up dark rooms. With `hitBy = flame_brand`, only that weapon can light it (the Hollow Spire's braziers). |
 | `light` | point | `radius`, `flicker` | A light source for dark rooms (braziers, lava glow…). |
 
 **Story flags** are the glue between all of these:
@@ -365,7 +363,36 @@ Add `"darkness": 0.85` (0 to 1) to a map's entry in `world.json`, or add it as a
 3. Do the same in reverse to come back. Keep spawn points **outside** warp rectangles.
 4. Run `npm run validate`. It checks that every warp points to a real map and spawn.
 
-`tools/gen-maps.mjs` is the script that generated the starter maps. You don't need it. It won't overwrite existing maps unless you pass `--force`, which would erase your Tiled edits.
+`tools/gen-maps.mjs` is the script that generated the towns. You don't need it. It won't overwrite existing maps unless you pass `--force`, which would erase your Tiled edits.
+
+### Generated dungeons
+
+The four dungeons are built by **`tools/gen-dungeons.mjs`** from short recipes at the top of the file
+(name, tile style, enemies, mini-boss, item barrier, boss, loot, dark rooms, seed):
+
+```bash
+node tools/gen-dungeons.mjs --force   # rewrites public/maps/dungeonN_*.tmj and their world.json entries
+```
+
+Each dungeon is laid out on a grid:
+- **Main path:** 7 rooms winding north to the boss. Two small-key doors, the dungeon's **item barrier** and the Big Key door split it into zones.
+- **Branches:** short offshoots that end in dead ends. Each zone's branches hold what opens the next door: the first key and the **map**, then the **mini-boss** (who drops the dungeon's item) and the **compass**, then the second key, then the **Big Key**.
+  The rest hold loot, quest items, ambushes, or nothing but monsters. Some loot branches are sealed by an **older dungeon's item**, so you can come back later.
+- **One loop door** joins two neighbouring rooms.
+- **Item barriers:**
+
+  | Dungeon | Mini-boss | Item | Barrier |
+  |---|---|---|---|
+  | Mossy Catacombs | Moss Golem | Bow | a gate with a **stone eye**: shoot it |
+  | Shadow Crypt | Crypt Knight | Bombs | a **cracked wall** |
+  | Frost Cavern | Yeti Chieftain | Hookshot | a **chasm** around the door, crossed with hook posts |
+  | Hollow Spire | Fire Drake | Flame Brand | two cold **braziers** only the Flame Brand can light |
+
+**Checks:** the generator refuses to write a dungeon that can't be finished.
+- Every room is flood-filled tile by tile, so all doors and objects are reachable on foot.
+- The whole dungeon is "played": collect keys and items, open doors, and prove that the boss and every room can be reached.
+
+If a seed fails, it tries the next one. Change a recipe's `seed` for a different layout. The generated rooms are ordinary Tiled maps, so you can polish them by hand. Just don't re-run with `--force` afterwards.
 
 ---
 
@@ -672,6 +699,8 @@ Beating a boss also sets the flag `boss:<id>`. Use the reward `flag` on `gate`s 
 
 The world is a chain: **town → dungeon → boss → gate opens → next town**. The world map (Select → World) shows it from `world.json` → `regions`.
 
+The quickest way to add a dungeon is a new recipe in `tools/gen-dungeons.mjs` (see [Generated dungeons](#generated-dungeons)). Then add its region, boss and mini-boss data. To build one by hand instead:
+
 1. **Build the maps in Tiled** and save them to `public/maps/`.
 2. **Register them** in `public/data/world.json` → `maps`:
    ```json
@@ -746,6 +775,30 @@ If something fails to load in the game itself, the error is also shown on screen
 ---
 
 ## What's in the game so far
+
+**Milestone 4: The Sealed Road**
+- **Story:** a hundred years ago the Hollow King sealed the Sun Road between four cities with four dungeons that no one has ever crossed. You're the Wayfarer who breaks the seals.
+  - **Cities:** Brightwater, Ashford, Frostholm and the new desert city **Sunspire** (inn, bazaar, Temple of the Sun with the Sage).
+  - **Arrival scenes** in each city, and a new ending after the final boss.
+- **Four big dungeons** (about 25 rooms each) with branching paths, dead ends, keys, ambush rooms, switch puzzles and a loop:
+  - Mossy Catacombs
+  - Shadow Crypt
+  - Frost Cavern
+  - **Hollow Spire** (new; lava and sand)
+- **Mini-bosses** that guard each dungeon's item: Moss Golem → Bow, Crypt Knight → Bombs, Yeti Chieftain → Hookshot, Fire Drake → Flame Brand.
+- **The Hollow King:** a three-phase final boss.
+- **New enemies:** Fire Imps, Sand Knights, Scorpions.
+- **Exploration map:**
+  - Rooms appear as you visit them.
+  - Doorways you've seen show `?` rooms.
+  - The **map** reveals every room.
+  - The **compass** marks unopened chests and the boss.
+- **Loot:**
+  - Weapons: Twin Daggers, War Hammer (stuns), Flame Brand (burns, lights braziers)
+  - Armour: Mystic Robe (3× MP regeneration), Sun Plate (defence 3, immune to burn and slow)
+  - Heart containers, mana crystals, gold and potions
+  - Seal Stones from each boss
+- **Bigger screen on phones:** in portrait the game fills about half the screen, and the touch buttons are larger.
 
 **Milestone 3**
 - **Tools on the B button:**

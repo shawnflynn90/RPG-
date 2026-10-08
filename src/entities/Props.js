@@ -79,6 +79,7 @@ export class Chest extends Prop {
  * A barrier.
  *  - { flag: 'x' }   closed until flag x is set (e.g. by beating a boss)
  *  - { mode: 'boss' } open, but shuts while the room's boss fight is on
+ *  - { mode: 'clear' } ambush: shuts when you step in, opens when every enemy in the room is beaten
  */
 export class Gate {
   constructor(scene, rect, props) {
@@ -94,6 +95,7 @@ export class Gate {
 
   shouldBeClosed() {
     if (this.props.mode === 'boss') return !!this.scene.bossFightActive;
+    if (this.props.mode === 'clear') return !!this.scene.ambushActive;
     if (this.props.flag) {
       // "a,b" = every flag must be set. Pressure-plate flags only count while held down.
       const all = String(this.props.flag)
@@ -210,6 +212,8 @@ export class Pot extends Breakable {
  *   'floor'   step on it once; stays down (saved)
  *   'plate'   only down while the player or a block stands on it (not saved)
  *   'crystal' hit it with a weapon or spell to toggle the flag (saved)
+ * hitBy: 'bow'  only reacts to that weapon's shots (an "eye" switch: shoot it to open the way);
+ *               such switches latch on instead of toggling.
  */
 export class Switch extends Breakable {
   constructor(scene, x, y, props) {
@@ -222,6 +226,7 @@ export class Switch extends Breakable {
       this.body.enable = false;
       this.setDepth(2);
     }
+    if (props.hitBy) this.setTint(0xf8b048);
     this.refreshLook();
   }
 
@@ -253,12 +258,15 @@ export class Switch extends Breakable {
     this.refreshLook();
   }
 
-  hurt() {
+  hurt(_amount, _fx, _fy, opts = {}) {
     if (this.mode !== 'crystal') return false;
     const now = this.scene.time.now;
     if (now < (this.cooldownUntil || 0)) return false;
+    if (this.props.hitBy) {
+      if (opts.source !== this.props.hitBy || this.isOn) return false;
+      Game.setFlag(this.props.flag);
+    } else Game.setFlag(this.props.flag, !Game.flag(this.props.flag));
     this.cooldownUntil = now + 400;
-    Game.setFlag(this.props.flag, !Game.flag(this.props.flag));
     this.scene.sfx('switch');
     this.scene.combat.puff(this.x, this.y, 0x80d0ff, 6);
     this.refreshLook();
@@ -272,7 +280,10 @@ export class Switch extends Breakable {
   }
 }
 
-/** Torch: light it with fire to set a flag (and light up dark rooms). props: lit, flag, radius */
+/**
+ * Torch: light it with fire to set a flag (and light up dark rooms). props: lit, flag, radius,
+ * hitBy (only that weapon can light it, e.g. 'flame_brand' for braziers)
+ */
 export class Torch extends Breakable {
   constructor(scene, x, y, props) {
     super(scene, x, y, 'torch_off');
@@ -291,6 +302,7 @@ export class Torch extends Breakable {
 
   hurt(_amount, _fx, _fy, opts = {}) {
     if (this.lit || opts.element !== 'fire') return false;
+    if (this.props.hitBy && opts.source !== this.props.hitBy) return false;
     this.lit = true;
     this.scene.sfx('fire');
     if (this.props.flag) Game.setFlag(this.props.flag);

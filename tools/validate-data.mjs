@@ -260,6 +260,7 @@ for (const [id, { path, json }] of Object.entries(maps)) {
         case 'switch':
           if (!p.flag) err(`${where(o)}: switch needs a flag`);
           if (p.mode && !['floor', 'plate', 'crystal'].includes(p.mode)) err(`${where(o)}: switch mode must be floor, plate or crystal`);
+          if (p.hitBy && !D.weapons[p.hitBy]) err(`${where(o)}: unknown hitBy weapon "${p.hitBy}"`);
           break;
         case 'pot':
           if (p.item && !(p.item in D.items)) err(`${where(o)}: unknown item "${p.item}"`);
@@ -269,6 +270,8 @@ for (const [id, { path, json }] of Object.entries(maps)) {
           break;
         case 'block':
         case 'torch':
+          if (p.hitBy && !D.weapons[p.hitBy]) err(`${where(o)}: unknown hitBy weapon "${p.hitBy}"`);
+          break;
         case 'light':
           break;
         case 'enemy':
@@ -278,6 +281,8 @@ for (const [id, { path, json }] of Object.entries(maps)) {
           if (!((p.boss || o.name) in D.bosses)) err(`${where(o)}: unknown boss "${p.boss || o.name}"`);
           break;
         case 'gate':
+          if (p.mode && !['boss', 'clear'].includes(p.mode)) err(`${where(o)}: gate mode must be boss or clear`);
+          break;
         case 'sign':
           break;
         default:

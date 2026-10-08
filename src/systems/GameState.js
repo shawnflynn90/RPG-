@@ -38,7 +38,41 @@ function freshState() {
 /** Upgrade old saves here when the save format changes (bump SAVE.version). */
 function migrate(data) {
   const fresh = freshState();
-  return { ...fresh, ...data, version: SAVE.version };
+  const s = { ...fresh, ...data, version: SAVE.version };
+  if ((data.version || 1) < 2) {
+    // v0.4 rebuilt every dungeon: forget per-room progress in them and step outside.
+    const roomish = /^(chest|door|crack|item):dungeon|^(switch|ambush|eye|brazier):/;
+    s.flags = Object.fromEntries(Object.entries(s.flags || {}).filter(([k]) => !roomish.test(k)));
+    s.visited = Object.fromEntries(Object.entries(s.visited || {}).filter(([k]) => !k.startsWith('dungeon')));
+    s.items = { ...s.items };
+    delete s.items.small_key;
+    delete s.items.boss_key;
+    const outside = (mapId) => {
+      const m = /^dungeon(\d)/.exec(mapId || '');
+      return m ? { map: `town${m[1]}`, spawn: 'from_dungeon' } : null;
+    };
+    const out = outside(s.mapId);
+    if (out) {
+      s.mapId = out.map;
+      s.spawn = out.spawn;
+      s.pos = null;
+    }
+    if (s.respawn && outside(s.respawn.map)) s.respawn = outside(s.respawn.map);
+    // dungeons you already beat: you get their mini-boss items
+    const gifts = [
+      ['dungeon1_cleared', 'moss_golem', () => s.weapons.includes('bow') || s.weapons.push('bow')],
+      ['dungeon2_cleared', 'crypt_knight', () => s.spells.includes('bombs') || (s.spells.push('bombs'), (s.items.bomb = (s.items.bomb || 0) + 5))],
+      ['dungeon3_cleared', 'yeti_chief', () => s.spells.includes('hookshot') || s.spells.push('hookshot')],
+    ];
+    s.weapons = [...(s.weapons || [])];
+    s.spells = [...(s.spells || [])];
+    for (const [flag, boss, give] of gifts) {
+      if (!s.flags[flag]) continue;
+      s.flags[`boss:${boss}`] = true;
+      give();
+    }
+  }
+  return s;
 }
 
 class GameStateManager {
@@ -120,6 +154,13 @@ class GameStateManager {
   // ---- helpers used by game code -----------------------------------------------------
   flag(name) {
     return !!this.state.flags[name];
+  }
+
+  /** "a,b" = every listed flag is set. */
+  allFlags(list) {
+    return String(list)
+      .split(',')
+      .every((f) => this.flag(f.trim()));
   }
 
   setFlag(name, value = true) {

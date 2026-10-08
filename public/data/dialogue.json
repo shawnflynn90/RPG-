@@ -2,17 +2,33 @@
   "elder": {
     "speaker": "Elder",
     "pages": [
-      "Welcome, traveler. This is Town 1.",
-      "A monster has made its home in the dungeon to the north-east. The road to the next town runs right through it.",
-      "Buy what you need at the market stall, and visit the healer before you go."
+      "Long ago, the Sun Road joined the four cities: Brightwater, Ashford, Frostholm and Sunspire.",
+      "Then the Hollow King came. He sealed the road with four cursed dungeons, and no one who entered has ever come out the other side.",
+      "You're the first in a hundred years to try. Break the seals, Wayfarer, and set the road free."
     ],
     "variants": [
+      {
+        "if": {
+          "flag": "dungeon4_cleared"
+        },
+        "pages": [
+          "The Sun Road is open again! Caravans already sing your name."
+        ]
+      },
+      {
+        "if": {
+          "flag": "dungeon3_cleared"
+        },
+        "pages": [
+          "Three seals broken! Only the Hollow Spire remains, beyond Sunspire."
+        ]
+      },
       {
         "if": {
           "flag": "dungeon2_cleared"
         },
         "pages": [
-          "Two great evils defeated! Word of you has spread to every town."
+          "Two seals broken! Even the birds sound braver."
         ]
       },
       {
@@ -20,7 +36,8 @@
           "flag": "dungeon1_cleared"
         },
         "pages": [
-          "You defeated the Stone Warden! The road north to Town 2 is open. Safe travels!"
+          "You broke the first seal! Ashford lies north, through the old gate.",
+          "Each dungeon is bigger than the last. Find the map, and the compass if you can."
         ]
       }
     ]
@@ -35,7 +52,7 @@
     "speaker": "Kid",
     "pages": [
       "Tip: press LB and RB to switch weapons and spells!",
-      "And if you hold A after swinging, you can do a spin attack!"
+      "Hold A after swinging for a spin attack!"
     ],
     "variants": [
       {
@@ -43,7 +60,7 @@
           "hasWeapon": "bow"
         },
         "pages": [
-          "Whoa, a bow! You can hit things from far away now."
+          "Whoa, a bow! Did you know stone eyes open gates when you shoot them?"
         ]
       }
     ]
@@ -51,21 +68,21 @@
   "villager1": {
     "speaker": "Villager",
     "pages": [
-      "Press SELECT to look at your map.",
-      "In dungeons, finding the Dungeon Map shows every room!"
+      "Press SELECT for your map. It fills in as you explore!",
+      "Rooms you've only peeked into show up as '?'. The dungeon map shows them all, and the compass shows the treasure."
     ]
   },
   "innkeeper": {
     "speaker": "Innkeeper",
     "pages": [
-      "Welcome to the inn, traveler. A warm bed and a save, free of charge."
+      "Welcome to the inn, Wayfarer. A warm bed and a save, free of charge."
     ]
   },
   "traveler": {
     "speaker": "Traveler",
     "pages": [
-      "I came from the crypt. The dark there is alive...",
-      "...and I dropped my wedding ring in the west room! Could you find it for me?"
+      "I tried to cross the Shadow Crypt. The dark there is alive...",
+      "...and I dropped my wedding ring somewhere inside! Could you find it for me?"
     ],
     "startQuest": "lost_ring",
     "variants": [
@@ -92,7 +109,7 @@
           "questActive": "lost_ring"
         },
         "pages": [
-          "The west room of the crypt... the one with the heavy block."
+          "My ring is somewhere in the Shadow Crypt. Some rooms only open from the far side..."
         ]
       }
     ]
@@ -100,8 +117,8 @@
   "town2_guard": {
     "speaker": "Guard",
     "pages": [
-      "You beat the Warden? Then maybe you can handle the Shadow Crypt.",
-      "Light the torches with fire magic. That's all I know."
+      "You came through the Catacombs?! Welcome to Ashford, Wayfarer.",
+      "The Shadow Crypt lies north. Bring fire magic, and light any torch you find."
     ],
     "variants": [
       {
@@ -109,7 +126,7 @@
           "flag": "dungeon2_cleared"
         },
         "pages": [
-          "The Sorcerer is gone! I can finally sleep at night."
+          "The second seal is broken! I can finally sleep at night."
         ]
       }
     ]
@@ -117,15 +134,15 @@
   "scholar": {
     "speaker": "Scholar",
     "pages": [
-      "Shield Knights block attacks from the front. Hit them from the side or behind!",
-      "Magic that explodes around you, like Frost Ring or Thunder, gets past shields too."
+      "The Hollow King's dungeons are cunning. Every one hides a guardian, a lesser beast that keeps a treasure.",
+      "Beat the guardian and you'll find the tool that opens the rest of the dungeon.",
+      "And Shield Knights block attacks from the front. Hit them from the side!"
     ]
   },
   "town2_villager": {
     "speaker": "Villager",
     "pages": [
-      "The blacksmith can upgrade your weapons.",
-      "A Sword +3 is a fine thing indeed."
+      "The blacksmith can upgrade your weapons. Even the strange ones you find in dungeons."
     ],
     "variants": [
       {
@@ -141,9 +158,8 @@
   "town2_kid": {
     "speaker": "Kid",
     "pages": [
-      "Some doors in the crypt are locked.",
-      "Keys open locked doors. The BIG key opens the boss door!",
-      "I heard you can push blocks, too."
+      "Some doors are locked. Small keys open them, and the BIG key opens the boss door!",
+      "Sometimes all the doors slam shut... you have to beat every monster to get out!"
     ],
     "give": {
       "item": "potion",
@@ -155,7 +171,7 @@
     "speaker": "Farmer",
     "pages": [
       "Slimes! Slimes everywhere! They're eating my turnips.",
-      "Could you defeat 6 of them in the dungeon? I'll pay you!"
+      "Could you defeat 6 of them in the Mossy Catacombs? I'll pay you!"
     ],
     "startQuest": "slime_trouble",
     "variants": [
@@ -189,7 +205,7 @@
   "town3_guard": {
     "speaker": "Guard",
     "pages": [
-      "The Frost Cavern is north. Bombs, friend. Bring bombs."
+      "The Frost Cavern is north. Its guardian, the Yeti Chieftain, guards something that flies over chasms."
     ],
     "variants": [
       {
@@ -197,7 +213,7 @@
           "flag": "dungeon3_cleared"
         },
         "pages": [
-          "The Wyrm is gone and the snow is melting! You're a hero!"
+          "The Wyrm is gone and the snow is melting! Sunspire lies north."
         ]
       }
     ]
@@ -274,15 +290,72 @@
   "town3_kid": {
     "speaker": "Kid",
     "pages": [
-      "Did you know you can blow up cracked walls with bombs?",
+      "Bombs blow up cracked walls! The Crypt Knight dropped some for you? Lucky!",
       "There's a cracked wall somewhere in town, too! Hee hee."
     ]
   },
   "town4_greeter": {
     "speaker": "Guard",
     "pages": [
-      "Welcome to Town 4!",
-      "...We're still building it. Come back in the next milestone."
+      "A traveler from the south?! The road's been sealed for a hundred years!",
+      "Welcome to Sunspire, city of the sun. Or... it was, before the Spire went hollow."
+    ],
+    "variants": [
+      {
+        "if": {
+          "flag": "dungeon4_cleared"
+        },
+        "pages": [
+          "The sun is back over Sunspire! You did it!"
+        ]
+      }
+    ]
+  },
+  "sage": {
+    "speaker": "Sage",
+    "pages": [
+      "So you are the one who broke the seals. I felt each of them crack.",
+      "The Hollow King waits atop the Spire to the north. His guardian, the Fire Drake, keeps the Flame Brand.",
+      "Only that holy fire can light the braziers that bar his throne. Go, Wayfarer. End it."
+    ],
+    "variants": [
+      {
+        "if": {
+          "flag": "dungeon4_cleared"
+        },
+        "pages": [
+          "The King is gone, and the four cities are one road again. Thank you."
+        ]
+      }
+    ]
+  },
+  "town4_merchant": {
+    "speaker": "Merchant",
+    "pages": [
+      "Caravans haven't come in a century. My prices are... historical."
+    ]
+  },
+  "town4_kid": {
+    "speaker": "Kid",
+    "pages": [
+      "Lava burns! Don't touch the orange stuff.",
+      "The fire imps hate cold. Try ice magic!"
+    ]
+  },
+  "town4_lady": {
+    "speaker": "Weaver",
+    "pages": [
+      "My grandmother told stories of Brightwater. Is it true the fountains there sing?"
+    ],
+    "variants": [
+      {
+        "if": {
+          "flag": "dungeon4_cleared"
+        },
+        "pages": [
+          "Now I can visit Brightwater myself!"
+        ]
+      }
     ]
   }
 }

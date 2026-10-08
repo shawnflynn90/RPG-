@@ -2,7 +2,7 @@
   "_readme": "Quests. goals: {text, kills:{enemyId:n}} | {text, item, count} | {text, flag}. Started/completed from dialogue with startQuest / completeQuest. takeItems:false keeps goal items.",
   "slime_trouble": {
     "name": "Slime Trouble",
-    "giver": "Farmer, Town 1",
+    "giver": "Farmer, Brightwater",
     "description": "Slimes keep eating the farmer's crops. Defeat 6 slimes.",
     "goals": [
       {
@@ -20,8 +20,8 @@
   },
   "lost_ring": {
     "name": "The Lost Ring",
-    "giver": "Traveler, Town 2 inn",
-    "description": "A traveler lost his wedding ring in the west room of the Shadow Crypt.",
+    "giver": "Traveler, Ashford inn",
+    "description": "A traveler lost his wedding ring somewhere in the Shadow Crypt.",
     "goals": [
       {
         "text": "Find the Lost Ring",
@@ -35,7 +35,7 @@
   },
   "frozen_supplies": {
     "name": "Frozen Supplies",
-    "giver": "Explorer, Town 3",
+    "giver": "Explorer, Frostholm",
     "description": "Collect 3 Frost Herbs in the Frost Cavern.",
     "goals": [
       {
@@ -53,7 +53,7 @@
   },
   "yeti_hunt": {
     "name": "Yeti Hunt",
-    "giver": "Hunter, Town 3",
+    "giver": "Hunter, Frostholm",
     "description": "Yetis have been raiding the town. Defeat 4 of them.",
     "goals": [
       {

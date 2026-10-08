@@ -34,5 +34,5 @@ export const SAVE = {
   slots: 3,
   keyPrefix: 'pocketquest.save.',
   settingsKey: 'pocketquest.settings',
-  version: 1,
+  version: 2, // bump when old saves need fixing up (see migrate() in systems/GameState.js)
 };

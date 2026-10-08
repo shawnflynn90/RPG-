@@ -345,6 +345,123 @@
         "width": 22,
         "height": 16
       }
+    },
+    "boss_moss": {
+      "layout": "boss",
+      "file": null,
+      "body": {
+        "width": 22,
+        "height": 18
+      },
+      "placeholder": {
+        "color": "#4f8a3c",
+        "accent": "#c8f070",
+        "shape": "golem"
+      }
+    },
+    "boss_cknight": {
+      "layout": "boss",
+      "file": null,
+      "body": {
+        "width": 20,
+        "height": 16
+      },
+      "placeholder": {
+        "color": "#383050",
+        "accent": "#f84848",
+        "shape": "golem"
+      }
+    },
+    "boss_yeti": {
+      "layout": "boss",
+      "file": null,
+      "body": {
+        "width": 22,
+        "height": 18
+      },
+      "placeholder": {
+        "color": "#f0f8ff",
+        "accent": "#3868c0",
+        "shape": "golem"
+      }
+    },
+    "boss_drake": {
+      "layout": "boss",
+      "file": null,
+      "body": {
+        "width": 22,
+        "height": 16
+      },
+      "placeholder": {
+        "color": "#c84828",
+        "accent": "#f8d048",
+        "shape": "wyrm"
+      }
+    },
+    "boss_hollow": {
+      "layout": "boss",
+      "file": null,
+      "body": {
+        "width": 16,
+        "height": 14
+      },
+      "placeholder": {
+        "color": "#1c1424",
+        "accent": "#f8c838",
+        "shape": "robed"
+      }
+    },
+    "fire_imp": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#f87830",
+        "accent": "#f8e860",
+        "shape": "wisp"
+      },
+      "body": {
+        "width": 8,
+        "height": 8
+      }
+    },
+    "sand_knight": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#d8b878",
+        "accent": "#603818",
+        "shape": "humanoid"
+      },
+      "body": {
+        "width": 10,
+        "height": 8
+      }
+    },
+    "scorpion": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#c89048",
+        "accent": "#381808",
+        "shape": "spider"
+      },
+      "body": {
+        "width": 12,
+        "height": 8
+      }
+    },
+    "npc_sage": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#e8d070",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      },
+      "body": {
+        "width": 10,
+        "height": 8
+      }
     }
   },
   "images": {
@@ -1037,6 +1154,90 @@
           12
         ],
         "label": "Bz"
+      }
+    },
+    "icon_daggers": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#c8f0ff",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Dg"
+      }
+    },
+    "icon_hammer": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#a8a0b8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Hm"
+      }
+    },
+    "icon_flame": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f88838",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Fb"
+      }
+    },
+    "icon_robe": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#9070e0",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Rb"
+      }
+    },
+    "icon_sunplate": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f8d048",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Sp"
+      }
+    },
+    "icon_compass": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#e86848",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Cp"
+      }
+    },
+    "icon_seal": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#78e0c8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Se"
       }
     }
   },

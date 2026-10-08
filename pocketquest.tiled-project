@@ -1,670 +1,680 @@
 {
- "automappingRulesFile": "",
- "commands": [],
- "compatibilityVersion": 1100,
- "extensionsPath": "extensions",
- "folders": [
-  "public/maps",
-  "public/assets/tilesets"
- ],
- "propertyTypes": [
-  {
-   "id": 1,
-   "name": "spawn",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff58d858",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "facing",
-     "type": "string",
-     "value": "down"
-    }
-   ]
-  },
-  {
-   "id": 2,
-   "name": "warp",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff4890f0",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "map",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "spawn",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "facing",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 3,
-   "name": "npc",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#fff8d048",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "sprite",
-     "type": "string",
-     "value": "npc_elder"
-    },
-    {
-     "name": "dialogue",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "wander",
-     "type": "bool",
-     "value": false
-    },
-    {
-     "name": "facing",
-     "type": "string",
-     "value": "down"
-    },
-    {
-     "name": "ifFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "ifNotFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "cutscene",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 4,
-   "name": "shop",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#fff8a048",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "sprite",
-     "type": "string",
-     "value": "npc_merchant"
-    },
-    {
-     "name": "shop",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "dialogue",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "facing",
-     "type": "string",
-     "value": "down"
-    },
-    {
-     "name": "ifFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "ifNotFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "cutscene",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 5,
-   "name": "teacher",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffc878f8",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "sprite",
-     "type": "string",
-     "value": "npc_mage"
-    },
-    {
-     "name": "teacher",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "dialogue",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "facing",
-     "type": "string",
-     "value": "down"
-    },
-    {
-     "name": "ifFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "ifNotFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "cutscene",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 6,
-   "name": "smith",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff906040",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "sprite",
-     "type": "string",
-     "value": "npc_smith"
-    },
-    {
-     "name": "smith",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "dialogue",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "facing",
-     "type": "string",
-     "value": "down"
-    },
-    {
-     "name": "ifFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "ifNotFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "cutscene",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 7,
-   "name": "healer",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffffffff",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "sprite",
-     "type": "string",
-     "value": "npc_healer"
-    },
-    {
-     "name": "dialogue",
-     "type": "string",
-     "value": "healer"
-    },
-    {
-     "name": "price",
-     "type": "int",
-     "value": 0
-    },
-    {
-     "name": "facing",
-     "type": "string",
-     "value": "down"
-    },
-    {
-     "name": "ifFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "ifNotFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "cutscene",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 8,
-   "name": "sign",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffa87840",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "text",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 9,
-   "name": "chest",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffb07030",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "weapon",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "spell",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "tool",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "item",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "armor",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "count",
-     "type": "int",
-     "value": 1
-    },
-    {
-     "name": "gold",
-     "type": "int",
-     "value": 0
-    },
-    {
-     "name": "maxHp",
-     "type": "int",
-     "value": 0
-    },
-    {
-     "name": "maxMp",
-     "type": "int",
-     "value": 0
-    },
-    {
-     "name": "flag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "ifFlag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "id",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 10,
-   "name": "enemy",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#fff84848",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "enemy",
-     "type": "string",
-     "value": "slime"
-    }
-   ]
-  },
-  {
-   "id": 11,
-   "name": "boss",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffc00000",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "boss",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 12,
-   "name": "gate",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff8888a0",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "flag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "invert",
-     "type": "bool",
-     "value": false
-    },
-    {
-     "name": "mode",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "text",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 13,
-   "name": "door",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff805028",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "lock",
-     "type": "string",
-     "value": "small_key"
-    },
-    {
-     "name": "consume",
-     "type": "bool",
-     "value": true
-    },
-    {
-     "name": "text",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "id",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 14,
-   "name": "switch",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff38a8f8",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "flag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "mode",
-     "type": "string",
-     "value": "floor"
-    }
-   ]
-  },
-  {
-   "id": 15,
-   "name": "block",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffa0a8b8",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "once",
-     "type": "bool",
-     "value": false
-    }
-   ]
-  },
-  {
-   "id": 16,
-   "name": "pot",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffc08850",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "drop",
-     "type": "string",
-     "value": "random"
-    },
-    {
-     "name": "item",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "count",
-     "type": "int",
-     "value": 1
-    }
-   ]
-  },
-  {
-   "id": 17,
-   "name": "torch",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#fff8a030",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "flag",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "lit",
-     "type": "bool",
-     "value": false
-    },
-    {
-     "name": "radius",
-     "type": "int",
-     "value": 48
-    }
-   ]
-  },
-  {
-   "id": 18,
-   "name": "light",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#fff8f080",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "radius",
-     "type": "int",
-     "value": 40
-    },
-    {
-     "name": "flicker",
-     "type": "bool",
-     "value": true
-    }
-   ]
-  },
-  {
-   "id": 19,
-   "name": "item",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#fff8e060",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "item",
-     "type": "string",
-     "value": "small_key"
-    },
-    {
-     "name": "count",
-     "type": "int",
-     "value": 1
-    },
-    {
-     "name": "id",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 20,
-   "name": "trigger",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffe060f8",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "cutscene",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 21,
-   "name": "crack",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ff706888",
-   "drawFill": true,
-   "members": [
-    {
-     "name": "text",
-     "type": "string",
-     "value": ""
-    },
-    {
-     "name": "id",
-     "type": "string",
-     "value": ""
-    }
-   ]
-  },
-  {
-   "id": 22,
-   "name": "hook",
-   "type": "class",
-   "useAs": [
-    "object"
-   ],
-   "color": "#ffa07040",
-   "drawFill": true,
-   "members": []
-  }
- ]
+    "automappingRulesFile": "",
+    "commands": [],
+    "compatibilityVersion": 1100,
+    "extensionsPath": "extensions",
+    "folders": [
+        "public/maps",
+        "public/assets/tilesets"
+    ],
+    "propertyTypes": [
+        {
+            "id": 1,
+            "name": "spawn",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff58d858",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": "down"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "warp",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff4890f0",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "map",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "spawn",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "npc",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#fff8d048",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "sprite",
+                    "type": "string",
+                    "value": "npc_elder"
+                },
+                {
+                    "name": "dialogue",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "wander",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": "down"
+                },
+                {
+                    "name": "ifFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ifNotFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "cutscene",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "name": "shop",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#fff8a048",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "sprite",
+                    "type": "string",
+                    "value": "npc_merchant"
+                },
+                {
+                    "name": "shop",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "dialogue",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": "down"
+                },
+                {
+                    "name": "ifFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ifNotFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "cutscene",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "teacher",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffc878f8",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "sprite",
+                    "type": "string",
+                    "value": "npc_mage"
+                },
+                {
+                    "name": "teacher",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "dialogue",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": "down"
+                },
+                {
+                    "name": "ifFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ifNotFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "cutscene",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "smith",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff906040",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "sprite",
+                    "type": "string",
+                    "value": "npc_smith"
+                },
+                {
+                    "name": "smith",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "dialogue",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": "down"
+                },
+                {
+                    "name": "ifFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ifNotFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "cutscene",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "name": "healer",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffffffff",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "sprite",
+                    "type": "string",
+                    "value": "npc_healer"
+                },
+                {
+                    "name": "dialogue",
+                    "type": "string",
+                    "value": "healer"
+                },
+                {
+                    "name": "price",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "facing",
+                    "type": "string",
+                    "value": "down"
+                },
+                {
+                    "name": "ifFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ifNotFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "cutscene",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "name": "sign",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffa87840",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "text",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "name": "chest",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffb07030",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "weapon",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "spell",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "tool",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "item",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "armor",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "count",
+                    "type": "int",
+                    "value": 1
+                },
+                {
+                    "name": "gold",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "maxHp",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "maxMp",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "flag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "ifFlag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "name": "enemy",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#fff84848",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "enemy",
+                    "type": "string",
+                    "value": "slime"
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "name": "boss",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffc00000",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "boss",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "name": "gate",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff8888a0",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "flag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "invert",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "mode",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "text",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "name": "door",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff805028",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "lock",
+                    "type": "string",
+                    "value": "small_key"
+                },
+                {
+                    "name": "consume",
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "name": "text",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "name": "switch",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff38a8f8",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "flag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "mode",
+                    "type": "string",
+                    "value": "floor"
+                },
+                {
+                    "name": "hitBy",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "name": "block",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffa0a8b8",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "once",
+                    "type": "bool",
+                    "value": false
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "name": "pot",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffc08850",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "drop",
+                    "type": "string",
+                    "value": "random"
+                },
+                {
+                    "name": "item",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "count",
+                    "type": "int",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "id": 17,
+            "name": "torch",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#fff8a030",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "flag",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "lit",
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "name": "radius",
+                    "type": "int",
+                    "value": 48
+                },
+                {
+                    "name": "hitBy",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 18,
+            "name": "light",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#fff8f080",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "radius",
+                    "type": "int",
+                    "value": 40
+                },
+                {
+                    "name": "flicker",
+                    "type": "bool",
+                    "value": true
+                }
+            ]
+        },
+        {
+            "id": 19,
+            "name": "item",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#fff8e060",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "item",
+                    "type": "string",
+                    "value": "small_key"
+                },
+                {
+                    "name": "count",
+                    "type": "int",
+                    "value": 1
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 20,
+            "name": "trigger",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffe060f8",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "cutscene",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 21,
+            "name": "crack",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ff706888",
+            "drawFill": true,
+            "members": [
+                {
+                    "name": "text",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "id",
+                    "type": "string",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "id": 22,
+            "name": "hook",
+            "type": "class",
+            "useAs": [
+                "object"
+            ],
+            "color": "#ffa07040",
+            "drawFill": true,
+            "members": []
+        }
+    ]
 }

@@ -23,13 +23,14 @@
       },
       {
         "say": [
-          "Ah, you're finally awake! Welcome to Town 1, traveler."
+          "Ah, you're finally awake! Welcome to Brightwater, Wayfarer."
         ],
         "speaker": "Elder"
       },
       {
         "say": [
-          "A monster has made its nest in the old dungeon, just over there..."
+          "A hundred years ago the Hollow King sealed the Sun Road with four dungeons...",
+          "The first lies just over there. The Mossy Catacombs."
         ],
         "speaker": "Elder"
       },
@@ -45,7 +46,8 @@
       },
       {
         "say": [
-          "The road to the next town runs right through it. Nobody has come back out."
+          "Many have gone in. Nobody has ever come out the other side.",
+          "Beat its keeper and break the seal, and the road to Ashford opens."
         ],
         "speaker": "Elder"
       },
@@ -103,7 +105,7 @@
       {
         "say": [
           "A traveler? From the south? You came through the Shadow Crypt?!",
-          "Welcome to Town 3, friend."
+          "Welcome to Frostholm, friend."
         ],
         "speaker": "Guard"
       },
@@ -116,8 +118,8 @@
       },
       {
         "say": [
-          "Up north is the Frost Cavern. A Frost Wyrm sleeps in its depths...",
-          "You'll need bombs to get through. The store sells them."
+          "Up north is the Frost Cavern. The Frost Wyrm guards the third seal...",
+          "Use the bombs from the crypt on cracked ice. And dress warm!"
         ],
         "speaker": "Guard"
       },
@@ -145,12 +147,11 @@
         "wait": 600
       },
       {
-        "shake": 500
+        "shake": 600
       },
       {
         "say": [
-          "The cavern trembles... and falls silent.",
-          "The ice begins to thaw. Three great evils, defeated."
+          "The Hollow King lets out a long, empty sigh... and crumbles into light."
         ]
       },
       {
@@ -158,7 +159,12 @@
       },
       {
         "say": [
-          "Your legend will be sung in every town from here to the sea."
+          "One by one, the four seals turn to dust. Far away, in Brightwater, Ashford, Frostholm and Sunspire, the people look up."
+        ]
+      },
+      {
+        "say": [
+          "The Sun Road is free. The dungeons no one could conquer have been conquered, by you."
         ]
       },
       {
@@ -166,8 +172,58 @@
       },
       {
         "say": [
-          "(Your journey isn't over! Town 4 lies just to the north.)"
+          "(Thanks for playing! You can keep exploring: every chest and room is still out there.)"
         ]
+      }
+    ]
+  },
+  "town2_arrival": {
+    "steps": [
+      {
+        "emote": "Guard",
+        "icon": "!"
+      },
+      {
+        "face": "Guard",
+        "toward": "player"
+      },
+      {
+        "say": [
+          "Halt! ...You came up the old road? Through the Catacombs?",
+          "Nobody has done that in a hundred years! Welcome to Ashford, Wayfarer!"
+        ],
+        "speaker": "Guard"
+      },
+      {
+        "say": [
+          "The second seal is in the Shadow Crypt, north of town. Talk to our Scholar before you go."
+        ],
+        "speaker": "Guard"
+      }
+    ]
+  },
+  "town4_arrival": {
+    "steps": [
+      {
+        "emote": "Guard",
+        "icon": "!"
+      },
+      {
+        "face": "Guard",
+        "toward": "player"
+      },
+      {
+        "say": [
+          "The road... it's open? Then the seals really are breaking!",
+          "Welcome to Sunspire, Wayfarer. Our Sage has been waiting for you."
+        ],
+        "speaker": "Guard"
+      },
+      {
+        "say": [
+          "The Hollow Spire rises north of the city. The King himself waits at the top."
+        ],
+        "speaker": "Guard"
       }
     ]
   }

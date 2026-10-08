@@ -1,6 +1,6 @@
 {
   "town1_shop": {
-    "name": "General Store",
+    "name": "Brightwater Market",
     "greeting": "Welcome! Have a look at my wares.",
     "stock": [
       {
@@ -26,7 +26,7 @@
     ]
   },
   "town2_shop": {
-    "name": "Crypt Outfitters",
+    "name": "Ashford Outfitters",
     "greeting": "Heading into the crypt? You'll want armor. And antidotes. Lots of antidotes.",
     "stock": [
       {
@@ -52,13 +52,9 @@
     ]
   },
   "town3_shop": {
-    "name": "Frostfield Store",
+    "name": "Frostholm Store",
     "greeting": "Bombs! Get your bombs! Also coats. It's cold.",
     "stock": [
-      {
-        "tool": "bombs",
-        "price": 80
-      },
       {
         "item": "bomb",
         "count": 5,
@@ -67,6 +63,33 @@
       {
         "armor": "fur_coat",
         "price": 180
+      },
+      {
+        "item": "potion",
+        "price": 12
+      },
+      {
+        "item": "ether",
+        "price": 15
+      },
+      {
+        "item": "antidote",
+        "price": 8
+      }
+    ]
+  },
+  "town4_shop": {
+    "name": "Sunspire Bazaar",
+    "greeting": "Caravans haven't come in a century. My prices are... historical.",
+    "stock": [
+      {
+        "armor": "chain",
+        "price": 200
+      },
+      {
+        "item": "bomb",
+        "count": 5,
+        "price": 20
       },
       {
         "item": "potion",

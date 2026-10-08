@@ -60,6 +60,7 @@ export class Combat {
       damage: w.damage,
       knockback: w.knockback ?? 140,
       effect: w.effect,
+      element: w.element,
       until: this.scene.time.now + (w.activeMs || 100),
       hit: new Set(),
     };
@@ -174,7 +175,7 @@ export class Combat {
   hit(target, src, fromX, fromY) {
     const tx = target.x;
     const ty = target.y - target.frameH / 2;
-    const ok = target.hurt(src.damage || 0, fromX, fromY, { knockback: src.knockback ?? 120, kind: src.kind, element: src.element });
+    const ok = target.hurt(src.damage || 0, fromX, fromY, { knockback: src.knockback ?? 120, kind: src.kind, element: src.element, source: src.source });
     if (ok) {
       if (this.scene.particles) this.scene.particles.burst(tx, ty + target.frameH / 2, src.element === 'fire' ? 'fire' : 'hit', 5);
       if (!target.dead) target.applyEffect(src.effect);

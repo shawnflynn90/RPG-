@@ -62,8 +62,20 @@
   },
   "frost_herb": {
     "name": "Frost Herb",
-    "description": "A herb that only grows in deep ice. The explorer in Town 3 wants these.",
+    "description": "A herb that only grows in deep ice. The explorer in Frostholm wants these.",
     "icon": "icon_herb",
+    "key": true
+  },
+  "compass": {
+    "name": "Compass",
+    "description": "Marks unopened chests and the boss on the dungeon map (SELECT).",
+    "icon": "icon_compass",
+    "key": true
+  },
+  "seal_stone": {
+    "name": "Seal Stone",
+    "description": "A broken seal of the Sun Road. The Hollow King made four.",
+    "icon": "icon_seal",
     "key": true
   }
 }

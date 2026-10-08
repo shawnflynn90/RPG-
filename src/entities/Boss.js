@@ -42,13 +42,14 @@ export class Boss extends Actor {
 
   /** Start fighting (called by the world when the player walks in). */
   engage() {
-    if (this.engaged) return;
+    if (this.engaged || !this.scene) return; // the room may have changed during the intro
     this.engaged = true;
     this.loop();
   }
 
   wait(ms) {
-    return new Promise((res) => this.scene.time.delayedCall(ms, res));
+    // never resolves if the boss is gone (left the room): the loop just stops
+    return new Promise((res) => this.scene && this.scene.time.delayedCall(ms, res));
   }
 
   async loop() {

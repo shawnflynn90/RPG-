@@ -40,5 +40,24 @@
       "slow"
     ],
     "price": 180
+  },
+  "mystic_robe": {
+    "name": "Mystic Robe",
+    "description": "Takes 1 less damage and your MP refills three times as fast.",
+    "icon": "icon_robe",
+    "defense": 1,
+    "mpRegenMul": 3,
+    "price": 0
+  },
+  "sun_plate": {
+    "name": "Sun Plate",
+    "description": "Takes 3 less damage. Fire can't burn you and ice can't slow you.",
+    "icon": "icon_sunplate",
+    "defense": 3,
+    "resist": [
+      "burn",
+      "slow"
+    ],
+    "price": 0
   }
 }

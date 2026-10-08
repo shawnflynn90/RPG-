@@ -409,5 +409,170 @@
         "chance": 0.5
       }
     ]
+  },
+  "fire_imp": {
+    "name": "Fire Imp",
+    "sprite": "fire_imp",
+    "hp": 9,
+    "contactDamage": 2,
+    "speed": 22,
+    "xp": 9,
+    "light": 34,
+    "resist": [
+      "burn"
+    ],
+    "contactEffect": {
+      "burn": {
+        "dps": 1,
+        "durationMs": 2000
+      }
+    },
+    "ai": {
+      "idle": "flutter",
+      "sightRange": 110,
+      "loseRange": 160,
+      "onSight": "keepDistance",
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 1700,
+        "windupMs": 350,
+        "sfx": "fire",
+        "projectile": {
+          "sprite": "fireball",
+          "speed": 105,
+          "range": 170,
+          "damage": 2,
+          "size": [
+            8,
+            8
+          ],
+          "light": 24,
+          "effect": {
+            "burn": {
+              "dps": 1,
+              "durationMs": 2000
+            }
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "mana",
+        "chance": 0.4
+      },
+      {
+        "type": "gold",
+        "amount": [
+          3,
+          6
+        ],
+        "chance": 0.6
+      }
+    ]
+  },
+  "sand_knight": {
+    "name": "Sand Knight",
+    "sprite": "sand_knight",
+    "hp": 22,
+    "contactDamage": 4,
+    "speed": 18,
+    "xp": 12,
+    "shield": {
+      "arcDeg": 110
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 80,
+      "loseRange": 130,
+      "onSight": "chase",
+      "chaseSpeed": 24,
+      "dash": {
+        "range": 38,
+        "windupMs": 420,
+        "speed": 150,
+        "durationMs": 240,
+        "cooldownMs": 2200
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          5,
+          9
+        ],
+        "chance": 0.9
+      },
+      {
+        "type": "heart",
+        "chance": 0.3
+      }
+    ]
+  },
+  "scorpion": {
+    "name": "Scorpion",
+    "sprite": "scorpion",
+    "hp": 12,
+    "contactDamage": 3,
+    "speed": 26,
+    "xp": 9,
+    "contactEffect": {
+      "poison": {
+        "dps": 1,
+        "durationMs": 4000
+      }
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 76,
+      "loseRange": 120,
+      "onSight": "chase",
+      "chaseSpeed": 34,
+      "dash": {
+        "range": 44,
+        "windupMs": 300,
+        "speed": 165,
+        "durationMs": 220,
+        "cooldownMs": 1500
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 2600,
+        "windupMs": 300,
+        "sfx": "poison",
+        "projectile": {
+          "sprite": "venom",
+          "speed": 110,
+          "range": 120,
+          "damage": 1,
+          "size": [
+            6,
+            6
+          ],
+          "effect": {
+            "poison": {
+              "dps": 1,
+              "durationMs": 3000
+            }
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          3,
+          7
+        ],
+        "chance": 0.8
+      },
+      {
+        "type": "item",
+        "item": "antidote",
+        "chance": 0.15
+      }
+    ]
   }
 }

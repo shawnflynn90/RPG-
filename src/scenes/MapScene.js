@@ -60,6 +60,11 @@ export class MapScene extends Phaser.Scene {
   }
 
   // ------------------------------------------------------------------------------ dungeon
+  /**
+   * The map fills in as you explore: visited rooms are drawn solid, doorways you have seen lead
+   * to "?" outlines. The dungeon map (flag map:<region>) reveals every room; the compass
+   * (flag compass:<region>) marks unopened chests and the boss.
+   */
   drawArea() {
     const regionDef = (DB.world.regions || []).find((r) => r.id === this.region);
     const rooms = Object.entries(DB.world.maps).filter(([, m]) => m.region === this.region && m.grid);
@@ -69,45 +74,69 @@ export class MapScene extends Phaser.Scene {
     }
     this.put(pixelText(this, 10, 28, regionDef ? regionDef.name : this.region, COLORS.highlight));
     const hasMap = Game.flag(`map:${this.region}`);
+    const hasCompass = Game.flag(`compass:${this.region}`);
     const keys = Game.s.items.small_key || 0;
-    const bigKey = Game.s.items.boss_key ? '  Big Key' : '';
+    const bigKey = Game.s.items.boss_key ? ' +Big' : '';
     this.put(pixelText(this, 230, 28, `Keys ${keys}${bigKey}`, COLORS.text).setOrigin(1, 0));
-    if (!hasMap) this.put(pixelText(this, 10, 146, 'Find the dungeon map to see every room.', COLORS.dim));
+    const tips = [hasMap ? 'Map' : null, hasCompass ? 'Compass' : null].filter(Boolean).join(' + ');
+    this.put(pixelText(this, 10, 146, tips ? `Have: ${tips}` : 'Find the map and compass!', COLORS.dim));
+    this.put(pixelText(this, 230, 146, '? unexplored', COLORS.dim).setOrigin(1, 0));
+
+    const visited = (id) => !!Game.s.visited[id];
+    const links = {};
+    for (const [id] of rooms) links[id] = warpTargets(id).filter((t) => DB.world.maps[t] && DB.world.maps[t].region === this.region);
+    // rooms you've seen a doorway to (or every room, with the map)
+    const seen = new Set();
+    for (const [id] of rooms) if (visited(id) || hasMap) seen.add(id);
+    for (const [id] of rooms) if (visited(id)) for (const t of links[id]) seen.add(t);
 
     const cols = rooms.map(([, m]) => m.grid[0]);
     const rows = rooms.map(([, m]) => m.grid[1]);
     const minC = Math.min(...cols);
     const minR = Math.min(...rows);
-    const w = (Math.max(...cols) - minC + 1) * (CELL_W + 4);
-    const h = (Math.max(...rows) - minR + 1) * (CELL_H + 4);
-    const ox = Math.round(120 - w / 2);
-    const oy = Math.round(88 - h / 2);
+    const nC = Math.max(...cols) - minC + 1;
+    const nR = Math.max(...rows) - minR + 1;
+    const gap = 4;
+    const cw = Math.max(10, Math.min(CELL_W, Math.floor(220 / nC) - gap));
+    const ch = Math.max(8, Math.min(CELL_H, Math.floor(104 / nR) - gap));
+    const ox = Math.round(120 - (nC * (cw + gap) - gap) / 2);
+    const oy = Math.round(88 - (nR * (ch + gap) - gap) / 2);
     const pos = {};
-    for (const [id, m] of rooms) pos[id] = { x: ox + (m.grid[0] - minC) * (CELL_W + 4), y: oy + (m.grid[1] - minR) * (CELL_H + 4), m };
+    for (const [id, m] of rooms) pos[id] = { x: ox + (m.grid[0] - minC) * (cw + gap), y: oy + (m.grid[1] - minR) * (ch + gap), m };
 
-    // connections, derived from the warps in each map
     const g = this.put(this.add.graphics());
+    // doorways between neighbouring rooms
     for (const [id, p] of Object.entries(pos)) {
-      const visible = Game.s.visited[id] || hasMap;
-      if (!visible) continue;
-      for (const target of warpTargets(id)) {
-        const q = pos[target];
-        if (!q || !(Game.s.visited[target] || hasMap)) continue;
-        g.lineStyle(4, 0x8890b8, 1);
-        g.lineBetween(p.x + CELL_W / 2, p.y + CELL_H / 2, q.x + CELL_W / 2, q.y + CELL_H / 2);
+      if (!visited(id) && !hasMap) continue;
+      for (const t of links[id]) {
+        const q = pos[t];
+        if (!q) continue;
+        const dx = Math.sign(q.m.grid[0] - p.m.grid[0]);
+        const dy = Math.sign(q.m.grid[1] - p.m.grid[1]);
+        g.fillStyle(visited(id) && visited(t) ? 0xc8d0f0 : 0x6870a0, 1);
+        if (dx) g.fillRect(dx > 0 ? p.x + cw : p.x - gap, p.y + ch / 2 - 2, gap, 4);
+        else if (dy) g.fillRect(p.x + cw / 2 - 2, dy > 0 ? p.y + ch : p.y - gap, 4, gap);
       }
     }
     for (const [id, p] of Object.entries(pos)) {
-      const visited = !!Game.s.visited[id];
-      if (!visited && !hasMap) continue;
-      const isBoss = p.m.boss;
-      const fill = visited ? (isBoss ? 0x903040 : 0x3858c8) : 0x283058;
-      g.fillStyle(0x000000, 1).fillRect(p.x - 1, p.y - 1, CELL_W + 2, CELL_H + 2);
-      g.fillStyle(fill, 1).fillRect(p.x, p.y, CELL_W, CELL_H);
-      if (isBoss) this.put(pixelText(this, p.x + CELL_W / 2, p.y + 5, 'BOSS', 0xffffff).setOrigin(0.5, 0));
-      if (id === this.mapId) {
-        this.here = this.put(this.add.rectangle(p.x + CELL_W / 2, p.y + CELL_H / 2, 6, 6, 0xf8e060));
+      if (!seen.has(id)) continue;
+      const isBoss = p.m.boss === true;
+      g.fillStyle(0x000000, 1).fillRect(p.x - 1, p.y - 1, cw + 2, ch + 2);
+      if (visited(id)) {
+        g.fillStyle(isBoss ? 0x903040 : 0x3858c8, 1).fillRect(p.x, p.y, cw, ch);
+        g.fillStyle(0xffffff, 0.18).fillRect(p.x, p.y, cw, 2);
+      } else if (hasMap) {
+        g.fillStyle(isBoss ? 0x502030 : 0x283058, 1).fillRect(p.x, p.y, cw, ch);
+      } else {
+        g.lineStyle(1, 0x6870a0, 1).strokeRect(p.x + 0.5, p.y + 0.5, cw - 1, ch - 1);
+        this.put(pixelText(this, p.x + cw / 2, p.y + ch / 2 - 4, '?', COLORS.dim).setOrigin(0.5, 0));
       }
+      if (hasCompass) {
+        const marks = roomMarkers(id);
+        if (isBoss && !marks.bossBeaten) g.fillStyle(0xf84838, 1).fillCircle(p.x + cw / 2, p.y + ch / 2, 3);
+        for (let i = 0; i < marks.chests; i++) g.fillStyle(0xf8d048, 1).fillRect(p.x + 2 + i * 4, p.y + ch - 5, 3, 3);
+      }
+      if (id === this.mapId) this.here = this.put(this.add.rectangle(p.x + cw / 2, p.y + ch / 2, 5, 5, 0xf8e060));
     }
   }
 
@@ -175,4 +204,21 @@ function warpTargets(mapId) {
     for (const o of l.objects) if ((o.type || o.class) === 'warp') out.add(propsOf(o).map);
   }
   return [...out];
+}
+
+/** Unopened chests and an unbeaten boss in a map (for the compass). */
+function roomMarkers(mapId) {
+  const map = DB.maps[mapId];
+  const out = { chests: 0, bossBeaten: true };
+  if (!map) return out;
+  for (const l of map.layers) {
+    if (l.type !== 'objectgroup') continue;
+    for (const o of l.objects) {
+      const type = o.type || o.class;
+      const p = propsOf(o);
+      if (type === 'chest' && !Game.flag(`chest:${p.id || `${mapId}:${o.id}`}`)) out.chests++;
+      if (type === 'boss' && !Game.flag(`boss:${p.boss || o.name}`)) out.bossBeaten = false;
+    }
+  }
+  return out;
 }

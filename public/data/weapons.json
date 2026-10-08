@@ -185,5 +185,115 @@
       }
     ],
     "price": 220
+  },
+  "twin_daggers": {
+    "name": "Twin Daggers",
+    "description": "Very fast, short stabs. Found in the Mossy Catacombs.",
+    "icon": "icon_daggers",
+    "shape": "thrust",
+    "damage": 2,
+    "cooldownMs": 150,
+    "range": 13,
+    "width": 12,
+    "activeMs": 80,
+    "lockMs": 80,
+    "knockback": 80,
+    "color": "#c8f0ff",
+    "price": 0,
+    "sfx": "thrust",
+    "charge": {
+      "timeMs": 450,
+      "damageMul": 2,
+      "radius": 22
+    },
+    "upgrades": [
+      {
+        "price": 60,
+        "damage": 1
+      },
+      {
+        "price": 140,
+        "damage": 1
+      },
+      {
+        "price": 240,
+        "damage": 1,
+        "cooldownMs": -20
+      }
+    ]
+  },
+  "war_hammer": {
+    "name": "War Hammer",
+    "description": "Crushing, slow blows that stun. Found in the Shadow Crypt.",
+    "icon": "icon_hammer",
+    "shape": "arc",
+    "damage": 10,
+    "cooldownMs": 900,
+    "range": 16,
+    "width": 30,
+    "activeMs": 160,
+    "lockMs": 520,
+    "knockback": 300,
+    "effect": {
+      "stun": {
+        "durationMs": 700
+      }
+    },
+    "color": "#d0c8e0",
+    "price": 0,
+    "sfx": "heavy",
+    "charge": {
+      "timeMs": 900,
+      "damageMul": 2.5,
+      "radius": 32
+    },
+    "upgrades": [
+      {
+        "price": 150,
+        "damage": 2
+      },
+      {
+        "price": 260,
+        "damage": 3
+      }
+    ]
+  },
+  "flame_brand": {
+    "name": "Flame Brand",
+    "description": "A holy sword wreathed in fire. Burns foes and kindles braziers.",
+    "icon": "icon_flame",
+    "shape": "arc",
+    "damage": 6,
+    "cooldownMs": 300,
+    "range": 15,
+    "width": 22,
+    "activeMs": 120,
+    "lockMs": 170,
+    "knockback": 160,
+    "element": "fire",
+    "effect": {
+      "burn": {
+        "dps": 1,
+        "durationMs": 2500
+      }
+    },
+    "color": "#f88838",
+    "price": 0,
+    "sfx": "fire",
+    "charge": {
+      "timeMs": 650,
+      "damageMul": 2.2,
+      "radius": 28
+    },
+    "upgrades": [
+      {
+        "price": 200,
+        "damage": 2
+      },
+      {
+        "price": 320,
+        "damage": 2
+      }
+    ]
   }
 }

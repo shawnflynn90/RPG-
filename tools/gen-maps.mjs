@@ -1,167 +1,12 @@
-// Generates the milestone's starter maps as plain Tiled JSON (.tmj) files in public/maps/.
-// After that they're ordinary Tiled maps: open and edit them in Tiled. This script will NOT overwrite
-// an existing map unless you pass --force (which would throw away your Tiled edits!).
+// Generates the towns and their interiors as plain Tiled JSON (.tmj) files in public/maps/.
+// (Dungeons come from tools/gen-dungeons.mjs.) After that they're ordinary Tiled maps: open and
+// edit them in Tiled. This script will NOT overwrite an existing map unless you pass --force
+// (which would throw away your Tiled edits!).
 //
 //   node tools/gen-maps.mjs [--force]
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { t, makeRng, interior, exitTo, townBase, house, save } from './maplib.mjs';
 
-const force = process.argv.includes('--force');
-const T = 16;
-
-// Tile ids in the placeholder tileset (see tools/gen-placeholder-art.mjs). gid = id + 1.
-const t = {
-  grass: 0, flowers: 1, dirt: 2, water: 3, tree: 4, houseWall: 5, roof: 6, door: 7,
-  floor: 8, floorCracked: 9, wall: 10, wallTop: 11, stairsDown: 12, fence: 13, wood: 14,
-  carpet: 15, counter: 16, bossFloor: 17, pillar: 18, plaza: 19, bush: 20, void: 21,
-  treeTop: 22, stairsUp: 23,
-  inWall: 24, inWallTop: 25, checker: 26, table: 27, bed: 28, shelf: 29, window: 30, mat: 31,
-  sand: 32, cactus: 33, stoneFloor: 34, stoneWall: 35, stoneTop: 36, pit: 37, lava: 38,
-  barrel: 39, autumnGrass: 40, autumnTree: 41, anvil: 42, fountain: 43,
-  ice: 44, snow: 45, iceWall: 46, iceTop: 47, snowTree: 48, frozenWater: 49,
-};
-
-class MapBuilder {
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
-    this.layers = { ground: [], walls: [], above: [] };
-    for (const k of Object.keys(this.layers)) this.layers[k] = new Array(width * height).fill(0);
-    this.objects = [];
-    this.nextId = 1;
-  }
-
-  set(layer, x, y, tile) {
-    if (x < 0 || y < 0 || x >= this.width || y >= this.height) return;
-    this.layers[layer][y * this.width + x] = tile === null ? 0 : tile + 1;
-  }
-
-  fill(layer, x, y, w, h, tile) {
-    for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) this.set(layer, i, j, tile);
-  }
-
-  /** Point object at the centre of tile (tx, ty). */
-  point(type, name, tx, ty, props = {}) {
-    this.objects.push({ type, name, x: tx * T + T / 2, y: ty * T + T / 2, point: true, props });
-  }
-
-  /** Rectangle object covering tiles. */
-  area(type, name, tx, ty, tw, th, props = {}) {
-    this.objects.push({ type, name, x: tx * T, y: ty * T, width: tw * T, height: th * T, props });
-  }
-
-  toTiled() {
-    const prop = (name, value) => ({
-      name,
-      type: typeof value === 'number' ? (Number.isInteger(value) ? 'int' : 'float') : typeof value === 'boolean' ? 'bool' : 'string',
-      value,
-    });
-    let layerId = 1;
-    const tileLayer = (name) => ({
-      id: layerId++, name, type: 'tilelayer', visible: true, opacity: 1, x: 0, y: 0,
-      width: this.width, height: this.height, data: this.layers[name],
-    });
-    return {
-      type: 'map', version: '1.10', tiledversion: '1.10.2', orientation: 'orthogonal', renderorder: 'right-down',
-      width: this.width, height: this.height, tilewidth: T, tileheight: T, infinite: false,
-      compressionlevel: -1,
-      tilesets: [{ firstgid: 1, source: '../assets/tilesets/placeholder.tsj' }],
-      layers: [
-        tileLayer('ground'),
-        tileLayer('walls'),
-        tileLayer('above'),
-        {
-          id: layerId++, name: 'objects', type: 'objectgroup', visible: true, opacity: 1, x: 0, y: 0,
-          draworder: 'topdown',
-          objects: this.objects.map((o) => ({
-            id: this.nextId++, name: o.name, type: o.type, x: o.x, y: o.y,
-            width: o.width || 0, height: o.height || 0, rotation: 0, visible: true,
-            ...(o.point ? { point: true } : {}),
-            properties: Object.entries(o.props).map(([k, v]) => prop(k, v)),
-          })),
-        },
-      ],
-      nextlayerid: layerId, nextobjectid: this.nextId,
-    };
-  }
-}
-
-function save(name, builder) {
-  const path = `public/maps/${name}.tmj`;
-  if (existsSync(path) && !force) {
-    console.log(`skip  ${path} (exists; use --force to overwrite)`);
-    return;
-  }
-  mkdirSync('public/maps', { recursive: true });
-  writeFileSync(path, JSON.stringify(builder.toTiled()));
-  console.log(`wrote ${path}`);
-}
-
-
-let seed = 42;
-const rand = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
-
-const STONE = { floor: t.stoneFloor, wall: t.stoneWall, top: t.stoneTop, cracked: t.stoneFloor };
-const BRICK = { floor: t.floor, wall: t.wall, top: t.wallTop, cracked: t.floorCracked };
-const ICE = { floor: t.snow, wall: t.iceWall, top: t.iceTop, cracked: t.ice };
-
-/** A dungeon room: wall ring, floor inside, with openings. */
-function dungeonRoom(w, h, { style = BRICK, floor } = {}) {
-  const m = new MapBuilder(w, h);
-  m.fill('ground', 0, 0, w, h, floor ?? style.floor);
-  if (floor === undefined) for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (rand() < 0.08) m.set('ground', x, y, style.cracked);
-  m.style = style;
-  m.fill('walls', 0, 0, w, 1, style.top);
-  m.fill('walls', 0, 1, w, 1, style.wall);
-  m.fill('walls', 0, h - 1, w, 1, style.top);
-  m.fill('walls', 0, 0, 1, h, style.top);
-  m.fill('walls', w - 1, 0, 1, h, style.top);
-  return m;
-}
-const openTop = (m, x, w = 2) => m.fill('walls', x, 0, w, 2, null);
-const openBottom = (m, x, w = 2) => m.fill('walls', x, m.height - 1, w, 1, null);
-const openLeft = (m, y, h = 2) => m.fill('walls', 0, y, 1, h, null);
-const openRight = (m, y, h = 2) => m.fill('walls', m.width - 1, y, 1, h, null);
-
-/** Small indoor room (fits on one screen). The exit is a doormat in the bottom wall at column `door`. */
-function interior(w, h, door, { floor = t.wood, windows = [] } = {}) {
-  const m = new MapBuilder(w, h);
-  m.fill('ground', 0, 0, w, h, floor);
-  m.fill('walls', 0, 0, w, 1, t.inWallTop);
-  m.fill('walls', 0, 1, w, 1, t.inWall);
-  for (const x of windows) m.set('walls', x, 1, t.window);
-  m.fill('walls', 0, 0, 1, h, t.inWallTop);
-  m.fill('walls', w - 1, 0, 1, h, t.inWallTop);
-  m.fill('walls', 0, h - 1, w, 1, t.inWallTop);
-  m.set('walls', door, h - 1, null);
-  m.set('ground', door, h - 1, t.mat);
-  m.point('spawn', 'entrance', door, h - 2, { facing: 'up' });
-  return m;
-}
-const exitTo = (m, door, map, spawn) => m.area('warp', 'exit', door, m.height - 1, 1, 1, { map, spawn });
-
-/** Tree border with optional gaps: { top: [x...], bottom: [x...] } */
-function townBase(W, H, ground, tree, gaps = {}) {
-  const m = new MapBuilder(W, H);
-  m.fill('ground', 0, 0, W, H, ground);
-  for (let x = 0; x < W; x++) {
-    if (!(gaps.top || []).includes(x)) m.set('walls', x, 0, tree);
-    if (!(gaps.bottom || []).includes(x)) m.set('walls', x, H - 1, tree);
-  }
-  for (let y = 0; y < H; y++) {
-    m.set('walls', 0, y, tree);
-    m.set('walls', W - 1, y, tree);
-  }
-  return m;
-}
-
-/** House with a roof (2 rows) and a front wall (2 rows) with a door. Returns the door position. */
-function house(m, x, y, w, doorX) {
-  m.fill('walls', x, y, w, 2, t.roof);
-  m.fill('walls', x, y + 2, w, 2, t.houseWall);
-  m.set('walls', doorX, y + 3, null);
-  m.set('ground', doorX, y + 3, t.door);
-  return { x: doorX, y: y + 3 };
-}
+const rand = makeRng(42);
 
 // ====================================================================================== TOWN 1
 {
@@ -224,8 +69,8 @@ function house(m, x, y, w, doorX) {
   m.point('npc', 'Kid', 17, 12, { sprite: 'npc_kid', dialogue: 'kid', wander: true });
   m.point('npc', 'Villager', 7, 8, { sprite: 'npc_villager', dialogue: 'villager1', facing: 'down' });
   m.point('npc', 'Farmer', 20, 9, { sprite: 'npc_farmer', dialogue: 'farmer', facing: 'down' });
-  m.point('sign', 'Sign', 24, 5, { text: 'DUNGEON 1\\nMonsters inside. Turn back if you value your life!' });
-  m.point('sign', 'Sign', 15, 9, { text: 'TOWN 1\\nNorth-east: Dungeon 1\\nWest: Healer   North: Shop' });
+  m.point('sign', 'Sign', 24, 5, { text: 'MOSSY CATACOMBS\\nThe first seal. Nobody has ever come out the other side.' });
+  m.point('sign', 'Sign', 15, 9, { text: 'BRIGHTWATER\\nNorth-east: Mossy Catacombs\\nWest: Healer   North: Shop' });
   m.point('chest', 'Chest', 28, 18, { gold: 15 });
   m.point('pot', 'Pot', 1, 1, {});
   m.point('pot', 'Pot', 2, 1, {});
@@ -264,78 +109,6 @@ function house(m, x, y, w, doorX) {
   m.set('walls', 8, 4, t.table);
   m.point('teacher', 'Mage', 4.5, 2.6, { sprite: 'npc_mage', teacher: 'town1_teacher', facing: 'down' });
   save('town1_magic', m);
-}
-
-// ====================================================================================== DUNGEON 1
-{
-  const m = dungeonRoom(18, 12);
-  openBottom(m, 8);
-  openTop(m, 8);
-  m.set('ground', 8, 11, t.stairsUp);
-  m.set('ground', 9, 11, t.stairsUp);
-  for (const [x, y] of [[4, 4], [13, 4], [4, 8], [13, 8]]) m.set('walls', x, y, t.pillar);
-  m.area('warp', 'to_town', 8, 11, 2, 1, { map: 'town1', spawn: 'from_dungeon' });
-  m.area('warp', 'to_room2', 8, 0, 2, 1, { map: 'dungeon1_2', spawn: 'south' });
-  m.point('spawn', 'entrance', 8.5, 9, { facing: 'up' });
-  m.point('spawn', 'north', 8.5, 2, { facing: 'down' });
-  m.point('enemy', 'Slime', 5, 6, { enemy: 'slime' });
-  m.point('enemy', 'Slime', 12, 6, { enemy: 'slime' });
-  m.point('enemy', 'Slime', 9, 4, { enemy: 'slime' });
-  m.point('chest', 'Map', 16, 2, { item: 'dungeon_map', flag: 'map:dungeon1' });
-  for (const [x, y] of [[1, 2], [1, 10], [16, 10]]) m.point('pot', 'Pot', x, y, {});
-  save('dungeon1_1', m);
-}
-{
-  const m = dungeonRoom(22, 14);
-  openBottom(m, 10);
-  openRight(m, 6);
-  m.fill('walls', 6, 5, 10, 1, t.wall);
-  m.fill('walls', 6, 4, 10, 1, t.wallTop);
-  m.set('walls', 11, 9, t.pillar);
-  m.area('warp', 'to_room1', 10, 13, 2, 1, { map: 'dungeon1_1', spawn: 'north' });
-  m.area('warp', 'to_room3', 21, 6, 1, 2, { map: 'dungeon1_3', spawn: 'west' });
-  m.point('spawn', 'south', 10.5, 11, { facing: 'up' });
-  m.point('spawn', 'east', 19, 6.5, { facing: 'left' });
-  m.point('enemy', 'Archer', 4, 3, { enemy: 'archer' });
-  m.point('enemy', 'Archer', 17, 3, { enemy: 'archer' });
-  m.point('enemy', 'Slime', 6, 9, { enemy: 'slime' });
-  m.point('chest', 'Chest', 10.5, 2.5, { weapon: 'bow' });
-  for (const [x, y] of [[1, 12], [20, 12], [1, 2]]) m.point('pot', 'Pot', x, y, {});
-  save('dungeon1_2', m);
-}
-{
-  const m = dungeonRoom(16, 16);
-  openLeft(m, 6);
-  openTop(m, 7);
-  m.fill('ground', 5, 9, 6, 3, t.water);
-  m.fill('walls', 5, 9, 6, 3, null);
-  m.area('warp', 'to_room2', 0, 6, 1, 2, { map: 'dungeon1_2', spawn: 'east' });
-  m.area('warp', 'to_boss', 7, 0, 2, 1, { map: 'dungeon1_boss', spawn: 'south' });
-  m.point('spawn', 'west', 2, 6.5, { facing: 'right' });
-  m.point('spawn', 'north', 7.5, 2.5, { facing: 'down' });
-  m.point('enemy', 'Bat', 11, 4, { enemy: 'bat' });
-  m.point('enemy', 'Bat', 4, 13, { enemy: 'bat' });
-  m.point('enemy', 'Archer', 12, 13, { enemy: 'archer' });
-  m.point('enemy', 'Slime', 9, 6, { enemy: 'slime' });
-  m.point('chest', 'Chest', 2.5, 13.5, { item: 'potion', count: 2 });
-  m.point('chest', 'Chest', 13.5, 3, { gold: 40 });
-  m.point('sign', 'Sign', 9.5, 2.5, { text: 'A chill runs down your spine. Something big waits beyond.' });
-  m.point('pot', 'Pot', 14, 14, {});
-  save('dungeon1_3', m);
-}
-{
-  const m = dungeonRoom(18, 15, { floor: t.bossFloor });
-  openBottom(m, 8);
-  openTop(m, 8);
-  for (const [x, y] of [[3, 4], [14, 4], [3, 10], [14, 10]]) m.set('walls', x, y, t.pillar);
-  m.area('warp', 'to_room3', 8, 14, 2, 1, { map: 'dungeon1_3', spawn: 'north' });
-  m.area('warp', 'to_town2', 8, 0, 2, 1, { map: 'town2', spawn: 'south' });
-  m.point('spawn', 'south', 8.5, 12, { facing: 'up' });
-  m.point('spawn', 'north', 8.5, 2.5, { facing: 'down' });
-  m.area('gate', 'BossDoor', 8, 13, 2, 1, { mode: 'boss' });
-  m.area('gate', 'NorthGate', 8, 1, 2, 1, { flag: 'dungeon1_cleared', text: 'The gate is sealed by a strange force.' });
-  m.point('boss', 'Warden', 8.5, 6, { boss: 'warden' });
-  save('dungeon1_boss', m);
 }
 
 // ====================================================================================== TOWN 2
@@ -424,125 +197,6 @@ function house(m, x, y, w, doorX) {
   save('town2_library', m);
 }
 
-// ====================================================================================== DUNGEON 2: the Shadow Crypt
-// Grid:            [boss]
-//          [west]-[hub]-[east]
-//                 [entrance]
-{
-  // Entrance: light both torches with fire to open the north gate.
-  const m = dungeonRoom(16, 12, { style: STONE });
-  openBottom(m, 7);
-  openTop(m, 7);
-  m.set('ground', 7, 11, t.stairsUp);
-  m.set('ground', 8, 11, t.stairsUp);
-  m.area('warp', 'to_town', 7, 11, 2, 1, { map: 'town2', spawn: 'from_dungeon' });
-  m.area('warp', 'to_hub', 7, 0, 2, 1, { map: 'dungeon2_2', spawn: 'south' });
-  m.area('gate', 'TorchGate', 7, 1, 2, 1, { flag: 'd2_torch_a,d2_torch_b', text: 'Two cold torches flank the gate. Maybe fire would help...' });
-  m.point('torch', 'Torch', 5, 2, { flag: 'd2_torch_a' });
-  m.point('torch', 'Torch', 10, 2, { flag: 'd2_torch_b' });
-  m.point('light', 'Light', 7.5, 10, { radius: 40 });
-  m.point('spawn', 'entrance', 7.5, 9.5, { facing: 'up' });
-  m.point('spawn', 'north', 7.5, 3, { facing: 'down' });
-  m.point('enemy', 'Knight', 8, 6, { enemy: 'knight' });
-  m.point('enemy', 'Spider', 3, 8, { enemy: 'spider' });
-  m.point('enemy', 'Spider', 12, 8, { enemy: 'spider' });
-  m.point('chest', 'Map', 13.5, 9.5, { item: 'dungeon_map', flag: 'map:dungeon2' });
-  for (const [x, y] of [[1, 2], [14, 2], [1, 10]]) m.point('pot', 'Pot', x, y, {});
-  m.point('sign', 'Sign', 3, 2.5, { text: 'Only flame opens the way.' });
-  save('dungeon2_1', m);
-}
-{
-  // Hub: locked door east (small key), boss door north (big key).
-  const m = dungeonRoom(20, 14, { style: STONE });
-  openBottom(m, 9);
-  openLeft(m, 6);
-  openRight(m, 6);
-  openTop(m, 9);
-  for (const [x, y] of [[5, 4], [14, 4], [5, 9], [14, 9]]) m.set('walls', x, y, t.pillar);
-  m.fill('ground', 8, 5, 4, 4, t.pit);
-  m.area('warp', 'to_entrance', 9, 13, 2, 1, { map: 'dungeon2_1', spawn: 'north' });
-  m.area('warp', 'to_west', 0, 6, 1, 2, { map: 'dungeon2_3', spawn: 'east' });
-  m.area('warp', 'to_east', 19, 6, 1, 2, { map: 'dungeon2_4', spawn: 'west' });
-  m.area('warp', 'to_boss', 9, 0, 2, 1, { map: 'dungeon2_boss', spawn: 'south' });
-  m.area('door', 'EastDoor', 18, 6, 1, 2, { lock: 'small_key' });
-  m.area('door', 'BossDoor', 9, 1, 2, 1, { lock: 'boss_key' });
-  m.point('spawn', 'south', 9.5, 11.5, { facing: 'up' });
-  m.point('spawn', 'west', 2, 6.5, { facing: 'right' });
-  m.point('spawn', 'east', 16.5, 6.5, { facing: 'left' });
-  m.point('spawn', 'north', 9.5, 3, { facing: 'down' });
-  for (const [x, y] of [[3, 3], [16, 3], [3, 10], [16, 10]]) m.point('light', 'Brazier', x, y, { radius: 30 });
-  m.point('enemy', 'Wisp', 4, 7, { enemy: 'wisp' });
-  m.point('enemy', 'Wisp', 15, 11, { enemy: 'wisp' });
-  m.point('enemy', 'Knight', 12, 11, { enemy: 'knight' });
-  m.point('pot', 'Pot', 1, 12, {});
-  m.point('pot', 'Pot', 18, 12, {});
-  save('dungeon2_2', m);
-}
-{
-  // West: push the block onto the pressure plate to open the alcove with the small key.
-  const m = dungeonRoom(16, 12, { style: STONE });
-  openRight(m, 5);
-  m.area('warp', 'to_hub', 15, 5, 1, 2, { map: 'dungeon2_2', spawn: 'west' });
-  m.point('spawn', 'east', 13.5, 5.5, { facing: 'left' });
-  // alcove (x1-4, y2-4) walled off, gate at (2,5)
-  m.fill('walls', 5, 2, 1, 4, STONE.wall);
-  m.fill('walls', 1, 5, 4, 1, STONE.wall);
-  m.area('gate', 'PlateGate', 2, 5, 1, 1, { flag: 'd2_plate', text: "It won't budge. Something must hold the plate down." });
-  m.set('walls', 2, 5, null);
-  m.point('chest', 'Key', 2.5, 3, { item: 'small_key' });
-  m.point('switch', 'Plate', 4, 8, { flag: 'd2_plate', mode: 'plate' });
-  m.point('block', 'Block', 7, 8, {});
-  m.point('torch', 'Torch', 13, 2, { lit: true });
-  m.point('light', 'Light', 3, 3, { radius: 22 });
-  m.point('enemy', 'Spider', 10, 9, { enemy: 'spider' });
-  m.point('enemy', 'Spider', 9, 3, { enemy: 'spider' });
-  m.point('sign', 'Sign', 11, 10, { text: 'Heavy things press harder than feet.' });
-  m.point('item', 'Ring', 14, 2.5, { item: 'lost_ring' });
-  for (const [x, y] of [[14, 10], [8, 10]]) m.point('pot', 'Pot', x, y, {});
-  save('dungeon2_3', m);
-}
-{
-  // East: a crystal switch flips two gates. The Big Key is behind the top gate.
-  const m = dungeonRoom(16, 14, { style: STONE });
-  openLeft(m, 6);
-  m.area('warp', 'to_hub', 0, 6, 1, 2, { map: 'dungeon2_2', spawn: 'east' });
-  m.point('spawn', 'west', 2, 6.5, { facing: 'right' });
-  m.fill('walls', 8, 2, 1, 11, STONE.wall);
-  m.fill('walls', 9, 7, 6, 1, STONE.wall);
-  m.set('walls', 8, 4, null);
-  m.set('walls', 8, 10, null);
-  m.area('gate', 'GateA', 8, 4, 1, 1, { flag: 'd2_crystal' });
-  m.area('gate', 'GateB', 8, 10, 1, 1, { flag: 'd2_crystal', invert: true });
-  m.point('switch', 'Crystal', 4, 7, { flag: 'd2_crystal', mode: 'crystal' });
-  m.point('chest', 'BigKey', 12, 3, { item: 'boss_key' });
-  m.point('switch', 'FloorSwitch', 13, 5, { flag: 'd2_secret', mode: 'floor' });
-  m.point('chest', 'Secret', 12, 10, { item: 'ether', count: 2, ifFlag: 'd2_secret' });
-  m.point('light', 'Light', 4, 7, { radius: 28 });
-  m.point('light', 'Light', 12, 4, { radius: 26 });
-  m.point('light', 'Light', 12, 11, { radius: 26 });
-  m.point('enemy', 'Knight', 5, 4, { enemy: 'knight' });
-  m.point('enemy', 'Wisp', 11, 5, { enemy: 'wisp' });
-  m.point('enemy', 'Spider', 12, 12, { enemy: 'spider' });
-  m.point('sign', 'Sign', 2.5, 2.5, { text: 'Strike the crystal to change the way.' });
-  for (const [x, y] of [[1, 12], [14, 12]]) m.point('pot', 'Pot', x, y, {});
-  save('dungeon2_4', m);
-}
-{
-  const m = dungeonRoom(18, 15, { style: STONE, floor: t.bossFloor });
-  openBottom(m, 8);
-  openTop(m, 8);
-  for (const [x, y] of [[3, 4], [14, 4], [3, 10], [14, 10]]) m.set('walls', x, y, t.pillar);
-  m.area('warp', 'to_hub', 8, 14, 2, 1, { map: 'dungeon2_2', spawn: 'north' });
-  m.area('warp', 'to_town3', 8, 0, 2, 1, { map: 'town3', spawn: 'south' });
-  m.point('spawn', 'south', 8.5, 12, { facing: 'up' });
-  m.point('spawn', 'north', 8.5, 2.5, { facing: 'down' });
-  m.area('gate', 'BossDoor', 8, 13, 2, 1, { mode: 'boss' });
-  m.area('gate', 'NorthGate', 8, 1, 2, 1, { flag: 'dungeon2_cleared', text: 'Dark magic seals the way.' });
-  for (const [x, y] of [[2, 2], [15, 2], [2, 12], [15, 12]]) m.point('torch', 'Torch', x, y, { lit: true, radius: 56 });
-  m.point('boss', 'Sorcerer', 8.5, 6, { boss: 'sorcerer' });
-  save('dungeon2_boss', m);
-}
-
 // ====================================================================================== TOWN 3 (snow)
 {
   const W = 26;
@@ -572,7 +226,7 @@ function house(m, x, y, w, doorX) {
   const shop = house(m, 18, 2, 6, 20);
   m.area('warp', 'to_shop', shop.x, shop.y, 1, 1, { map: 'town3_shop', spawn: 'entrance' });
   m.point('spawn', 'from_shop', 20, 6.6, { facing: 'down' });
-  m.point('sign', 'Sign', 23, 6.5, { text: 'GENERAL STORE\\nBombs sold here!' });
+  m.point('sign', 'Sign', 23, 6.5, { text: 'GENERAL STORE\\nBomb refills and warm coats.' });
   // Shrine (outdoor spell teacher)
   m.fill('ground', 2, 11, 6, 4, t.plaza);
   m.set('walls', 2, 11, t.pillar);
@@ -617,130 +271,98 @@ function house(m, x, y, w, doorX) {
   save('town3_shop', m);
 }
 
-// ====================================================================================== DUNGEON 3: Frost Cavern
-// Grid:            [boss]
-//         [west]-[hall]-[east]
-//                [entrance]
+// ====================================================================================== TOWN 4: Sunspire
 {
-  // Entrance: slippery ice, a cracked wall hiding supplies (needs bombs from Town 3).
-  const m = dungeonRoom(18, 12, { style: ICE });
-  openBottom(m, 8);
-  openTop(m, 8);
-  m.fill('ground', 4, 4, 10, 5, t.ice);
-  m.set('ground', 8, 11, t.stairsUp);
-  m.set('ground', 9, 11, t.stairsUp);
-  m.area('warp', 'to_town', 8, 11, 2, 1, { map: 'town3', spawn: 'from_dungeon' });
-  m.area('warp', 'to_hall', 8, 0, 2, 1, { map: 'dungeon3_2', spawn: 'south' });
-  m.point('spawn', 'entrance', 8.5, 9.5, { facing: 'up' });
-  m.point('spawn', 'north', 8.5, 2.5, { facing: 'down' });
-  // secret alcove on the east wall
-  m.fill('walls', 14, 2, 1, 4, ICE.wall);
-  m.fill('walls', 15, 5, 2, 1, ICE.wall);
+  const W = 28;
+  const H = 20;
+  const m = townBase(W, H, t.sand, t.stoneWall, { bottom: [13, 14] });
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (rand() < 0.05) m.set('ground', x, y, t.dirt);
+  m.fill('ground', 13, 4, 2, 16, t.plaza);
+  m.fill('ground', 2, 10, 24, 1, t.plaza);
+  m.fill('ground', 9, 8, 10, 5, t.plaza);
+  m.set('walls', 11, 9, t.fountain);
+  m.set('walls', 16, 9, t.fountain);
+  // North: the Hollow Spire
+  m.fill('walls', 10, 1, 8, 3, t.stoneWall);
+  m.fill('walls', 10, 1, 8, 1, t.stoneTop);
+  m.set('walls', 13, 3, null);
+  m.set('ground', 13, 3, t.stairsDown);
   m.set('walls', 14, 3, null);
-  m.area('crack', 'Crack', 14, 3, 1, 1, { text: 'The ice wall is cracked...' });
-  m.point('chest', 'Supplies', 15.5, 3, { item: 'bomb', count: 5 });
-  m.point('item', 'Herb', 16, 4, { item: 'frost_herb' });
-  m.point('chest', 'Map', 2, 2.5, { item: 'dungeon_map', flag: 'map:dungeon3' });
-  m.point('enemy', 'IceSlime', 6, 6, { enemy: 'ice_slime' });
-  m.point('enemy', 'IceSlime', 11, 5, { enemy: 'ice_slime' });
-  m.point('enemy', 'IceSlime', 9, 7, { enemy: 'ice_slime' });
-  for (const [x, y] of [[1, 10], [16, 10]]) m.point('pot', 'Pot', x, y, {});
-  m.point('sign', 'Sign', 6, 2.5, { text: 'Cracked walls crumble before bombs.' });
-  save('dungeon3_1', m);
-}
-{
-  // Hall: big ice rink. East is walled off by cracked ice; north is the boss door.
-  const m = dungeonRoom(20, 14, { style: ICE });
-  openBottom(m, 9);
-  openLeft(m, 6);
-  openRight(m, 6);
-  openTop(m, 9);
-  m.fill('ground', 3, 3, 14, 8, t.ice);
-  for (const [x, y] of [[6, 5], [13, 5], [6, 9], [13, 9]]) m.set('walls', x, y, t.pillar);
-  m.area('warp', 'to_entrance', 9, 13, 2, 1, { map: 'dungeon3_1', spawn: 'north' });
-  m.area('warp', 'to_west', 0, 6, 1, 2, { map: 'dungeon3_3', spawn: 'east' });
-  m.area('warp', 'to_east', 19, 6, 1, 2, { map: 'dungeon3_4', spawn: 'west' });
-  m.area('warp', 'to_boss', 9, 0, 2, 1, { map: 'dungeon3_boss', spawn: 'south' });
-  m.area('crack', 'EastCrack', 18, 6, 1, 2, { text: 'Cracked ice blocks the way east.' });
-  m.area('door', 'BossDoor', 9, 1, 2, 1, { lock: 'boss_key' });
-  m.point('spawn', 'south', 9.5, 11.5, { facing: 'up' });
-  m.point('spawn', 'west', 2, 6.5, { facing: 'right' });
-  m.point('spawn', 'east', 16.5, 6.5, { facing: 'left' });
-  m.point('spawn', 'north', 9.5, 3, { facing: 'down' });
-  m.point('enemy', 'Yeti', 5, 3, { enemy: 'yeti' });
-  m.point('enemy', 'Yeti', 15, 10, { enemy: 'yeti' });
-  m.point('enemy', 'Wisp', 10, 7, { enemy: 'frost_wisp' });
-  m.point('pot', 'Pot', 1, 12, {});
-  m.point('pot', 'Pot', 18, 12, {});
-  save('dungeon3_2', m);
-}
-{
-  // West: the Hookshot. Use it to cross the frozen river to a herb.
-  const m = dungeonRoom(18, 14, { style: ICE });
-  openRight(m, 6);
-  m.area('warp', 'to_hall', 17, 6, 1, 2, { map: 'dungeon3_2', spawn: 'west' });
-  m.point('spawn', 'east', 15.5, 6.5, { facing: 'left' });
-  m.fill('ground', 6, 2, 3, 11, t.frozenWater); // river (hookshot crosses it)
-  m.point('chest', 'Hookshot', 12, 3, { tool: 'hookshot' });
-  m.point('hook', 'Post', 3, 7, {});
-  m.point('hook', 'Post', 11, 10, {});
-  m.point('item', 'Herb', 2, 3, { item: 'frost_herb' });
-  m.point('chest', 'Chest', 2, 11, { item: 'potion', count: 2 });
-  m.point('enemy', 'IceSlime', 13, 9, { enemy: 'ice_slime' });
-  m.point('enemy', 'Yeti', 13, 11, { enemy: 'yeti' });
-  m.point('sign', 'Sign', 14, 2.5, { text: 'Fire the Hookshot at a post to fly across water and pits.' });
-  save('dungeon3_3', m);
-}
-{
-  // East (behind cracked ice): a chasm crossed by hookshot posts. The Big Key waits on the far side.
-  const m = dungeonRoom(18, 14, { style: ICE });
-  openLeft(m, 6);
-  m.area('warp', 'to_hall', 0, 6, 1, 2, { map: 'dungeon3_2', spawn: 'east' });
-  m.point('spawn', 'west', 2, 6.5, { facing: 'right' });
-  m.fill('ground', 5, 2, 4, 11, t.pit);
-  m.fill('ground', 9, 9, 8, 1, t.pit);
-  m.point('hook', 'Post', 10, 6, {});
-  m.point('hook', 'Post', 13, 11, {});
-  m.point('hook', 'Post', 15, 7, {}); // back up from the bottom ledge
-  m.point('hook', 'Post', 3, 4, {}); // back across to the entrance side
-  m.point('chest', 'BigKey', 14, 4, { item: 'boss_key' });
-  m.point('item', 'Herb', 15, 12, { item: 'frost_herb' });
-  m.point('enemy', 'Wisp', 13, 6, { enemy: 'frost_wisp' });
-  m.point('enemy', 'Wisp', 3, 11, { enemy: 'frost_wisp' });
-  m.point('pot', 'Pot', 1, 2, {});
-  m.point('pot', 'Pot', 1, 12, { drop: 'mana' });
-  m.point('sign', 'Sign', 3, 2.5, { text: 'Only those who fly may cross.' });
-  save('dungeon3_4', m);
-}
-{
-  const m = dungeonRoom(18, 15, { style: ICE });
-  openBottom(m, 8);
-  openTop(m, 8);
-  m.fill('ground', 2, 3, 14, 10, t.ice);
-  m.fill('ground', 6, 6, 6, 4, t.snow);
-  for (const [x, y] of [[3, 4], [14, 4], [3, 10], [14, 10]]) m.set('walls', x, y, t.pillar);
-  m.area('warp', 'to_hall', 8, 14, 2, 1, { map: 'dungeon3_2', spawn: 'north' });
-  m.area('warp', 'to_town4', 8, 0, 2, 1, { map: 'town4', spawn: 'south' });
-  m.point('spawn', 'south', 8.5, 12, { facing: 'up' });
-  m.point('spawn', 'north', 8.5, 2.5, { facing: 'down' });
-  m.area('gate', 'BossDoor', 8, 13, 2, 1, { mode: 'boss' });
-  m.area('gate', 'NorthGate', 8, 1, 2, 1, { flag: 'dungeon3_cleared', text: 'Thick ice seals the way.' });
-  m.point('boss', 'Wyrm', 8.5, 6, { boss: 'wyrm' });
-  save('dungeon3_boss', m);
-}
-
-// ====================================================================================== TOWN 4 (stub)
-{
-  const W = 18;
-  const H = 12;
-  const m = townBase(W, H, t.grass, t.tree, { bottom: [8, 9] });
-  m.fill('ground', 8, 3, 2, 9, t.dirt);
-  m.fill('ground', 5, 3, 8, 3, t.plaza);
-  house(m, 2, 1, 3, 3);
-  house(m, 13, 1, 3, 14);
-  m.area('warp', 'to_cavern', 8, 11, 2, 1, { map: 'dungeon3_boss', spawn: 'north' });
-  m.point('spawn', 'south', 8.5, 9, { facing: 'up' });
-  m.point('npc', 'Guard', 10, 7, { sprite: 'npc_guard', dialogue: 'town4_greeter', facing: 'down' });
-  m.point('sign', 'Sign', 7, 7, { text: 'TOWN 4\\n(Under construction - next milestone!)' });
+  m.set('ground', 14, 3, t.stairsDown);
+  m.area('warp', 'to_spire', 13, 3, 2, 1, { map: 'dungeon4_1', spawn: 'entrance' });
+  m.point('spawn', 'from_dungeon', 13.5, 5, { facing: 'down' });
+  m.point('sign', 'Sign', 16, 4.5, { text: 'THE HOLLOW SPIRE\\nThe last seal. The King waits at the top.' });
+  for (const x of [9, 18]) {
+    m.set('walls', x, 4, t.pillar);
+    m.point('torch', 'Torch', x, 5, { lit: true });
+  }
+  // South: the road from Frostholm
+  m.area('warp', 'to_cavern', 13, H - 1, 2, 1, { map: 'dungeon3_boss', spawn: 'north' });
+  m.point('spawn', 'south', 13.5, H - 3, { facing: 'up' });
+  // Inn
+  const inn = house(m, 2, 2, 6, 4);
+  m.area('warp', 'to_inn', inn.x, inn.y, 1, 1, { map: 'town4_inn', spawn: 'entrance' });
+  m.point('spawn', 'from_inn', 4, 6.6, { facing: 'down' });
+  m.point('sign', 'Sign', 7, 6.5, { text: 'INN\\nRest and save.' });
+  // Bazaar
+  const shop = house(m, 20, 2, 6, 22);
+  m.area('warp', 'to_shop', shop.x, shop.y, 1, 1, { map: 'town4_shop', spawn: 'entrance' });
+  m.point('spawn', 'from_shop', 22, 6.6, { facing: 'down' });
+  m.point('sign', 'Sign', 25, 6.5, { text: 'BAZAAR' });
+  // Temple of the Sun
+  m.fill('walls', 2, 12, 8, 2, t.roof);
+  m.fill('walls', 2, 14, 8, 2, t.houseWall);
+  m.set('walls', 2, 14, t.pillar);
+  m.set('walls', 9, 14, t.pillar);
+  m.set('walls', 5, 15, null);
+  m.set('ground', 5, 15, t.door);
+  m.area('warp', 'to_temple', 5, 15, 1, 1, { map: 'town4_temple', spawn: 'entrance' });
+  m.point('spawn', 'from_temple', 5, 16.6, { facing: 'down' });
+  m.point('sign', 'Sign', 7, 16.5, { text: 'TEMPLE OF THE SUN\\nThe Sage awaits.' });
+  // a little lava garden and market stalls
+  m.fill('ground', 19, 13, 5, 3, t.lava);
+  m.fill('walls', 18, 12, 7, 1, t.fence);
+  m.fill('walls', 18, 16, 7, 1, t.fence);
+  m.point('light', 'Glow', 21, 14, { radius: 40 });
+  for (const [x, y] of [[1, 8], [26, 8], [8, 18], [20, 18], [3, 9], [24, 11]]) m.set('walls', x, y, t.cactus);
+  for (const [x, y] of [[17, 7], [10, 7]]) m.set('walls', x, y, t.barrel);
+  // people
+  m.point('npc', 'Guard', 15.5, H - 4, { sprite: 'npc_guard', dialogue: 'town4_greeter', facing: 'down' });
+  m.point('npc', 'Kid', 15, 11, { sprite: 'npc_kid', dialogue: 'town4_kid', wander: true });
+  m.point('npc', 'Weaver', 8, 9, { sprite: 'npc_villager', dialogue: 'town4_lady', facing: 'down' });
+  m.point('chest', 'Chest', 25.5, 17, { gold: 40 });
+  m.point('pot', 'Pot', 1, 1, {});
+  m.point('pot', 'Pot', 26, 1, {});
+  m.point('pot', 'Pot', 1, 18, {});
   save('town4', m);
 }
+{
+  const m = interior(10, 8, 4, { floor: t.carpet, windows: [2, 7] });
+  exitTo(m, 4, 'town4', 'from_inn');
+  m.set('walls', 7, 2, t.bed);
+  m.set('walls', 8, 2, t.bed);
+  m.set('walls', 8, 4, t.bed);
+  m.set('walls', 1, 2, t.table);
+  m.point('healer', 'Innkeeper', 3.5, 2.6, { sprite: 'npc_healer', dialogue: 'innkeeper', facing: 'down' });
+  save('town4_inn', m);
+}
+{
+  const m = interior(10, 8, 5, { floor: t.checker, windows: [2] });
+  exitTo(m, 5, 'town4', 'from_shop');
+  m.fill('walls', 1, 3, 8, 1, t.counter);
+  m.set('walls', 8, 2, t.barrel);
+  m.set('walls', 1, 2, t.shelf);
+  m.point('shop', 'Merchant', 4.5, 2.4, { sprite: 'npc_merchant', shop: 'town4_shop', facing: 'down' });
+  save('town4_shop', m);
+}
+{
+  const m = interior(12, 9, 6, { floor: t.plaza, windows: [3, 8] });
+  exitTo(m, 6, 'town4', 'from_temple');
+  m.fill('ground', 5, 2, 3, 6, t.carpet);
+  for (const [x, y] of [[2, 3], [9, 3], [2, 6], [9, 6]]) m.set('walls', x, y, t.pillar);
+  m.point('npc', 'Sage', 6, 2.6, { sprite: 'npc_sage', dialogue: 'sage', facing: 'down' });
+  m.point('light', 'Light', 6, 3, { radius: 40 });
+  m.point('chest', 'Gift', 10, 7, { item: 'ether', count: 2 });
+  save('town4_temple', m);
+}
+
