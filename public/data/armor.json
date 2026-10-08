@@ -30,5 +30,15 @@
       "poison"
     ],
     "price": 160
+  },
+  "fur_coat": {
+    "name": "Fur Coat",
+    "description": "Takes 1 less damage and you can't be slowed by ice.",
+    "icon": "icon_fur",
+    "defense": 1,
+    "resist": [
+      "slow"
+    ],
+    "price": 180
   }
 }

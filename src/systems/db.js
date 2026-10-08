@@ -2,7 +2,7 @@
 // Everything the game knows about content comes from here; nothing is hard-coded in game code.
 
 const DATA_FILES = [
-  'world', 'weapons', 'spells', 'items', 'armor', 'enemies', 'bosses', 'shops', 'teachers', 'smiths', 'dialogue', 'sounds', 'music',
+  'world', 'weapons', 'spells', 'tools', 'quests', 'cutscenes', 'credits', 'items', 'armor', 'enemies', 'bosses', 'shops', 'teachers', 'smiths', 'dialogue', 'sounds', 'music',
 ];
 
 export const DB = {
@@ -17,6 +17,10 @@ export const DB = {
   teachers: {},
   dialogue: {},
   armor: {},
+  tools: {},
+  quests: {},
+  cutscenes: {},
+  credits: {},
   smiths: {},
   sounds: {},
   music: {},
@@ -72,6 +76,8 @@ export async function loadDatabase(onProgress = () => {}) {
       onProgress(++done / DATA_FILES.length / 2);
     }),
   );
+  // Tools (bombs, hookshot...) share the B-button slot with spells, so they're looked up the same way.
+  for (const [id, t] of Object.entries(DB.tools)) if (!id.startsWith('_')) DB.spells[id] = { mpCost: 0, ...t, isTool: true };
   const entries = Object.entries(DB.world.maps);
   done = 0;
   await Promise.all(

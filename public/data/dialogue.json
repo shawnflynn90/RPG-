@@ -65,7 +65,36 @@
     "speaker": "Traveler",
     "pages": [
       "I came from the crypt. The dark there is alive...",
-      "If you're poisoned, drink an Antidote, or rest at the inn."
+      "...and I dropped my wedding ring in the west room! Could you find it for me?"
+    ],
+    "startQuest": "lost_ring",
+    "variants": [
+      {
+        "if": {
+          "questDone": "lost_ring"
+        },
+        "pages": [
+          "My ring! I'll never lose it again. Thank you!",
+          "If you're poisoned, drink an Antidote, or rest here at the inn."
+        ]
+      },
+      {
+        "if": {
+          "questReady": "lost_ring"
+        },
+        "pages": [
+          "That's it! My ring! Please, take this reward."
+        ],
+        "completeQuest": "lost_ring"
+      },
+      {
+        "if": {
+          "questActive": "lost_ring"
+        },
+        "pages": [
+          "The west room of the crypt... the one with the heavy block."
+        ]
+      }
     ]
   },
   "town2_guard": {
@@ -122,10 +151,137 @@
     },
     "giveFlag": "gift_town2_kid"
   },
-  "town3_greeter": {
+  "farmer": {
+    "speaker": "Farmer",
+    "pages": [
+      "Slimes! Slimes everywhere! They're eating my turnips.",
+      "Could you defeat 6 of them in the dungeon? I'll pay you!"
+    ],
+    "startQuest": "slime_trouble",
+    "variants": [
+      {
+        "if": {
+          "questDone": "slime_trouble"
+        },
+        "pages": [
+          "My turnips are safe. Thank you, hero!"
+        ]
+      },
+      {
+        "if": {
+          "questReady": "slime_trouble"
+        },
+        "pages": [
+          "You did it! Here, take this."
+        ],
+        "completeQuest": "slime_trouble"
+      },
+      {
+        "if": {
+          "questActive": "slime_trouble"
+        },
+        "pages": [
+          "Still slimes out there... 6 is what I need."
+        ]
+      }
+    ]
+  },
+  "town3_guard": {
     "speaker": "Guard",
     "pages": [
-      "Welcome to Town 3!",
+      "The Frost Cavern is north. Bombs, friend. Bring bombs."
+    ],
+    "variants": [
+      {
+        "if": {
+          "flag": "dungeon3_cleared"
+        },
+        "pages": [
+          "The Wyrm is gone and the snow is melting! You're a hero!"
+        ]
+      }
+    ]
+  },
+  "explorer": {
+    "speaker": "Explorer",
+    "pages": [
+      "I'm studying the Frost Herbs that grow in the cavern.",
+      "Could you bring me 3 of them? I'll pay well."
+    ],
+    "startQuest": "frozen_supplies",
+    "variants": [
+      {
+        "if": {
+          "questDone": "frozen_supplies"
+        },
+        "pages": [
+          "My research is going wonderfully, thanks to you!"
+        ]
+      },
+      {
+        "if": {
+          "questReady": "frozen_supplies"
+        },
+        "pages": [
+          "Three perfect Frost Herbs! Here's your reward."
+        ],
+        "completeQuest": "frozen_supplies"
+      },
+      {
+        "if": {
+          "questActive": "frozen_supplies"
+        },
+        "pages": [
+          "Frost Herbs grow in hidden corners of the cavern. Some are across the water..."
+        ]
+      }
+    ]
+  },
+  "hunter": {
+    "speaker": "Hunter",
+    "pages": [
+      "Yetis keep raiding our storehouse. Defeat 4 of them and I'll give you some of my bombs."
+    ],
+    "startQuest": "yeti_hunt",
+    "variants": [
+      {
+        "if": {
+          "questDone": "yeti_hunt"
+        },
+        "pages": [
+          "Not a yeti in sight. Good work!"
+        ]
+      },
+      {
+        "if": {
+          "questReady": "yeti_hunt"
+        },
+        "pages": [
+          "Four yetis! Here, you earned these."
+        ],
+        "completeQuest": "yeti_hunt"
+      },
+      {
+        "if": {
+          "questActive": "yeti_hunt"
+        },
+        "pages": [
+          "Yetis lurk in the Frost Cavern. Watch out for their snowballs."
+        ]
+      }
+    ]
+  },
+  "town3_kid": {
+    "speaker": "Kid",
+    "pages": [
+      "Did you know you can blow up cracked walls with bombs?",
+      "There's a cracked wall somewhere in town, too! Hee hee."
+    ]
+  },
+  "town4_greeter": {
+    "speaker": "Guard",
+    "pages": [
+      "Welcome to Town 4!",
       "...We're still building it. Come back in the next milestone."
     ]
   }

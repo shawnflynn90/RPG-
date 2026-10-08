@@ -40,7 +40,7 @@ const TILES = [
   ['water', true, (b, x, y) => {
     b.rect(x, y, T, T, hex('#3870d0'));
     for (const r of [3, 9, 13]) b.rect(x + (r % 5), y + r, 5, 1, hex('#78a8f0'));
-  }],
+  }, { low: true }],
   ['tree', true, (b, x, y) => {
     b.rect(x, y, T, T, hex('#58a848'));
     b.rect(x + 6, y + 10, 4, 6, hex('#805028'));
@@ -197,12 +197,12 @@ const TILES = [
     b.rect(x + 3, y + 10, 1, 6, hex('#384460'));
   }],
   ['stone_wall_top', true, (b, x, y) => { b.rect(x, y, T, T, hex('#141824')); speckle(b, x, y, hex('#20283a'), 6); }],
-  ['pit', true, (b, x, y) => { b.rect(x, y, T, T, hex('#000000')); b.rect(x, y, T, 2, hex('#20283a')); }],
+  ['pit', true, (b, x, y) => { b.rect(x, y, T, T, hex('#000000')); b.rect(x, y, T, 2, hex('#20283a')); }, { low: true }],
   ['lava', true, (b, x, y) => {
     b.rect(x, y, T, T, hex('#c83810'));
     speckle(b, x, y, hex('#f8a030'), 14);
     b.rect(x + 3, y + 5, 4, 1, hex('#f8e060'));
-  }],
+  }, { low: true }],
   // ---- misc (39-43)
   ['barrel', true, (b, x, y) => {
     b.rect(x, y, T, T, hex('#585068'));
@@ -232,6 +232,33 @@ const TILES = [
     b.rect(x + 7, y + 2, 2, 6, hex('#a0a8b0'));
     b.rect(x + 6, y + 1, 4, 2, hex('#98d0f8'));
   }],
+  // ---- ice cavern (44-49)
+  ['ice', false, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#a8d8f0'));
+    b.rect(x + 2, y + 3, 5, 1, hex('#e8f8ff'));
+    b.rect(x + 9, y + 10, 4, 1, hex('#e8f8ff'));
+    b.rect(x, y + T - 1, T, 1, hex('#88c0e0'));
+  }, { ice: true }],
+  ['snow', false, (b, x, y) => { b.rect(x, y, T, T, hex('#e8f0f8')); speckle(b, x, y, hex('#c8d8e8'), 10); }],
+  ['ice_wall', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#78a8d0'));
+    for (const r of [0, 6, 11]) b.rect(x, y + r, T, 1, hex('#5888b0'));
+    b.rect(x + 3, y + 2, 1, 3, hex('#d0f0ff'));
+    b.rect(x + 10, y + 7, 1, 3, hex('#d0f0ff'));
+  }],
+  ['ice_wall_top', true, (b, x, y) => { b.rect(x, y, T, T, hex('#203048')); speckle(b, x, y, hex('#304868'), 6); }],
+  ['snow_tree', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#e8f0f8'));
+    b.rect(x + 6, y + 11, 4, 5, hex('#805028'));
+    b.rect(x + 3, y + 5, 10, 7, hex('#286040'));
+    b.rect(x + 5, y + 1, 6, 5, hex('#286040'));
+    b.rect(x + 5, y + 1, 6, 2, hex('#f8f8f8'));
+    b.rect(x + 3, y + 5, 10, 2, hex('#f8f8f8'));
+  }],
+  ['frozen_water', true, (b, x, y) => {
+    b.rect(x, y, T, T, hex('#2850a0'));
+    for (const r of [3, 9, 13]) b.rect(x + (r % 5), y + r, 5, 1, hex('#5888d0'));
+  }, { low: true }],
 ];
 
 function writeIfAllowed(path, write) {
@@ -263,11 +290,14 @@ const tsj = {
   tilecount: COLS * rows,
   margin: 0,
   spacing: 0,
-  tiles: TILES.map(([name, collides], id) => ({
+  tiles: TILES.map(([name, collides, , extra = {}], id) => ({
     id,
     properties: [
       { name: 'collides', type: 'bool', value: collides },
       { name: 'label', type: 'string', value: name },
+      // low = solid to walk on, but projectiles and the hookshot pass over (pits, water, lava)
+      // ice = slippery floor
+      ...Object.entries(extra).map(([k, v]) => ({ name: k, type: 'bool', value: v })),
     ],
   })),
 };

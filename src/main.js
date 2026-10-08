@@ -13,7 +13,9 @@ import { ShopScene } from './scenes/ShopScene.js';
 import { UIScene } from './scenes/UIScene.js';
 import { OptionsScene, applySettings } from './scenes/OptionsScene.js';
 import { MapScene } from './scenes/MapScene.js';
+import { CreditsScene } from './scenes/CreditsScene.js';
 import { Audio } from './systems/Audio.js';
+import { Game } from './systems/GameState.js';
 
 input.attach();
 touchControls.attach();
@@ -30,7 +32,7 @@ const game = new Phaser.Game({
   physics: { default: 'arcade', arcade: { debug: GAME.debugPhysics } },
   input: { keyboard: false, gamepad: false, mouse: false, touch: false }, // we use our own input layer
   // Order = draw order (later scenes are drawn on top).
-  scene: [BootScene, TitleScene, WorldScene, HUDScene, PauseScene, ShopScene, MapScene, OptionsScene, UIScene],
+  scene: [BootScene, TitleScene, WorldScene, HUDScene, PauseScene, ShopScene, MapScene, OptionsScene, CreditsScene, UIScene],
 });
 
 // Merge keyboard/gamepad/touch once per frame, before any scene updates.
@@ -49,6 +51,7 @@ fsBtn.addEventListener('click', () => {
 
 window.__game = game; // handy for debugging in the browser console
 window.__audio = Audio;
+window.__state = Game; // e.g. __state.s.gold = 999, __state.addSpell('hookshot')
 
 /**
  * Art helper: in the browser console run  __exportSprite('player')  to download that sprite's

@@ -27,7 +27,8 @@
       "name": "Town 1",
       "kind": "town",
       "region": "town1",
-      "music": "town"
+      "music": "town",
+      "onEnter": "intro"
     },
     "town1_healer": {
       "file": "maps/town1_healer.tmj",
@@ -189,6 +190,84 @@
       "name": "Town 3",
       "kind": "town",
       "region": "town3",
+      "music": "snow"
+    },
+    "town3_inn": {
+      "file": "maps/town3_inn.tmj",
+      "name": "Town 3",
+      "kind": "interior",
+      "region": "town3",
+      "music": "interior"
+    },
+    "town3_shop": {
+      "file": "maps/town3_shop.tmj",
+      "name": "Town 3",
+      "kind": "interior",
+      "region": "town3",
+      "music": "interior"
+    },
+    "dungeon3_1": {
+      "file": "maps/dungeon3_1.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        1,
+        2
+      ]
+    },
+    "dungeon3_2": {
+      "file": "maps/dungeon3_2.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        1,
+        1
+      ]
+    },
+    "dungeon3_3": {
+      "file": "maps/dungeon3_3.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        0,
+        1
+      ]
+    },
+    "dungeon3_4": {
+      "file": "maps/dungeon3_4.tmj",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        2,
+        1
+      ],
+      "darkness": 0.5
+    },
+    "dungeon3_boss": {
+      "file": "maps/dungeon3_boss.tmj",
+      "name": "Wyrm's Den",
+      "kind": "dungeon",
+      "region": "dungeon3",
+      "music": "ice",
+      "grid": [
+        1,
+        0
+      ],
+      "boss": true
+    },
+    "town4": {
+      "file": "maps/town4.tmj",
+      "name": "Town 4",
+      "kind": "town",
+      "region": "town4",
       "music": "town"
     }
   },
@@ -230,6 +309,17 @@
     {
       "id": "town3",
       "name": "Town 3",
+      "kind": "town"
+    },
+    {
+      "id": "dungeon3",
+      "name": "Frost Cavern",
+      "kind": "dungeon",
+      "boss": "wyrm"
+    },
+    {
+      "id": "town4",
+      "name": "Town 4",
       "kind": "town"
     }
   ]

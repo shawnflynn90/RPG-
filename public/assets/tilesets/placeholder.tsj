@@ -5,11 +5,11 @@
  "name": "placeholder",
  "image": "placeholder.png",
  "imagewidth": 128,
- "imageheight": 96,
+ "imageheight": 112,
  "tilewidth": 16,
  "tileheight": 16,
  "columns": 8,
- "tilecount": 48,
+ "tilecount": 56,
  "margin": 0,
  "spacing": 0,
  "tiles": [
@@ -70,6 +70,11 @@
      "name": "label",
      "type": "string",
      "value": "water"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
     }
    ]
   },
@@ -580,6 +585,11 @@
      "name": "label",
      "type": "string",
      "value": "pit"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
     }
    ]
   },
@@ -595,6 +605,11 @@
      "name": "label",
      "type": "string",
      "value": "lava"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
     }
    ]
   },
@@ -670,6 +685,106 @@
      "name": "label",
      "type": "string",
      "value": "fountain"
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "ice"
+    },
+    {
+     "name": "ice",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 45,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "snow"
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "ice_wall"
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "ice_wall_top"
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "snow_tree"
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "frozen_water"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
     }
    ]
   }

@@ -5,6 +5,7 @@ import { PLAYER } from '../config/game.config.js';
 import { DB } from '../systems/db.js';
 import { Game } from '../systems/GameState.js';
 import { Audio } from '../systems/Audio.js';
+import { toolProblem } from '../systems/Tools.js';
 
 export class Player extends Actor {
   constructor(scene, x, y) {
@@ -41,6 +42,11 @@ export class Player extends Actor {
   update(time, dt) {
     if (this.dead) return;
     const s = Game.s;
+    if (this.hooked) {
+      // the hookshot (systems/Tools.js) is in control
+      this.play4('attack');
+      return;
+    }
     s.mp = Math.min(s.maxMp, s.mp + (PLAYER.mpRegenPerSecond * dt) / 1000);
 
     if (input.pressed('cycleWeapon') && s.weapons.length > 1) {
@@ -72,11 +78,29 @@ export class Player extends Actor {
       if (stunned) this.play4('hurt');
     } else {
       const d = input.direction();
-      if (d.x || d.y) {
+      const onIce = this.scene.isIce(this.footX, this.footY);
+      if (onIce) {
+        // slippery: accelerate slowly, keep sliding
+        const len = Math.hypot(d.x, d.y) || 1;
+        const sp = PLAYER.speed * this.speedMul;
+        const v = this.body.velocity;
+        v.x += (d.x / len) * sp * 2.2 * (dt / 1000);
+        v.y += (d.y / len) * sp * 2.2 * (dt / 1000);
+        const mag = Math.hypot(v.x, v.y);
+        if (mag > sp * 1.1) v.scale((sp * 1.1) / mag);
+        if (!d.x && !d.y) v.scale(0.995);
+        if (d.x || d.y) this.facing = dirFromVector(d.x, d.y, this.facing);
+        this.play4(d.x || d.y ? 'walk' : 'idle');
+        if (mag > 20 && Math.random() < 0.15) this.scene.particles.burst(this.footX, this.footY, 'ice', 1);
+      } else if (d.x || d.y) {
         const len = Math.hypot(d.x, d.y);
         let sp = PLAYER.speed * this.speedMul * (Game.armorDef.speedMul || 1);
         if (this.charging) sp *= 0.55; // walk slowly while charging, keep facing
         this.body.setVelocity((d.x / len) * sp, (d.y / len) * sp);
+        if (time > (this.nextDust || 0)) {
+          this.nextDust = time + 260;
+          this.scene.particles.burst(this.footX, this.footY + 2, 'dust', 1);
+        }
         if (!this.charging) this.facing = dirFromVector(d.x, d.y, this.facing);
         this.play4('walk');
         this.checkPush(time, d);
@@ -198,6 +222,7 @@ export class Player extends Actor {
     const sp = DB.spells[id];
     if (!sp) return;
     if (time < (this.spellReadyAt[id] || 0)) return;
+    if (sp.isTool) return this.useTool(id, sp, time);
     if (Game.s.mp < sp.mpCost) {
       Audio.sfx('error');
       this.scene.ui.toast('Not enough MP!', 700);
@@ -254,6 +279,25 @@ export class Player extends Actor {
       combat.floatText(this.x, this.y - 10, `+${Math.round(Game.s.hp - before)}`, 0x78f878);
     }
     this.scene.events.emit('spell-cast', id);
+  }
+
+  useTool(id, def, time) {
+    const problem = toolProblem(def);
+    if (problem) {
+      Audio.sfx('error');
+      this.scene.ui.toast(problem, 800);
+      return;
+    }
+    this.cancelCharge();
+    if (!this.scene.tools.use(def, this)) return;
+    if (def.ammo) {
+      Game.s.items[def.ammo]--;
+      if (Game.s.items[def.ammo] <= 0) delete Game.s.items[def.ammo];
+    }
+    this.spellReadyAt[id] = time + (def.cooldownMs || 400);
+    this.lockUntil = time + 150;
+    this.body.setVelocity(0, 0);
+    this.play4('attack', false);
   }
 
   /** Remaining cooldown fraction 0..1 for the HUD. */

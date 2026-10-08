@@ -20,7 +20,7 @@ function readJSON(path) {
 }
 
 const D = {};
-for (const n of ['world', 'weapons', 'spells', 'items', 'armor', 'enemies', 'bosses', 'shops', 'teachers', 'smiths', 'dialogue', 'sounds', 'music']) {
+for (const n of ['world', 'weapons', 'spells', 'tools', 'quests', 'cutscenes', 'credits', 'items', 'armor', 'enemies', 'bosses', 'shops', 'teachers', 'smiths', 'dialogue', 'sounds', 'music']) {
   D[n] = readJSON(join(PUB, 'data', `${n}.json`)) || {};
 }
 const assets = readJSON(join(PUB, 'assets.json')) || {};
@@ -86,7 +86,7 @@ for (const [id, e] of Object.entries(D.enemies)) {
   const pr = ai.attack && ai.attack.projectile;
   if (pr && pr.sprite && !textureExists(pr.sprite)) err(`enemies.${id}: projectile sprite "${pr.sprite}" not in assets.json`);
 }
-const PATTERN_TYPES = ['chase', 'charge', 'area', 'radial', 'aimed', 'summon', 'teleport'];
+const PATTERN_TYPES = ['chase', 'charge', 'area', 'radial', 'aimed', 'summon', 'teleport', 'rain'];
 for (const [id, b] of Object.entries(D.bosses)) {
   need(b.sprite in sprites, `bosses.${id}: sprite "${b.sprite}" not in assets.json sprites`);
   need(Array.isArray(b.phases) && b.phases.length, `bosses.${id}: needs at least one phase`);
@@ -109,6 +109,7 @@ for (const [id, s] of Object.entries(D.shops)) {
     if (e.weapon) need(e.weapon in D.weapons, `shops.${id}: unknown weapon "${e.weapon}"`);
     else if (e.spell) need(e.spell in D.spells, `shops.${id}: unknown spell "${e.spell}"`);
     else if (e.armor) need(e.armor in D.armor, `shops.${id}: unknown armor "${e.armor}"`);
+    else if (e.tool) need(e.tool in D.tools, `shops.${id}: unknown tool "${e.tool}"`);
     else need(e.item in D.items, `shops.${id}: unknown item "${e.item}"`);
   }
 }
@@ -117,9 +118,52 @@ for (const [id, t] of Object.entries(D.teachers)) {
 }
 const ng = D.world.newGame || {};
 for (const w of ng.weapons || []) need(w in D.weapons, `world.newGame: unknown weapon "${w}"`);
-for (const s of ng.spells || []) need(s in D.spells, `world.newGame: unknown spell "${s}"`);
+for (const s of ng.spells || []) need(s in D.spells || s in D.tools, `world.newGame: unknown spell/tool "${s}"`);
 for (const i of Object.keys(ng.items || {})) need(i in D.items, `world.newGame: unknown item "${i}"`);
 for (const a of ng.armor || []) need(a in D.armor, `world.newGame: unknown armor "${a}"`);
+// tools
+for (const [id, t] of Object.entries(D.tools)) {
+  if (id.startsWith('_')) continue;
+  need(['bomb', 'hookshot'].includes(t.type), `tools.${id}: type must be bomb or hookshot`);
+  if (t.ammo) need(t.ammo in D.items, `tools.${id}: ammo item "${t.ammo}" unknown`);
+  if (t.icon && !textureExists(t.icon)) err(`tools.${id}: icon "${t.icon}" not in assets.json`);
+  if (id in D.spells) err(`tools.${id}: id clashes with a spell id`);
+}
+const bSlot = (id) => id in D.spells || id in D.tools;
+// quests
+for (const [id, q] of Object.entries(D.quests)) {
+  if (id.startsWith('_')) continue;
+  for (const g of q.goals || []) {
+    if (g.item) need(g.item in D.items, `quests.${id}: goal item "${g.item}" unknown`);
+    if (g.kills) for (const e of Object.keys(g.kills)) need(e in D.enemies || e in D.bosses, `quests.${id}: goal enemy "${e}" unknown`);
+    if (!g.item && !g.kills && !g.flag) err(`quests.${id}: each goal needs kills, item or flag`);
+  }
+  const r = q.reward || {};
+  if (r.item) need(r.item in D.items, `quests.${id}: reward item "${r.item}" unknown`);
+  if (r.weapon) need(r.weapon in D.weapons, `quests.${id}: reward weapon "${r.weapon}" unknown`);
+}
+const questRef = (where, id) => id && !(id in D.quests) && err(`${where}: unknown quest "${id}"`);
+// cutscenes
+const cutRef = (where, id) => id && !(id in D.cutscenes) && err(`${where}: unknown cutscene "${id}"`);
+const STEP_KEYS = ['say', 'ask', 'move', 'face', 'emote', 'camera', 'wait', 'shake', 'flash', 'fade', 'sfx', 'music', 'flag', 'startQuest', 'give', 'hide', 'show', 'warp', 'credits'];
+for (const [id, c] of Object.entries(D.cutscenes)) {
+  if (id.startsWith('_')) continue;
+  (c.steps || []).forEach((st, i) => {
+    if (!STEP_KEYS.some((k) => k in st)) err(`cutscenes.${id} step ${i}: unknown command ${JSON.stringify(st)}`);
+    if (st.startQuest) questRef(`cutscenes.${id} step ${i}`, st.startQuest);
+    if (st.give && st.give.item) need(st.give.item in D.items, `cutscenes.${id} step ${i}: give.item unknown`);
+    if (st.sfx) checkSfx(`cutscenes.${id} step ${i}`, st.sfx);
+    if (st.warp) need(st.warp.map in D.world.maps, `cutscenes.${id} step ${i}: warp to unknown map "${st.warp.map}"`);
+  });
+}
+for (const [id, b] of Object.entries(D.bosses)) cutRef(`bosses.${id}`, b.cutscene);
+for (const [id, m] of Object.entries(D.world.maps || {})) cutRef(`world.maps.${id}.onEnter`, m.onEnter);
+for (const [id, d] of Object.entries(D.dialogue)) {
+  for (const v of [d, ...(d.variants || [])]) {
+    questRef(`dialogue.${id}`, v.startQuest);
+    questRef(`dialogue.${id}`, v.completeQuest);
+  }
+}
 const regionIds = new Set((D.world.regions || []).map((r) => r.id));
 for (const r of D.world.regions || []) if (r.boss) need(r.boss in D.bosses, `world.regions.${r.id}: unknown boss "${r.boss}"`);
 for (const [id, def] of Object.entries(D.world.maps || {})) {
@@ -183,7 +227,8 @@ for (const [id, { path, json }] of Object.entries(maps)) {
         case 'healer':
           if (p.dialogue && !(p.dialogue in D.dialogue)) err(`${where(o)}: unknown dialogue "${p.dialogue}"`);
           if (p.sprite && !(p.sprite in sprites)) err(`${where(o)}: unknown sprite "${p.sprite}"`);
-          if (type === 'npc' && !p.dialogue) warn(`${where(o)}: npc has no dialogue property`);
+          if (type === 'npc' && !p.dialogue && !p.cutscene) warn(`${where(o)}: npc has no dialogue property`);
+          cutRef(where(o), p.cutscene);
           break;
         case 'shop':
           if (!(p.shop in D.shops)) err(`${where(o)}: unknown shop "${p.shop}"`);
@@ -196,6 +241,17 @@ for (const [id, { path, json }] of Object.entries(maps)) {
           if (p.spell && !(p.spell in D.spells)) err(`${where(o)}: unknown spell "${p.spell}"`);
           if (p.item && !(p.item in D.items)) err(`${where(o)}: unknown item "${p.item}"`);
           if (p.armor && !(p.armor in D.armor)) err(`${where(o)}: unknown armor "${p.armor}"`);
+          if (p.tool && !(p.tool in D.tools)) err(`${where(o)}: unknown tool "${p.tool}"`);
+          break;
+        case 'trigger':
+          if (!o.width || !o.height) err(`${where(o)}: trigger must be a rectangle`);
+          cutRef(where(o), p.cutscene);
+          if (!p.cutscene) err(`${where(o)}: trigger needs a cutscene`);
+          break;
+        case 'crack':
+          if (!o.width || !o.height) err(`${where(o)}: crack must be a rectangle`);
+          break;
+        case 'hook':
           break;
         case 'door':
           if (!o.width || !o.height) err(`${where(o)}: door must be a rectangle`);

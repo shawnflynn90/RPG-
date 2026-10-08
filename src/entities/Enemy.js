@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Actor, dirFromVector, DIR_VECTORS } from './Actor.js';
 import { Audio } from '../systems/Audio.js';
+import { Game } from '../systems/GameState.js';
 
 /**
  * Data-driven enemy (see public/data/enemies.json).
@@ -309,6 +310,8 @@ export class Enemy extends Actor {
   die() {
     super.die();
     Audio.sfx('enemyDie');
+    Game.recordKill(this.id);
+    this.scene.particles.burst(this.x, this.y, 'hit', 8);
     this.scene.combat.puff(this.x, this.y, 0xffffff, 10);
     this.scene.spawnDrops(this.x, this.y, this.def.drops || []);
     this.scene.gainXp(this.def.xp || 0, this.x, this.y);

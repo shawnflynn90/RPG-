@@ -266,6 +266,85 @@
         "width": 16,
         "height": 14
       }
+    },
+    "npc_farmer": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#70a038",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_explorer": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#c87830",
+        "accent": "#f8d0a0",
+        "shape": "humanoid"
+      }
+    },
+    "npc_monk": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#d8a038",
+        "accent": "#f8d0a0",
+        "shape": "robed"
+      }
+    },
+    "ice_slime": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#88c8f0",
+        "accent": "#ffffff",
+        "shape": "blob"
+      },
+      "body": {
+        "width": 12,
+        "height": 9
+      }
+    },
+    "yeti": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#e8f0f8",
+        "accent": "#4878c8",
+        "shape": "golem"
+      },
+      "body": {
+        "width": 12,
+        "height": 9
+      }
+    },
+    "frost_wisp": {
+      "layout": "character",
+      "file": null,
+      "placeholder": {
+        "color": "#78c8f8",
+        "accent": "#ffffff",
+        "shape": "wisp"
+      },
+      "body": {
+        "width": 8,
+        "height": 8
+      }
+    },
+    "boss_wyrm": {
+      "layout": "boss",
+      "file": null,
+      "placeholder": {
+        "color": "#5898d0",
+        "accent": "#e8f8ff",
+        "shape": "wyrm"
+      },
+      "body": {
+        "width": 22,
+        "height": 16
+      }
     }
   },
   "images": {
@@ -814,6 +893,150 @@
           12
         ],
         "label": "Ky"
+      }
+    },
+    "bomb": {
+      "file": null,
+      "placeholder": {
+        "shape": "bomb",
+        "color": "#283048",
+        "size": [
+          10,
+          10
+        ],
+        "accent": "#f8a040"
+      }
+    },
+    "cracked_wall": {
+      "file": null,
+      "placeholder": {
+        "shape": "crack",
+        "color": "#706888",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#383048"
+      }
+    },
+    "hook_post": {
+      "file": null,
+      "placeholder": {
+        "shape": "post",
+        "color": "#a07040",
+        "size": [
+          16,
+          16
+        ],
+        "accent": "#d0d0e0"
+      }
+    },
+    "icicle": {
+      "file": null,
+      "placeholder": {
+        "shape": "diamond",
+        "color": "#c8f0ff",
+        "size": [
+          6,
+          6
+        ],
+        "accent": "#ffffff"
+      }
+    },
+    "snowball": {
+      "file": null,
+      "placeholder": {
+        "shape": "circle",
+        "color": "#f0f8ff",
+        "size": [
+          8,
+          8
+        ],
+        "accent": "#c8e0f0"
+      }
+    },
+    "icon_bomb": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#404868",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Bm"
+      }
+    },
+    "icon_hookshot": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#b0b0c8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Hk"
+      }
+    },
+    "icon_bomb_item": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#404868",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Bm"
+      }
+    },
+    "icon_ring": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#f8d040",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Ri"
+      }
+    },
+    "icon_herb": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#78d8a8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Hb"
+      }
+    },
+    "icon_fur": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#e8d8c0",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Fu"
+      }
+    },
+    "icon_blizzard": {
+      "file": null,
+      "placeholder": {
+        "shape": "icon",
+        "color": "#a8e8f8",
+        "size": [
+          12,
+          12
+        ],
+        "label": "Bz"
       }
     }
   },

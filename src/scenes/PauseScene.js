@@ -3,11 +3,11 @@ import { DB } from '../systems/db.js';
 import { Game } from '../systems/GameState.js';
 import { input } from '../input/InputManager.js';
 import { Audio } from '../systems/Audio.js';
-import { pixelText, wrapText } from '../ui/font.js';
+import { pixelText, wrapText, measureText } from '../ui/font.js';
 import { drawPanel, ListMenu, COLORS } from '../ui/widgets.js';
 import { formatTime } from './TitleScene.js';
 
-const TABS = ['Items', 'Weapons', 'Spells', 'Armor', 'System'];
+const TABS = ['Items', 'Weapons', 'Spells', 'Armor', 'Quests', 'System'];
 
 /** START menu: items, weapons, spells, armor, save & options. LB/RB (or left/right) switch tabs. */
 export class PauseScene extends Phaser.Scene {
@@ -24,7 +24,12 @@ export class PauseScene extends Phaser.Scene {
   create() {
     this.add.rectangle(0, 0, 240, 160, 0x080818).setOrigin(0);
     drawPanel(this, 2, 2, 236, 18);
-    this.tabTexts = TABS.map((t, i) => pixelText(this, 10 + i * 46, 7, t, COLORS.dim));
+    let tx = 8;
+    this.tabTexts = TABS.map((t) => {
+      const txt = pixelText(this, tx, 7, t, COLORS.dim);
+      tx += measureText(t) + 11;
+      return txt;
+    });
     drawPanel(this, 2, 22, 150, 96);
     drawPanel(this, 154, 22, 84, 96);
     drawPanel(this, 2, 120, 236, 38);
@@ -61,7 +66,7 @@ export class PauseScene extends Phaser.Scene {
           const d = DB.spells[id];
           return {
             label: mark(s.spell === id) + d.name,
-            right: `${d.mpCost}MP`,
+            right: d.ammo ? `x${s.items[d.ammo] || 0}` : d.isTool ? 'Tool' : `${d.mpCost}MP`,
             id,
             color: s.spell === id ? COLORS.highlight : undefined,
             desc: d.description,
@@ -78,6 +83,23 @@ export class PauseScene extends Phaser.Scene {
             desc: d.description,
           };
         });
+      case 'Quests': {
+        const entries = Object.entries(s.quests).filter(([id]) => DB.quests[id]);
+        entries.sort((a, b) => (a[1].state === 'done') - (b[1].state === 'done'));
+        return entries.map(([id, q]) => {
+          const def = DB.quests[id];
+          const prog = Game.questProgress(id);
+          const ready = Game.questReady(id);
+          const goals = prog.map((g) => `${g.done ? '♥' : '-'} ${g.text}${g.need > 1 ? ` ${g.have}/${g.need}` : ''}`).join('\n');
+          return {
+            label: def.name,
+            right: q.state === 'done' ? 'Done' : ready ? 'Ready!' : '',
+            color: q.state === 'done' ? COLORS.dim : ready ? COLORS.good : undefined,
+            desc: q.state === 'done' ? `${def.description}\n(Completed)` : `${goals}\nFrom: ${def.giver || '?'}`,
+            quest: id,
+          };
+        });
+      }
       default:
         return [
           { label: 'Save', id: 'save', desc: `Save to slot ${Game.slot + 1}.` },
@@ -158,6 +180,8 @@ export class PauseScene extends Phaser.Scene {
       case 'Armor':
         s.armor = item.id;
         return this.refresh();
+      case 'Quests':
+        return this.showDesc(DB.quests[item.quest].description);
       default:
         if (item.id === 'save') {
           const ok = Game.save();

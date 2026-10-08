@@ -254,6 +254,20 @@ function drawCharacter(ctx, ph, dir, pose, f) {
       R(0, 6, 3, 3, accent);
       R(13, 6, 3, 3, accent);
     }
+  } else if (shape === 'wyrm') {
+    const sway = pose === 'walk' ? (f % 2 ? 1 : -1) : 0;
+    R(2 + sway, 9, 12, 6, dark); // coiled tail
+    R(3 + sway, 10, 10, 4, color);
+    R(4, 3 + bob, 8, 8, '#202020');
+    R(5, 3 + bob, 6, 7, color); // neck / head
+    R(3, 1 + bob, 2, 3, accent); // horns
+    R(11, 1 + bob, 2, 3, accent);
+    if (dir !== 'up') {
+      R(6 + dx, 5 + bob, 1, 1, '#f84848');
+      R(9 + dx, 5 + bob, 1, 1, '#f84848');
+      R(6 + dx, 8 + bob, 4, 1, accent); // frosty breath line
+    }
+    if (pose === 'attack') R(5 + dx * 3, 10, 6, 2, accent);
   } else if (shape === 'golem') {
     R(1, 4 + bob, 14, 12 - bob, '#202020');
     R(2, 4 + bob, 12, 11 - bob, color);
@@ -397,6 +411,28 @@ function makeImagePlaceholder(scene, key, ph) {
       R(1, 2, 2, 2, '#202020');
       R(4, 2, 4, 2, color);
       R(6, 4, 1, 2, color);
+      break;
+    case 'bomb':
+      for (let y = 0; y < h; y++)
+        for (let x = 0; x < w; x++) {
+          const d = Math.hypot((x - cx) / (w / 2), (y - cy - 1) / (h / 2 - 1));
+          if (d <= 1 && y > 1) R(x, y, 1, 1, d < 0.45 ? shade(color, 0.25) : color);
+        }
+      R(Math.round(cx), 0, 1, 2, '#c0a070');
+      R(Math.round(cx) + 1, 0, 1, 1, accent);
+      R(2, 4, 2, 1, '#ffffff');
+      break;
+    case 'crack':
+      R(0, 0, w, h, color);
+      R(0, 0, w, 1, shade(color, -0.2));
+      for (const [x, y] of [[7, 1], [6, 3], [8, 5], [7, 7], [5, 9], [9, 10], [7, 12], [8, 14], [4, 8], [11, 6]]) R(x, y, 2, 2, accent);
+      break;
+    case 'post':
+      R(5, 4, 6, 12, '#202020');
+      R(6, 5, 4, 11, color);
+      R(3, 1, 10, 5, '#202020');
+      R(4, 2, 8, 3, accent);
+      R(7, 0, 2, 2, accent);
       break;
     case 'icon':
       R(0, 0, w, h, '#202020');

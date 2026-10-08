@@ -50,5 +50,36 @@
         "price": 15
       }
     ]
+  },
+  "town3_shop": {
+    "name": "Frostfield Store",
+    "greeting": "Bombs! Get your bombs! Also coats. It's cold.",
+    "stock": [
+      {
+        "tool": "bombs",
+        "price": 80
+      },
+      {
+        "item": "bomb",
+        "count": 5,
+        "price": 20
+      },
+      {
+        "armor": "fur_coat",
+        "price": 180
+      },
+      {
+        "item": "potion",
+        "price": 12
+      },
+      {
+        "item": "ether",
+        "price": 15
+      },
+      {
+        "item": "antidote",
+        "price": 8
+      }
+    ]
   }
 }

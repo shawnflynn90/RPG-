@@ -7,7 +7,7 @@ import { Audio } from '../systems/Audio.js';
  * Runs the current phase's `patterns` list in order, looping, with `restMs` between them.
  * When HP drops to a phase's `hpBelow` fraction, it switches phase (message, tint, speed).
  *
- * Pattern types: chase, charge, area, radial, aimed, summon, teleport.
+ * Pattern types: chase, charge, area, radial, aimed, summon, teleport, rain.
  */
 export class Boss extends Actor {
   constructor(scene, x, y, id, def) {
@@ -170,6 +170,28 @@ export class Boss extends Actor {
             this.summons.push(e);
             combat.puff(e.x, e.y, 0xc080f8, 6);
           }
+        }
+        break;
+      }
+      case 'rain': {
+        // warning circles appear around the player, then strike
+        const pl = this.player;
+        const spots = [];
+        for (let k = 0; k < (p.count || 4); k++) {
+          const a = Math.random() * Math.PI * 2;
+          const r = k === 0 ? 0 : Math.random() * (p.spread || 48);
+          spots.push({ x: pl.footX + Math.cos(a) * r, y: pl.footY - 4 + Math.sin(a) * r });
+        }
+        this.mode = 'windup';
+        this.body.setVelocity(0, 0);
+        this.play4('attack', false);
+        for (const sp of spots) combat.telegraph(sp.x, sp.y, p.radius || 14, p.windupMs || 700, 0x88c8ff);
+        await this.wait(p.windupMs || 700);
+        if (!this.active || this.dead) return;
+        Audio.sfx(p.sfx || 'break');
+        for (const sp of spots) {
+          combat.area({ x: sp.x, y: sp.y, radius: p.radius || 14, damage: p.damage || 3, knockback: 60, effect: p.effect, color: p.color || '#c8f0ff', team: 'enemy' });
+          if (this.scene.particles) this.scene.particles.burst(sp.x, sp.y, 'ice', 8);
         }
         break;
       }

@@ -72,6 +72,10 @@ export class ShopScene extends Phaser.Scene {
         kind = 'weapon';
         def = DB.weapons[e.weapon];
         owned = s.weapons.includes(e.weapon);
+      } else if (e.tool) {
+        kind = 'tool';
+        def = DB.spells[e.tool];
+        owned = s.spells.includes(e.tool);
       } else if (e.armor) {
         kind = 'armor';
         def = DB.armor[e.armor];
@@ -91,7 +95,7 @@ export class ShopScene extends Phaser.Scene {
       if (owned) right = kind === 'spell' ? 'Learned' : 'Owned';
       else if (kind === 'item' && s.items[e.item]) right = `${price}G (${s.items[e.item]})`;
       return {
-        label: def.name,
+        label: e.count > 1 ? `${def.name} x${e.count}` : def.name,
         right,
         disabled: owned || tooPoor,
         color: owned ? COLORS.dim : tooPoor ? COLORS.bad : undefined,
@@ -138,11 +142,12 @@ export class ShopScene extends Phaser.Scene {
     Game.s.gold -= it.price;
     if (it.kind === 'weapon') Game.addWeapon(it.entry.weapon);
     if (it.kind === 'spell') Game.addSpell(it.entry.spell);
+    if (it.kind === 'tool') Game.addSpell(it.entry.tool);
     if (it.kind === 'armor') Game.addArmor(it.entry.armor);
     Audio.sfx('coin');
-    if (it.kind === 'item') Game.addItem(it.entry.item, 1);
+    if (it.kind === 'item') Game.addItem(it.entry.item, it.entry.count || 1);
     this.refresh();
-    const tip = { spell: ' Equip it with RB or in the menu.', armor: ' Equip it in the menu (Armor).' }[it.kind] || '';
+    const tip = { spell: ' Equip it with RB or in the menu.', tool: ' Select it with RB, use it with B.', armor: ' Equip it in the menu (Armor).' }[it.kind] || '';
     this.showDesc(it.kind === 'spell' ? `You learned ${it.def.name}!${tip}` : `Bought ${it.def.name}!${tip}`);
   }
 

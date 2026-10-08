@@ -5,10 +5,13 @@ import { input } from '../input/InputManager.js';
 import { Combat } from '../systems/Combat.js';
 import { Audio } from '../systems/Audio.js';
 import { Lighting } from '../systems/Lighting.js';
+import { Tools } from '../systems/Tools.js';
+import { Particles } from '../systems/Particles.js';
+import { CutsceneRunner } from '../systems/Cutscenes.js';
 import { Player } from '../entities/Player.js';
 import { Enemy } from '../entities/Enemy.js';
 import { Boss } from '../entities/Boss.js';
-import { NPC, Prop, Chest, Gate, Pickup, Pot, Switch, Torch, Door, Block, ItemPickup } from '../entities/Props.js';
+import { NPC, Prop, Chest, Gate, Pickup, Pot, Switch, Torch, Door, Block, ItemPickup, CrackedWall, HookPost } from '../entities/Props.js';
 import { DIR_VECTORS } from '../entities/Actor.js';
 import { PLAYER, GAME } from '../config/game.config.js';
 
@@ -49,6 +52,8 @@ export class WorldScene extends Phaser.Scene {
     this.player = null;
     this.boss = null;
     this.tempFlags = new Set();
+    this.scripting = false; // a data-driven cutscene is running (world keeps animating, no player control)
+    this.triggers = [];
     this.pendingLevelUps = [];
     this.cutsceneQueue = [];
   }
@@ -88,6 +93,9 @@ export class WorldScene extends Phaser.Scene {
 
     // ---- systems & groups -------------------------------------------------------------
     this.combat = new Combat(this);
+    this.particles = new Particles(this);
+    this.tools = new Tools(this);
+    this.cutscenes = new CutsceneRunner(this);
     this.enemyGroup = this.physics.add.group({ collideWorldBounds: true });
     this.npcGroup = this.physics.add.group({ collideWorldBounds: true, immovable: true, pushable: false });
     this.propGroup = this.physics.add.staticGroup();
@@ -104,6 +112,8 @@ export class WorldScene extends Phaser.Scene {
     this.torches = [];
     this.breakables = [];
     this.itemPickups = [];
+    this.hookPosts = [];
+    this.cracks = [];
     this.spawns = {};
     this.lighting = def.darkness ? new Lighting(this, def.darkness) : null;
 
@@ -139,6 +149,7 @@ export class WorldScene extends Phaser.Scene {
     cam.fadeIn(180, 0, 0, 0);
 
     Audio.music(this.boss ? def.music || 'dungeon' : def.music);
+    if (def.onEnter && this.cutscenes.canPlay(def.onEnter)) this.time.delayedCall(350, () => this.playCutscene(def.onEnter));
     this.events.emit('map-entered', this.mapId, def);
     this.scene.get('HUD').attachWorld(this);
   }
@@ -176,7 +187,13 @@ export class WorldScene extends Phaser.Scene {
         npc.name = obj.name;
         this.npcGroup.add(npc);
         this.npcs.push(npc);
-        this.interactables.push({ bounds: () => npc.hurtbox(), run: () => this.talkTo(npc), isNpc: true });
+        this.interactables.push({
+          bounds: () => npc.hurtbox(),
+          run: () => this.talkTo(npc),
+          isNpc: true,
+          // NPCs with a "cutscene" property play it (once) instead of talking
+          scripted: () => (p.cutscene && this.cutscenes.canPlay(p.cutscene) ? p.cutscene : null),
+        });
         break;
       }
       case 'sign': {
@@ -187,7 +204,7 @@ export class WorldScene extends Phaser.Scene {
       }
       case 'chest': {
         const contents = {};
-        for (const k of ['weapon', 'spell', 'item', 'armor', 'count', 'gold', 'maxHp', 'maxMp', 'flag']) if (p[k] !== undefined) contents[k] = p[k];
+        for (const k of ['weapon', 'spell', 'tool', 'item', 'armor', 'count', 'gold', 'maxHp', 'maxMp', 'flag']) if (p[k] !== undefined) contents[k] = p[k];
         if (p.ifFlag && !Game.flag(p.ifFlag)) {
           // appears when a flag is set (e.g. after solving a puzzle)
           this.hiddenChests = this.hiddenChests || [];
@@ -266,6 +283,22 @@ export class WorldScene extends Phaser.Scene {
         this.propGroup.add(t);
         this.breakables.push(t);
         this.torches.push(t);
+        break;
+      }
+      case 'trigger':
+        this.triggers.push({ rect, cutscene: p.cutscene });
+        break;
+      case 'crack': {
+        const c = new CrackedWall(this, rect, `crack:${uid}`, p);
+        this.gateGroup.add(c.sprite);
+        this.cracks.push(c);
+        this.interactables.push({ bounds: () => c.bounds(), run: () => this.ui.say(p.text || 'There is a big crack in the wall...'), active: () => !c.open });
+        break;
+      }
+      case 'hook': {
+        const h = new HookPost(this, cx, cy);
+        this.propGroup.add(h);
+        this.hookPosts.push(h);
         break;
       }
       case 'light':
@@ -352,6 +385,40 @@ export class WorldScene extends Phaser.Scene {
     return true;
   }
 
+  /** Tile properties at a world point (merged over all layers). */
+  tileProps(x, y) {
+    const out = {};
+    for (const layer of this.collisionLayers) {
+      const t = layer.getTileAtWorldXY(x, y);
+      if (t && t.properties) Object.assign(out, t.properties);
+      if (t && t.collides && !(t.properties && t.properties.low)) out.solid = true;
+    }
+    return out;
+  }
+
+  isIce(x, y) {
+    return !!this.tileProps(x, y).ice;
+  }
+
+  /** Can the hookshot chain pass this point? (pits, water and lava are fine; walls aren't) */
+  isHookable(x, y) {
+    if (x < 0 || y < 0 || x > this.map.widthInPixels || y > this.map.heightInPixels) return false;
+    if (this.tileProps(x, y).solid) return false;
+    const r = new Rect(x - 2, y - 2, 4, 4);
+    for (const g of this.gates) if (g.closed && Rect.Overlaps(r, g.rect)) return false;
+    for (const d of [...this.doors, ...this.cracks]) if (!d.open && Rect.Overlaps(r, d.rect)) return false;
+    for (const c of this.propGroup.getChildren()) {
+      if (!c.active || !c.body || !c.body.enable || this.hookPosts.includes(c)) continue;
+      if (Rect.Overlaps(r, new Rect(c.body.x, c.body.y, c.body.width, c.body.height))) return false;
+    }
+    return true;
+  }
+
+  onExplosion(x, y, radius) {
+    const circle = new Phaser.Geom.Circle(x, y, radius + 4);
+    for (const c of this.cracks) if (!c.open && Phaser.Geom.Intersects.CircleToRectangle(circle, c.rect)) c.blast();
+  }
+
   blockInFront(player) {
     const f = DIR_VECTORS[player.facing];
     const b = player.body;
@@ -392,7 +459,20 @@ export class WorldScene extends Phaser.Scene {
     const target = usable.find((it) => Rect.Overlaps(near, it.bounds())) || usable.find((it) => it.isNpc && Rect.Overlaps(far, it.bounds()));
     if (!target) return false;
     input.consume('A');
+    const sid = target.scripted && target.scripted();
+    if (sid) {
+      this.playCutscene(sid);
+      return true;
+    }
     this.cutscene(() => target.run());
+    return true;
+  }
+
+  /** Play a data-driven cutscene (data/cutscenes.json) if its conditions allow. */
+  playCutscene(id) {
+    if (this.scripting || this.inCutscene || this.transitioning) return false;
+    if (!this.cutscenes.canPlay(id)) return false;
+    this.cutscenes.play(id);
     return true;
   }
 
@@ -440,6 +520,17 @@ export class WorldScene extends Phaser.Scene {
     const v = (d.variants || []).find((x) => Game.check(x.if));
     const src = v || d;
     if (src.setFlag) Game.setFlag(src.setFlag);
+    // quests: "startQuest" / "completeQuest" on a dialogue entry or variant
+    const extra = [];
+    if (src.startQuest && Game.startQuest(src.startQuest)) {
+      extra.push(`New quest: ${DB.quests[src.startQuest].name}! (Pause > Quests)`);
+      this.sfx('quest');
+    }
+    if (src.completeQuest && Game.questReady(src.completeQuest)) {
+      extra.push(...Game.completeQuest(src.completeQuest));
+      this.sfx('questDone');
+    }
+    if (extra.length) return { pages: [...(src.pages || d.pages), ...extra], speaker: src.speaker || d.speaker || null };
     if (src.give) {
       // one-time gift: { give: {...reward}, giveFlag: 'got_x' }
       const key = src.giveFlag || `gift:${id}`;
@@ -590,6 +681,7 @@ export class WorldScene extends Phaser.Scene {
     boss.destroy();
     this.boss = null;
     Game.setFlag(`boss:${boss.id}`);
+    Game.recordKill(boss.id);
     this.sfx('victory');
     const r = boss.def.reward || {};
     const lines = [`You defeated the ${boss.def.name}!`, ...Game.grant(r)];
@@ -598,6 +690,8 @@ export class WorldScene extends Phaser.Scene {
     this.gainXp(boss.def.xp || 0, bx, by);
     await this.cutscene(() => this.ui.say(lines));
     Audio.music(this.mapDef.music);
+    // optional story scene after the fight (e.g. the ending + credits)
+    if (boss.def.cutscene) this.playCutscene(boss.def.cutscene);
   }
 
   // ======================================================================== death
@@ -620,7 +714,7 @@ export class WorldScene extends Phaser.Scene {
   update(time, dt) {
     Game.s.playTimeMs += dt;
     if (this.lighting) this.lighting.update(time);
-    if (this.transitioning || this.inCutscene) return;
+    if (this.transitioning || this.inCutscene || this.scripting) return;
 
     if (this.pendingLevelUps.length) {
       const lv = this.pendingLevelUps.shift();
@@ -645,6 +739,7 @@ export class WorldScene extends Phaser.Scene {
     this.enemies = this.enemies.filter((e) => e.active);
     for (const n of this.npcs) n.update(time, dt);
     this.combat.update();
+    this.tools.update(time, dt);
     this.breakables = this.breakables.filter((b) => b.active);
 
     const pl = this.player;
@@ -679,6 +774,13 @@ export class WorldScene extends Phaser.Scene {
         const pressed = Rect.Overlaps(r, pb) || this.blocks.some((b) => !b.moving && Rect.Overlaps(r, b.bounds()));
         s.updatePressed(pressed);
       }
+      // cutscene trigger areas
+      for (const t of this.triggers) {
+        if (Rect.Overlaps(t.rect, pb) && this.cutscenes.canPlay(t.cutscene)) {
+          this.playCutscene(t.cutscene);
+          return;
+        }
+      }
       // warps
       for (const w of this.warps) {
         if (Rect.Overlaps(w.rect, pb)) {
@@ -688,5 +790,12 @@ export class WorldScene extends Phaser.Scene {
       }
     }
     this.maybeStartBoss();
+    if (time > (this.nextQuestCheck || 0)) {
+      this.nextQuestCheck = time + 400;
+      for (const id of Game.newlyReadyQuests()) {
+        this.sfx('quest');
+        this.ui.toast(`Quest ready to turn in: ${DB.quests[id].name}`, 2000);
+      }
+    }
   }
 }

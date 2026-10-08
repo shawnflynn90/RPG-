@@ -30,5 +30,19 @@
         "price": 70
       }
     ]
+  },
+  "town3_teacher": {
+    "name": "Snow Monk",
+    "greeting": "The cold teaches patience. And Blizzard.",
+    "spells": [
+      {
+        "spell": "blizzard",
+        "price": 150
+      },
+      {
+        "spell": "shock",
+        "price": 140
+      }
+    ]
   }
 }

@@ -46,5 +46,24 @@
     "description": "Shows every room of a dungeon (press SELECT).",
     "icon": "icon_map",
     "key": true
+  },
+  "bomb": {
+    "name": "Bomb",
+    "description": "Ammo for the Bombs tool.",
+    "icon": "icon_bomb_item",
+    "key": true,
+    "price": 4
+  },
+  "lost_ring": {
+    "name": "Lost Ring",
+    "description": "A traveler's wedding ring.",
+    "icon": "icon_ring",
+    "key": true
+  },
+  "frost_herb": {
+    "name": "Frost Herb",
+    "description": "A herb that only grows in deep ice. The explorer in Town 3 wants these.",
+    "icon": "icon_herb",
+    "key": true
   }
 }

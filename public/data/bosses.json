@@ -289,5 +289,170 @@
       "flag": "dungeon2_cleared",
       "message": "The way to Town 3 is open!"
     }
+  },
+  "wyrm": {
+    "name": "Frost Wyrm",
+    "title": "Terror of the Deep Ice",
+    "sprite": "boss_wyrm",
+    "hp": 150,
+    "contactDamage": 4,
+    "speed": 32,
+    "restMs": 500,
+    "xp": 90,
+    "resist": [
+      "slow",
+      "poison"
+    ],
+    "music": "boss",
+    "cutscene": "ending",
+    "phases": [
+      {
+        "hpBelow": 1.0,
+        "patterns": [
+          "walk",
+          "breath",
+          "spikes",
+          "charge",
+          "radial"
+        ]
+      },
+      {
+        "hpBelow": 0.5,
+        "message": "The Wyrm's scales crackle with frost!",
+        "tint": "#88e0ff",
+        "speedMul": 1.35,
+        "patterns": [
+          "spikes_big",
+          "breath_fast",
+          "summon",
+          "charge",
+          "frost_nova",
+          "spikes_big"
+        ]
+      }
+    ],
+    "patterns": {
+      "walk": {
+        "type": "chase",
+        "durationMs": 1400
+      },
+      "breath": {
+        "type": "aimed",
+        "windupMs": 400,
+        "count": 5,
+        "spreadDeg": 12,
+        "waves": 2,
+        "waveDelayMs": 300,
+        "sfx": "ice",
+        "projectile": {
+          "sprite": "icicle",
+          "speed": 120,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            6,
+            6
+          ],
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      },
+      "breath_fast": {
+        "type": "aimed",
+        "windupMs": 300,
+        "count": 7,
+        "spreadDeg": 11,
+        "waves": 3,
+        "waveDelayMs": 260,
+        "sfx": "ice",
+        "projectile": {
+          "sprite": "icicle",
+          "speed": 140,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            6,
+            6
+          ],
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      },
+      "spikes": {
+        "type": "rain",
+        "windupMs": 800,
+        "count": 4,
+        "radius": 14,
+        "damage": 4,
+        "spread": 48,
+        "effect": {
+          "slow": 0.5,
+          "durationMs": 1500
+        }
+      },
+      "spikes_big": {
+        "type": "rain",
+        "windupMs": 700,
+        "count": 7,
+        "radius": 14,
+        "damage": 4,
+        "spread": 64,
+        "effect": {
+          "slow": 0.5,
+          "durationMs": 1500
+        }
+      },
+      "charge": {
+        "type": "charge",
+        "windupMs": 600,
+        "speed": 180,
+        "durationMs": 700
+      },
+      "radial": {
+        "type": "radial",
+        "windupMs": 500,
+        "count": 12,
+        "waves": 1,
+        "projectile": {
+          "sprite": "snowball",
+          "speed": 85,
+          "range": 220,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ]
+        }
+      },
+      "summon": {
+        "type": "summon",
+        "windupMs": 500,
+        "enemy": "ice_slime",
+        "count": 2,
+        "max": 3
+      },
+      "frost_nova": {
+        "type": "area",
+        "windupMs": 800,
+        "radius": 56,
+        "damage": 5,
+        "color": "#c8f0ff",
+        "sfx": "ice",
+        "effect": {
+          "slow": 0.6,
+          "durationMs": 2500
+        }
+      }
+    },
+    "reward": {
+      "gold": 150,
+      "maxHp": 6,
+      "flag": "dungeon3_cleared",
+      "message": "The way north is open!"
+    }
   }
 }

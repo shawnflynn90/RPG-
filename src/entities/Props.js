@@ -413,3 +413,45 @@ export class ItemPickup extends Phaser.Physics.Arcade.Image {
     this.destroy();
   }
 }
+
+/** A cracked wall: solid until a bomb blasts it (stays open, saved). */
+export class CrackedWall {
+  constructor(scene, rect, flagId, props) {
+    this.scene = scene;
+    this.rect = rect;
+    this.props = props;
+    this.flagId = flagId;
+    this.sprite = scene.add.tileSprite(rect.x, rect.y, rect.width, rect.height, 'cracked_wall').setOrigin(0, 0);
+    scene.physics.add.existing(this.sprite, true);
+    this.sprite.setDepth(10 + rect.bottom);
+    if (Game.flag(flagId)) this.setOpen();
+  }
+
+  get open() {
+    return Game.flag(this.flagId);
+  }
+
+  setOpen() {
+    this.sprite.setVisible(false);
+    this.sprite.body.enable = false;
+  }
+
+  bounds() {
+    return this.rect;
+  }
+
+  blast() {
+    if (this.open) return;
+    Game.setFlag(this.flagId);
+    this.scene.sfx('break');
+    this.scene.particles.burst(this.rect.centerX, this.rect.centerY, 'dust', 16);
+    this.setOpen();
+  }
+}
+
+/** Hook post: the hookshot latches onto it. */
+export class HookPost extends Prop {
+  constructor(scene, x, y) {
+    super(scene, x, y, 'hook_post');
+  }
+}

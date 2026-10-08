@@ -1,0 +1,12 @@
+{
+  "title": "Pocket Quest",
+  "music": "title",
+  "sections": [
+    { "heading": "Game Design", "lines": ["You"] },
+    { "heading": "Art", "lines": ["Your sprites go here!", "(placeholder art by the engine)"] },
+    { "heading": "Programming", "lines": ["Phaser 3 + Vite", "with Claude Code"] },
+    { "heading": "Music & Sound", "lines": ["Synthesized chiptunes", "(data/music.json)"] },
+    { "heading": "Special Thanks", "lines": ["Everyone who played", "the Game Boy Advance"] }
+  ],
+  "ending": "Thank you for playing! The adventure continues..."
+}

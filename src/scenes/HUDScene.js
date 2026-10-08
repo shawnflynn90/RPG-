@@ -133,11 +133,12 @@ export class HUDScene extends Phaser.Scene {
     this.setIcon(this.slots.weapon, w && w.icon);
     this.setIcon(this.slots.spell, sp && sp.icon);
     const cd = pl && pl.active && sp ? pl.spellCooldown(s.spell) : 0;
-    const noMp = sp && s.mp < sp.mpCost;
+    const ammo = sp && sp.ammo ? s.items[sp.ammo] || 0 : null;
+    const noMp = sp && (ammo !== null ? ammo <= 0 : s.mp < sp.mpCost);
     this.slots.spell.cd.setVisible(cd > 0 || noMp);
     this.slots.spell.cd.height = noMp ? 16 : 16 * cd;
     this.slots.weapon.cd.setVisible(false);
-    this.mpCost.setText(sp ? `${sp.mpCost}` : '');
+    this.mpCost.setText(!sp ? '' : ammo !== null ? `x${ammo}` : sp.isTool ? '' : `${sp.mpCost}`);
 
     // boss bar
     const boss = this.world && this.world.boss;

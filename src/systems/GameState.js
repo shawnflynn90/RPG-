@@ -26,6 +26,8 @@ function freshState() {
     level: 1,
     xp: 0,
     visited: {},
+    kills: {}, // enemy id -> total defeated
+    quests: {}, // quest id -> { state: 'active' | 'done', base: {kills at start}, notified }
     flags: {},
     respawn: { map: DB.world.start.map, spawn: DB.world.start.spawn },
     playTimeMs: 0,
@@ -135,6 +137,10 @@ class GameStateManager {
     if (cond.minGold && s.gold < cond.minGold) return false;
     if (cond.minLevel && s.level < cond.minLevel) return false;
     if (cond.visited && !s.visited[cond.visited]) return false;
+    if (cond.questActive && this.questState(cond.questActive) !== 'active') return false;
+    if (cond.questReady && !this.questReady(cond.questReady)) return false;
+    if (cond.questDone && this.questState(cond.questDone) !== 'done') return false;
+    if (cond.questNotStarted && this.questState(cond.questNotStarted)) return false;
     return true;
   }
 
@@ -144,7 +150,12 @@ class GameStateManager {
   }
 
   addSpell(id) {
-    if (!this.state.spells.includes(id)) this.state.spells.push(id);
+    if (!this.state.spells.includes(id)) {
+      this.state.spells.push(id);
+      // tools can come with some ammo (e.g. 5 bombs)
+      const def = DB.spells[id];
+      if (def && def.ammo && def.startAmmo) this.addItem(def.ammo, def.startAmmo);
+    }
     if (!this.state.spell) this.state.spell = id;
   }
 
@@ -183,6 +194,76 @@ class GameStateManager {
 
   resists(effect) {
     return (this.armorDef.resist || []).includes(effect);
+  }
+
+  // ---- quests (data/quests.json) ------------------------------------------------------
+  questState(id) {
+    const q = this.state.quests[id];
+    return q ? q.state : null;
+  }
+
+  startQuest(id) {
+    if (!DB.quests[id] || this.state.quests[id]) return false;
+    this.state.quests[id] = { state: 'active', base: { ...this.state.kills }, notified: false };
+    return true;
+  }
+
+  /** Progress lines: [{ text, have, need, done }] */
+  questProgress(id) {
+    const def = DB.quests[id];
+    const q = this.state.quests[id];
+    if (!def) return [];
+    return (def.goals || []).map((g) => {
+      let have = 0;
+      let need = 1;
+      if (g.kills) {
+        const [enemy, n] = Object.entries(g.kills)[0];
+        need = n;
+        have = (this.state.kills[enemy] || 0) - ((q && q.base[enemy]) || 0);
+      } else if (g.item) {
+        need = g.count || 1;
+        have = this.state.items[g.item] || 0;
+      } else if (g.flag) {
+        have = this.flag(g.flag) ? 1 : 0;
+      }
+      have = Math.max(0, Math.min(have, need));
+      return { text: g.text, have, need, done: have >= need };
+    });
+  }
+
+  questReady(id) {
+    return this.questState(id) === 'active' && this.questProgress(id).every((g) => g.done);
+  }
+
+  /** Turn in a ready quest: takes quest items, grants the reward. Returns message lines. */
+  completeQuest(id) {
+    if (!this.questReady(id)) return [];
+    const def = DB.quests[id];
+    if (def.takeItems !== false) {
+      for (const g of def.goals || []) {
+        if (!g.item) continue;
+        this.state.items[g.item] -= g.count || 1;
+        if (this.state.items[g.item] <= 0) delete this.state.items[g.item];
+      }
+    }
+    this.state.quests[id].state = 'done';
+    return [`Quest complete: ${def.name}!`, ...this.grant(def.reward || {})];
+  }
+
+  recordKill(enemyId) {
+    this.state.kills[enemyId] = (this.state.kills[enemyId] || 0) + 1;
+  }
+
+  /** Quests that just became ready (each reported once). */
+  newlyReadyQuests() {
+    const out = [];
+    for (const [id, q] of Object.entries(this.state.quests)) {
+      if (q.state === 'active' && !q.notified && this.questReady(id)) {
+        q.notified = true;
+        out.push(id);
+      }
+    }
+    return out;
   }
 
   // ---- experience --------------------------------------------------------------------
@@ -241,6 +322,10 @@ class GameStateManager {
     if (r.spell) {
       this.addSpell(r.spell);
       lines.push(`You learned ${DB.spells[r.spell].name}!`);
+    }
+    if (r.tool) {
+      this.addSpell(r.tool);
+      lines.push(`You got the ${DB.spells[r.tool].name}! Select it with RB, use it with B.`);
     }
     if (r.armor) {
       this.addArmor(r.armor);

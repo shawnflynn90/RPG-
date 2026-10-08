@@ -1,0 +1,174 @@
+{
+  "_readme": "Cutscenes. See README 'Cutscenes'. Actors: 'player' or an NPC's Name from Tiled. Positions are tiles [x, y].",
+  "intro": {
+    "steps": [
+      {
+        "wait": 400
+      },
+      {
+        "emote": "Elder",
+        "icon": "!"
+      },
+      {
+        "move": "Elder",
+        "to": [
+          14,
+          11
+        ],
+        "speed": 45
+      },
+      {
+        "face": "player",
+        "dir": "up"
+      },
+      {
+        "say": [
+          "Ah, you're finally awake! Welcome to Town 1, traveler."
+        ],
+        "speaker": "Elder"
+      },
+      {
+        "say": [
+          "A monster has made its nest in the old dungeon, just over there..."
+        ],
+        "speaker": "Elder"
+      },
+      {
+        "camera": [
+          25,
+          4
+        ],
+        "ms": 900
+      },
+      {
+        "wait": 400
+      },
+      {
+        "say": [
+          "The road to the next town runs right through it. Nobody has come back out."
+        ],
+        "speaker": "Elder"
+      },
+      {
+        "camera": "player",
+        "ms": 700
+      },
+      {
+        "say": [
+          "Visit the shop and the healer before you go. And take this."
+        ],
+        "speaker": "Elder"
+      },
+      {
+        "give": {
+          "item": "potion",
+          "count": 1
+        }
+      },
+      {
+        "move": "Elder",
+        "to": [
+          13,
+          9
+        ],
+        "speed": 45
+      },
+      {
+        "face": "Elder",
+        "dir": "down"
+      }
+    ],
+    "if": {
+      "notFlag": "boss:warden"
+    }
+  },
+  "town3_arrival": {
+    "steps": [
+      {
+        "emote": "Guard",
+        "icon": "!"
+      },
+      {
+        "move": "Guard",
+        "to": [
+          13,
+          11
+        ],
+        "speed": 70
+      },
+      {
+        "face": "Guard",
+        "toward": "player"
+      },
+      {
+        "say": [
+          "A traveler? From the south? You came through the Shadow Crypt?!",
+          "Welcome to Town 3, friend."
+        ],
+        "speaker": "Guard"
+      },
+      {
+        "camera": [
+          13,
+          3
+        ],
+        "ms": 800
+      },
+      {
+        "say": [
+          "Up north is the Frost Cavern. A Frost Wyrm sleeps in its depths...",
+          "You'll need bombs to get through. The store sells them."
+        ],
+        "speaker": "Guard"
+      },
+      {
+        "camera": "player",
+        "ms": 600
+      },
+      {
+        "move": "Guard",
+        "to": [
+          15,
+          7
+        ],
+        "speed": 60
+      },
+      {
+        "face": "Guard",
+        "dir": "down"
+      }
+    ]
+  },
+  "ending": {
+    "steps": [
+      {
+        "wait": 600
+      },
+      {
+        "shake": 500
+      },
+      {
+        "say": [
+          "The cavern trembles... and falls silent.",
+          "The ice begins to thaw. Three great evils, defeated."
+        ]
+      },
+      {
+        "flash": "#ffffff"
+      },
+      {
+        "say": [
+          "Your legend will be sung in every town from here to the sea."
+        ]
+      },
+      {
+        "credits": true
+      },
+      {
+        "say": [
+          "(Your journey isn't over! Town 4 lies just to the north.)"
+        ]
+      }
+    ]
+  }
+}

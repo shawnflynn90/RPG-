@@ -90,5 +90,22 @@
         "durationMs": 1500
       }
     }
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "description": "A freezing storm around you. Heavily slows enemies.",
+    "icon": "icon_blizzard",
+    "type": "area",
+    "sfx": "ice",
+    "mpCost": 6,
+    "cooldownMs": 2500,
+    "damage": 4,
+    "radius": 50,
+    "knockback": 60,
+    "color": "#c8f0ff",
+    "effect": {
+      "slow": 0.6,
+      "durationMs": 3500
+    }
   }
 }

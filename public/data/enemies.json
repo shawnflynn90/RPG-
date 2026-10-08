@@ -260,5 +260,154 @@
         "chance": 0.12
       }
     ]
+  },
+  "ice_slime": {
+    "name": "Ice Slime",
+    "sprite": "ice_slime",
+    "hp": 10,
+    "contactDamage": 2,
+    "speed": 16,
+    "xp": 4,
+    "resist": [
+      "slow"
+    ],
+    "contactEffect": {
+      "slow": 0.5,
+      "durationMs": 2000
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 70,
+      "loseRange": 120,
+      "onSight": "chase",
+      "chaseSpeed": 28
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          2,
+          4
+        ],
+        "chance": 0.7
+      },
+      {
+        "type": "heart",
+        "chance": 0.2
+      }
+    ]
+  },
+  "yeti": {
+    "name": "Yeti",
+    "sprite": "yeti",
+    "hp": 22,
+    "contactDamage": 4,
+    "speed": 18,
+    "xp": 12,
+    "resist": [
+      "slow"
+    ],
+    "ai": {
+      "idle": "wander",
+      "sightRange": 90,
+      "loseRange": 140,
+      "onSight": "chase",
+      "chaseSpeed": 26,
+      "dash": {
+        "range": 40,
+        "windupMs": 500,
+        "speed": 160,
+        "durationMs": 300,
+        "cooldownMs": 2400
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 2200,
+        "windupMs": 400,
+        "sfx": "bow",
+        "projectile": {
+          "sprite": "snowball",
+          "speed": 100,
+          "range": 150,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          5,
+          10
+        ],
+        "chance": 0.9
+      },
+      {
+        "type": "item",
+        "item": "bomb",
+        "chance": 0.25
+      }
+    ]
+  },
+  "frost_wisp": {
+    "name": "Frost Wisp",
+    "sprite": "frost_wisp",
+    "hp": 8,
+    "contactDamage": 2,
+    "speed": 20,
+    "xp": 8,
+    "light": 30,
+    "resist": [
+      "slow",
+      "poison"
+    ],
+    "ai": {
+      "idle": "flutter",
+      "sightRange": 110,
+      "loseRange": 160,
+      "onSight": "teleport",
+      "teleport": {
+        "cooldownMs": 2600,
+        "minDist": 44,
+        "maxDist": 76
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 1500,
+        "windupMs": 350,
+        "count": 3,
+        "spreadDeg": 14,
+        "sfx": "ice",
+        "projectile": {
+          "sprite": "icicle",
+          "speed": 100,
+          "range": 160,
+          "damage": 2,
+          "size": [
+            6,
+            6
+          ],
+          "light": 18,
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "mana",
+        "chance": 0.5
+      }
+    ]
   }
 }

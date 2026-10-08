@@ -24,6 +24,8 @@ export class Combat {
   /** Called once walls/gates exist, so projectiles break on them. */
   addBlockers(blockers) {
     for (const b of blockers) {
+      // Projectiles fly over "low" tiles (pits, water, lava).
+      const overLow = (p, obj) => !(obj && obj.properties && obj.properties.low);
       this.scene.physics.add.collider(this.projectiles, b, (p, obj) => {
         // Solid breakables (pots, torches, crystal switches) still get hit by the projectile.
         if (obj && obj.hurt && p.proj && p.proj.team === 'player' && !p.proj.hit.has(obj)) {
@@ -31,7 +33,7 @@ export class Combat {
           this.hit(obj, p.proj, p.x, p.y);
         }
         this.killProjectile(p);
-      });
+      }, overLow);
     }
   }
 
