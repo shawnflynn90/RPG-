@@ -1,0 +1,413 @@
+{
+  "slime": {
+    "name": "Slime",
+    "sprite": "slime",
+    "hp": 6,
+    "contactDamage": 2,
+    "speed": 18,
+    "ai": {
+      "idle": "wander",
+      "sightRange": 64,
+      "loseRange": 110,
+      "onSight": "chase",
+      "chaseSpeed": 32
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          1,
+          3
+        ],
+        "chance": 0.7
+      },
+      {
+        "type": "heart",
+        "chance": 0.15
+      }
+    ],
+    "xp": 2
+  },
+  "archer": {
+    "name": "Skeleton Archer",
+    "sprite": "skeleton",
+    "hp": 8,
+    "contactDamage": 2,
+    "speed": 22,
+    "ai": {
+      "idle": "wander",
+      "sightRange": 100,
+      "loseRange": 150,
+      "onSight": "keepDistance",
+      "preferredDistance": 56,
+      "chaseSpeed": 30,
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 1700,
+        "windupMs": 350,
+        "projectile": {
+          "sprite": "bone",
+          "speed": 95,
+          "range": 160,
+          "damage": 2,
+          "size": [
+            6,
+            6
+          ]
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          2,
+          5
+        ],
+        "chance": 0.8
+      },
+      {
+        "type": "mana",
+        "chance": 0.25
+      }
+    ],
+    "xp": 4
+  },
+  "bat": {
+    "name": "Cave Bat",
+    "sprite": "bat",
+    "hp": 3,
+    "contactDamage": 1,
+    "speed": 30,
+    "ai": {
+      "idle": "flutter",
+      "sightRange": 80,
+      "loseRange": 120,
+      "onSight": "charge",
+      "charge": {
+        "windupMs": 450,
+        "speed": 140,
+        "durationMs": 380,
+        "restMs": 650
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          1,
+          2
+        ],
+        "chance": 0.5
+      }
+    ],
+    "xp": 2
+  },
+  "knight": {
+    "name": "Shield Knight",
+    "sprite": "knight",
+    "hp": 14,
+    "contactDamage": 3,
+    "speed": 18,
+    "xp": 8,
+    "shield": {
+      "arcDeg": 110
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 80,
+      "loseRange": 130,
+      "onSight": "chase",
+      "chaseSpeed": 24,
+      "dash": {
+        "range": 38,
+        "windupMs": 420,
+        "speed": 150,
+        "durationMs": 240,
+        "cooldownMs": 2200
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          3,
+          7
+        ],
+        "chance": 0.9
+      },
+      {
+        "type": "heart",
+        "chance": 0.25
+      }
+    ]
+  },
+  "wisp": {
+    "name": "Shadow Wisp",
+    "sprite": "wisp",
+    "hp": 6,
+    "contactDamage": 1,
+    "speed": 20,
+    "xp": 6,
+    "light": 30,
+    "resist": [
+      "poison"
+    ],
+    "ai": {
+      "idle": "flutter",
+      "sightRange": 110,
+      "loseRange": 160,
+      "onSight": "teleport",
+      "teleport": {
+        "cooldownMs": 2800,
+        "minDist": 44,
+        "maxDist": 76
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 1600,
+        "windupMs": 350,
+        "sfx": "teleport",
+        "projectile": {
+          "sprite": "shadowball",
+          "speed": 90,
+          "range": 170,
+          "damage": 2,
+          "size": [
+            8,
+            8
+          ],
+          "light": 22
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "mana",
+        "chance": 0.5
+      },
+      {
+        "type": "gold",
+        "amount": [
+          2,
+          4
+        ],
+        "chance": 0.5
+      }
+    ]
+  },
+  "spider": {
+    "name": "Crypt Spider",
+    "sprite": "spider",
+    "hp": 7,
+    "contactDamage": 2,
+    "speed": 26,
+    "xp": 5,
+    "contactEffect": {
+      "poison": {
+        "dps": 1,
+        "durationMs": 4000
+      }
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 76,
+      "loseRange": 120,
+      "onSight": "chase",
+      "chaseSpeed": 34,
+      "dash": {
+        "range": 44,
+        "windupMs": 300,
+        "speed": 165,
+        "durationMs": 220,
+        "cooldownMs": 1500
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 2600,
+        "windupMs": 300,
+        "sfx": "poison",
+        "projectile": {
+          "sprite": "venom",
+          "speed": 110,
+          "range": 120,
+          "damage": 1,
+          "size": [
+            6,
+            6
+          ],
+          "effect": {
+            "poison": {
+              "dps": 1,
+              "durationMs": 3000
+            }
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          1,
+          4
+        ],
+        "chance": 0.7
+      },
+      {
+        "type": "item",
+        "item": "antidote",
+        "chance": 0.12
+      }
+    ]
+  },
+  "ice_slime": {
+    "name": "Ice Slime",
+    "sprite": "ice_slime",
+    "hp": 10,
+    "contactDamage": 2,
+    "speed": 16,
+    "xp": 4,
+    "resist": [
+      "slow"
+    ],
+    "contactEffect": {
+      "slow": 0.5,
+      "durationMs": 2000
+    },
+    "ai": {
+      "idle": "wander",
+      "sightRange": 70,
+      "loseRange": 120,
+      "onSight": "chase",
+      "chaseSpeed": 28
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          2,
+          4
+        ],
+        "chance": 0.7
+      },
+      {
+        "type": "heart",
+        "chance": 0.2
+      }
+    ]
+  },
+  "yeti": {
+    "name": "Yeti",
+    "sprite": "yeti",
+    "hp": 22,
+    "contactDamage": 4,
+    "speed": 18,
+    "xp": 12,
+    "resist": [
+      "slow"
+    ],
+    "ai": {
+      "idle": "wander",
+      "sightRange": 90,
+      "loseRange": 140,
+      "onSight": "chase",
+      "chaseSpeed": 26,
+      "dash": {
+        "range": 40,
+        "windupMs": 500,
+        "speed": 160,
+        "durationMs": 300,
+        "cooldownMs": 2400
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 2200,
+        "windupMs": 400,
+        "sfx": "bow",
+        "projectile": {
+          "sprite": "snowball",
+          "speed": 100,
+          "range": 150,
+          "damage": 3,
+          "size": [
+            8,
+            8
+          ],
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "gold",
+        "amount": [
+          5,
+          10
+        ],
+        "chance": 0.9
+      },
+      {
+        "type": "item",
+        "item": "bomb",
+        "chance": 0.25
+      }
+    ]
+  },
+  "frost_wisp": {
+    "name": "Frost Wisp",
+    "sprite": "frost_wisp",
+    "hp": 8,
+    "contactDamage": 2,
+    "speed": 20,
+    "xp": 8,
+    "light": 30,
+    "resist": [
+      "slow",
+      "poison"
+    ],
+    "ai": {
+      "idle": "flutter",
+      "sightRange": 110,
+      "loseRange": 160,
+      "onSight": "teleport",
+      "teleport": {
+        "cooldownMs": 2600,
+        "minDist": 44,
+        "maxDist": 76
+      },
+      "attack": {
+        "type": "projectile",
+        "cooldownMs": 1500,
+        "windupMs": 350,
+        "count": 3,
+        "spreadDeg": 14,
+        "sfx": "ice",
+        "projectile": {
+          "sprite": "icicle",
+          "speed": 100,
+          "range": 160,
+          "damage": 2,
+          "size": [
+            6,
+            6
+          ],
+          "light": 18,
+          "effect": {
+            "slow": 0.4,
+            "durationMs": 1500
+          }
+        }
+      }
+    },
+    "drops": [
+      {
+        "type": "mana",
+        "chance": 0.5
+      }
+    ]
+  }
+}

@@ -1,0 +1,792 @@
+{
+ "type": "tileset",
+ "version": "1.10",
+ "tiledversion": "1.10.2",
+ "name": "placeholder",
+ "image": "placeholder.png",
+ "imagewidth": 128,
+ "imageheight": 112,
+ "tilewidth": 16,
+ "tileheight": 16,
+ "columns": 8,
+ "tilecount": 56,
+ "margin": 0,
+ "spacing": 0,
+ "tiles": [
+  {
+   "id": 0,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "grass"
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "grass_flowers"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "dirt"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "water"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "tree"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "house_wall"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "roof"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "door"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "dungeon_floor"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "dungeon_floor_cracked"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "dungeon_wall"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "dungeon_wall_top"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "stairs_down"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "fence"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "wood_floor"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "carpet"
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "counter"
+    }
+   ]
+  },
+  {
+   "id": 17,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "boss_floor"
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "pillar"
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "plaza"
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "bush"
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "void"
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "tree_top"
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "stairs_up"
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "indoor_wall"
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "indoor_wall_top"
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "checker_floor"
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "table"
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "bed"
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "bookshelf"
+    }
+   ]
+  },
+  {
+   "id": 30,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "window_wall"
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "doormat"
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "sand"
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "cactus"
+    }
+   ]
+  },
+  {
+   "id": 34,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "stone_floor"
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "stone_wall"
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "stone_wall_top"
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "pit"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "lava"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "barrel"
+    }
+   ]
+  },
+  {
+   "id": 40,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "autumn_grass"
+    }
+   ]
+  },
+  {
+   "id": 41,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "autumn_tree"
+    }
+   ]
+  },
+  {
+   "id": 42,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "anvil"
+    }
+   ]
+  },
+  {
+   "id": 43,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "fountain"
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "ice"
+    },
+    {
+     "name": "ice",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  },
+  {
+   "id": 45,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": false
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "snow"
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "ice_wall"
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "ice_wall_top"
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "snow_tree"
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "properties": [
+    {
+     "name": "collides",
+     "type": "bool",
+     "value": true
+    },
+    {
+     "name": "label",
+     "type": "string",
+     "value": "frozen_water"
+    },
+    {
+     "name": "low",
+     "type": "bool",
+     "value": true
+    }
+   ]
+  }
+ ]
+}

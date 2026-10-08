@@ -1,0 +1,168 @@
+{
+  "_readme": "Chiptune music, one entry per track. Maps pick a track with 'music' in world.json. Each channel is a list of steps (8th notes): a note like C4 / F#5 / Bb3, '-' holds the previous note, '.' is silence, and on a 'noise' channel 'x' is a drum hit. Channels loop independently. To use a real file instead, add an 'audio' entry in assets.json with the key 'music_<track>' (e.g. music_town).",
+  "title": {
+    "bpm": 96,
+    "channels": [
+      {
+        "wave": "square",
+        "vol": 0.06,
+        "notes": "E5 - D5 - C5 - G4 - A4 - - - G4 - - - E5 - D5 - C5 - D5 - E5 - - - - - - - F5 - E5 - D5 - C5 - D5 - - - G4 - - - C5 - D5 - E5 - D5 - C5 - - - - - - -"
+      },
+      {
+        "wave": "triangle",
+        "vol": 0.14,
+        "notes": "C3 . G3 . A2 . E3 . F2 . C3 . G2 . D3 ."
+      }
+    ]
+  },
+  "town": {
+    "bpm": 120,
+    "channels": [
+      {
+        "wave": "square",
+        "vol": 0.06,
+        "notes": "C5 - E5 G5 - E5 C5 - D5 - F5 A5 - F5 D5 - E5 - G5 C6 - B5 A5 G5 F5 - E5 - D5 - . . C5 - E5 G5 - E5 C5 - D5 - F5 A5 - F5 D5 - G5 - F5 E5 D5 - E5 D5 C5 - - - . . . ."
+      },
+      {
+        "wave": "triangle",
+        "vol": 0.14,
+        "notes": "C3 . G3 . C3 . G3 . D3 . A3 . D3 . A3 . E3 . B3 . F3 . C4 . G3 . D4 . G3 . B3 ."
+      },
+      {
+        "wave": "noise",
+        "vol": 0.03,
+        "notes": "x . . . x . x ."
+      }
+    ]
+  },
+  "town2": {
+    "bpm": 104,
+    "channels": [
+      {
+        "wave": "square",
+        "vol": 0.06,
+        "notes": "F5 - A5 - C6 - A5 - G5 - Bb5 - D6 - - - C6 - A5 - F5 - G5 - A5 - - - - - . . F5 - A5 - C6 - D6 - C6 - Bb5 - A5 - G5 - F5 - - - E5 - - - F5 - - - - - . ."
+      },
+      {
+        "wave": "triangle",
+        "vol": 0.14,
+        "notes": "F2 . C3 . F2 . C3 . G2 . D3 . C3 . G3 ."
+      },
+      {
+        "wave": "noise",
+        "vol": 0.025,
+        "notes": "x . x . . . x ."
+      }
+    ]
+  },
+  "interior": {
+    "bpm": 90,
+    "channels": [
+      {
+        "wave": "triangle",
+        "vol": 0.12,
+        "notes": "G5 - E5 - C5 - E5 - F5 - D5 - B4 - D5 - E5 - C5 - A4 - C5 - D5 - - - . . . ."
+      },
+      {
+        "wave": "triangle",
+        "vol": 0.1,
+        "notes": "C3 . . . G2 . . . A2 . . . G2 . . ."
+      }
+    ]
+  },
+  "dungeon": {
+    "bpm": 84,
+    "channels": [
+      {
+        "wave": "square",
+        "vol": 0.05,
+        "notes": "A4 - - - C5 - B4 - A4 - - - E4 - - - F4 - - - E4 - D4 - E4 - - - - - - - A4 - - - C5 - D5 - E5 - - - D5 - C5 - B4 - - - G#4 - - - A4 - - - - - - -"
+      },
+      {
+        "wave": "triangle",
+        "vol": 0.15,
+        "notes": "A2 - . A2 - . A2 . F2 - . F2 - . F2 . E2 - . E2 - . E2 . A2 - . A2 - . G#2 ."
+      }
+    ]
+  },
+  "dark": {
+    "bpm": 70,
+    "channels": [
+      {
+        "wave": "triangle",
+        "vol": 0.1,
+        "notes": "D4 - - - F4 - - - E4 - - - C#4 - - - D4 - - - A3 - - - Bb3 - - - A3 - - -"
+      },
+      {
+        "wave": "sine",
+        "vol": 0.16,
+        "notes": "D2 - - - - - - - Bb1 - - - A1 - - -"
+      },
+      {
+        "wave": "noise",
+        "vol": 0.015,
+        "notes": "x . . . . . . . . . . . . . . ."
+      }
+    ]
+  },
+  "boss": {
+    "bpm": 152,
+    "channels": [
+      {
+        "wave": "sawtooth",
+        "vol": 0.05,
+        "notes": "E2 E3 E2 E3 E2 E3 D3 E3 C2 C3 C2 C3 D2 D3 B2 D3"
+      },
+      {
+        "wave": "square",
+        "vol": 0.06,
+        "notes": "E4 - G4 - B4 - A4 G4 F#4 - - - E4 - D4 - E4 - G4 - B4 - C5 B4 A4 - B4 - G4 - . ."
+      },
+      {
+        "wave": "noise",
+        "vol": 0.04,
+        "notes": "x . x . x . x x"
+      }
+    ]
+  },
+  "snow": {
+    "bpm": 92,
+    "channels": [
+      {
+        "wave": "triangle",
+        "vol": 0.12,
+        "notes": "A5 - E5 - C5 - E5 - B4 - - - G4 - - - A4 - C5 - E5 - D5 - C5 - B4 - A4 - - - . . . ."
+      },
+      {
+        "wave": "sine",
+        "vol": 0.14,
+        "notes": "A2 - - - E3 - - - F2 - - - G2 - - -"
+      },
+      {
+        "wave": "noise",
+        "vol": 0.015,
+        "notes": "x . . . . . x . . . . . . . . ."
+      }
+    ]
+  },
+  "ice": {
+    "bpm": 100,
+    "channels": [
+      {
+        "wave": "square",
+        "vol": 0.04,
+        "notes": "E5 . B5 . G5 . E5 . F#5 . A5 . D5 . . . E5 . B5 . G5 . E5 . D5 . C5 . B4 . . ."
+      },
+      {
+        "wave": "triangle",
+        "vol": 0.14,
+        "notes": "E2 - - - E2 - - - C2 - - - D2 - - -"
+      },
+      {
+        "wave": "noise",
+        "vol": 0.02,
+        "notes": ". . x . . . x . . . x . . x x ."
+      }
+    ]
+  }
+}

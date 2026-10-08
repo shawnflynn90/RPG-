@@ -1,0 +1,111 @@
+{
+  "fire": {
+    "name": "Fire Bolt",
+    "description": "Hurl a ball of fire.",
+    "icon": "icon_fire",
+    "type": "projectile",
+    "mpCost": 2,
+    "cooldownMs": 550,
+    "damage": 5,
+    "knockback": 120,
+    "projectile": {
+      "sprite": "fireball",
+      "speed": 150,
+      "range": 150,
+      "size": [
+        8,
+        8
+      ]
+    },
+    "sfx": "fire",
+    "element": "fire"
+  },
+  "ice": {
+    "name": "Frost Ring",
+    "description": "A ring of frost that slows nearby enemies.",
+    "icon": "icon_ice",
+    "type": "area",
+    "mpCost": 4,
+    "cooldownMs": 1800,
+    "damage": 2,
+    "radius": 38,
+    "knockback": 60,
+    "color": "#90e0f8",
+    "effect": {
+      "slow": 0.4,
+      "durationMs": 3500
+    },
+    "sfx": "ice"
+  },
+  "heal": {
+    "name": "Heal",
+    "description": "Restore 10 HP.",
+    "icon": "icon_heal",
+    "type": "heal",
+    "mpCost": 5,
+    "cooldownMs": 2500,
+    "amount": 10,
+    "sfx": "heal"
+  },
+  "venom": {
+    "name": "Venom Dart",
+    "description": "A dart that poisons its target.",
+    "icon": "icon_venom",
+    "type": "projectile",
+    "sfx": "poison",
+    "mpCost": 3,
+    "cooldownMs": 700,
+    "damage": 2,
+    "knockback": 40,
+    "projectile": {
+      "sprite": "venom",
+      "speed": 160,
+      "range": 150,
+      "size": [
+        6,
+        6
+      ]
+    },
+    "effect": {
+      "poison": {
+        "dps": 2,
+        "durationMs": 4000
+      }
+    }
+  },
+  "shock": {
+    "name": "Thunder",
+    "description": "Lightning strikes all around you. Stuns enemies.",
+    "icon": "icon_shock",
+    "type": "area",
+    "sfx": "spark",
+    "mpCost": 7,
+    "cooldownMs": 3000,
+    "damage": 6,
+    "radius": 56,
+    "knockback": 100,
+    "color": "#f8f070",
+    "effect": {
+      "stun": {
+        "durationMs": 1500
+      }
+    }
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "description": "A freezing storm around you. Heavily slows enemies.",
+    "icon": "icon_blizzard",
+    "type": "area",
+    "sfx": "ice",
+    "mpCost": 6,
+    "cooldownMs": 2500,
+    "damage": 4,
+    "radius": 50,
+    "knockback": 60,
+    "color": "#c8f0ff",
+    "effect": {
+      "slow": 0.6,
+      "durationMs": 3500
+    }
+  }
+}

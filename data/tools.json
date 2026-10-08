@@ -1,0 +1,33 @@
+{
+  "_readme": "Tools share the B button with spells (cycle with RB). type: bomb | hookshot. 'ammo' = item consumed per use.",
+  "bombs": {
+    "name": "Bombs",
+    "description": "Place a bomb. Blasts enemies, pots and cracked walls. Stand back!",
+    "icon": "icon_bomb",
+    "type": "bomb",
+    "ammo": "bomb",
+    "cooldownMs": 500,
+    "fuseMs": 1500,
+    "radius": 30,
+    "damage": 8,
+    "selfDamage": 2,
+    "sfx": "fuse",
+    "startAmmo": 5
+  },
+  "hookshot": {
+    "name": "Hookshot",
+    "description": "Fires a chain. Latches onto hook posts to pull you across pits. Stuns enemies.",
+    "icon": "icon_hookshot",
+    "type": "hookshot",
+    "cooldownMs": 400,
+    "range": 128,
+    "speed": 280,
+    "damage": 1,
+    "effect": {
+      "stun": {
+        "durationMs": 1400
+      }
+    },
+    "sfx": "hook"
+  }
+}

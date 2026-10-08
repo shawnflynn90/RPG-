@@ -1,0 +1,85 @@
+{
+  "town1_shop": {
+    "name": "General Store",
+    "greeting": "Welcome! Have a look at my wares.",
+    "stock": [
+      {
+        "weapon": "spear",
+        "price": 60
+      },
+      {
+        "armor": "leather",
+        "price": 70
+      },
+      {
+        "item": "potion",
+        "price": 10
+      },
+      {
+        "item": "ether",
+        "price": 15
+      },
+      {
+        "item": "antidote",
+        "price": 8
+      }
+    ]
+  },
+  "town2_shop": {
+    "name": "Crypt Outfitters",
+    "greeting": "Heading into the crypt? You'll want armor. And antidotes. Lots of antidotes.",
+    "stock": [
+      {
+        "armor": "warden_plate",
+        "price": 160
+      },
+      {
+        "armor": "chain",
+        "price": 220
+      },
+      {
+        "item": "antidote",
+        "price": 8
+      },
+      {
+        "item": "potion",
+        "price": 12
+      },
+      {
+        "item": "ether",
+        "price": 15
+      }
+    ]
+  },
+  "town3_shop": {
+    "name": "Frostfield Store",
+    "greeting": "Bombs! Get your bombs! Also coats. It's cold.",
+    "stock": [
+      {
+        "tool": "bombs",
+        "price": 80
+      },
+      {
+        "item": "bomb",
+        "count": 5,
+        "price": 20
+      },
+      {
+        "armor": "fur_coat",
+        "price": 180
+      },
+      {
+        "item": "potion",
+        "price": 12
+      },
+      {
+        "item": "ether",
+        "price": 15
+      },
+      {
+        "item": "antidote",
+        "price": 8
+      }
+    ]
+  }
+}

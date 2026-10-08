@@ -1,0 +1,69 @@
+{
+  "potion": {
+    "name": "Potion",
+    "description": "Restores 10 HP.",
+    "icon": "icon_potion",
+    "use": {
+      "hp": 10
+    },
+    "price": 10
+  },
+  "ether": {
+    "name": "Ether",
+    "description": "Restores 8 MP.",
+    "icon": "icon_ether",
+    "use": {
+      "mp": 8
+    },
+    "price": 15
+  },
+  "antidote": {
+    "name": "Antidote",
+    "description": "Cures poison.",
+    "icon": "icon_antidote",
+    "use": {
+      "cure": [
+        "poison",
+        "burn"
+      ]
+    },
+    "price": 8
+  },
+  "small_key": {
+    "name": "Small Key",
+    "description": "Opens a locked door in this dungeon.",
+    "icon": "icon_key_item",
+    "key": true
+  },
+  "boss_key": {
+    "name": "Big Key",
+    "description": "Opens the boss door.",
+    "icon": "icon_bosskey",
+    "key": true
+  },
+  "dungeon_map": {
+    "name": "Dungeon Map",
+    "description": "Shows every room of a dungeon (press SELECT).",
+    "icon": "icon_map",
+    "key": true
+  },
+  "bomb": {
+    "name": "Bomb",
+    "description": "Ammo for the Bombs tool.",
+    "icon": "icon_bomb_item",
+    "key": true,
+    "price": 4
+  },
+  "lost_ring": {
+    "name": "Lost Ring",
+    "description": "A traveler's wedding ring.",
+    "icon": "icon_ring",
+    "key": true
+  },
+  "frost_herb": {
+    "name": "Frost Herb",
+    "description": "A herb that only grows in deep ice. The explorer in Town 3 wants these.",
+    "icon": "icon_herb",
+    "key": true
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "_readme": "Quests. goals: {text, kills:{enemyId:n}} | {text, item, count} | {text, flag}. Started/completed from dialogue with startQuest / completeQuest. takeItems:false keeps goal items.",
+  "slime_trouble": {
+    "name": "Slime Trouble",
+    "giver": "Farmer, Town 1",
+    "description": "Slimes keep eating the farmer's crops. Defeat 6 slimes.",
+    "goals": [
+      {
+        "text": "Defeat slimes",
+        "kills": {
+          "slime": 6
+        }
+      }
+    ],
+    "reward": {
+      "gold": 40,
+      "item": "potion",
+      "count": 2
+    }
+  },
+  "lost_ring": {
+    "name": "The Lost Ring",
+    "giver": "Traveler, Town 2 inn",
+    "description": "A traveler lost his wedding ring in the west room of the Shadow Crypt.",
+    "goals": [
+      {
+        "text": "Find the Lost Ring",
+        "item": "lost_ring"
+      }
+    ],
+    "reward": {
+      "gold": 80,
+      "maxHp": 2
+    }
+  },
+  "frozen_supplies": {
+    "name": "Frozen Supplies",
+    "giver": "Explorer, Town 3",
+    "description": "Collect 3 Frost Herbs in the Frost Cavern.",
+    "goals": [
+      {
+        "text": "Collect Frost Herbs",
+        "item": "frost_herb",
+        "count": 3
+      }
+    ],
+    "reward": {
+      "gold": 100,
+      "item": "ether",
+      "count": 3,
+      "maxMp": 2
+    }
+  },
+  "yeti_hunt": {
+    "name": "Yeti Hunt",
+    "giver": "Hunter, Town 3",
+    "description": "Yetis have been raiding the town. Defeat 4 of them.",
+    "goals": [
+      {
+        "text": "Defeat yetis",
+        "kills": {
+          "yeti": 4
+        }
+      }
+    ],
+    "reward": {
+      "gold": 60,
+      "item": "bomb",
+      "count": 10
+    }
+  }
+}

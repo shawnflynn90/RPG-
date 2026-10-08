@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1a1424" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="PocketQuest" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="icons/icon-192.png" />
+    <title>Pocket Quest</title>
+    <script type="module" crossorigin src="./assets/index-Cl_sIOCk.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-wIXFLZ7T.css">
+  <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+  <body class="touch-visible">
+    <div id="shell">
+      <div id="screen"><div id="game"></div></div>
+
+      <!-- On-screen controls. Each data-btn is a virtual button name (see src/config/input.config.js). -->
+      <div id="left-pad" class="pad">
+        <div class="shoulder" data-btn="LB">L</div>
+        <div id="dpad" aria-label="D-pad">
+          <div class="arm up"></div>
+          <div class="arm down"></div>
+          <div class="arm left"></div>
+          <div class="arm right"></div>
+          <div class="hub"></div>
+        </div>
+      </div>
+
+      <div id="right-pad" class="pad">
+        <div class="shoulder" data-btn="RB">R</div>
+        <div id="face">
+          <div class="face-btn b" data-btn="B"><span>B</span></div>
+          <div class="face-btn a" data-btn="A"><span>A</span></div>
+        </div>
+      </div>
+
+      <div id="sys">
+        <div class="sys-btn" data-btn="select"><i></i><span>SELECT</span></div>
+        <div class="sys-btn" data-btn="start"><i></i><span>START</span></div>
+        <button id="fullscreen-btn" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+      </div>
+    </div>
+  </body>
+</html>
